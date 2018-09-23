@@ -63,6 +63,21 @@ def compute_time_consumed(start_time):
     second = seconds % 3600 % 60
     print("本次训练共耗时 {0} 时 {1} 分 {2} 秒".format(hour, minute, second))
 
+
 def finish_instance():
     import os
     os.system('sh /data/stop_instance.sh')
+
+
+def mix_data(x, y, alpha=1.0):
+    lam = np.random.beta(alpha, alpha)
+
+    batch_size = x.shape[0]
+    index = np.random.permutation(batch_size)
+    mixed_x = lam * x + (1 - lam) * x[index, :]
+    y_a, y_b = y, y[index]
+    return mixed_x, y_a, y_b,lam
+
+
+def mixup_criterion(y_a, y_b, lam):
+    return lambda criterion, pred: lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)

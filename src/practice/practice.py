@@ -1,7 +1,5 @@
 import librosa
 import numpy as np
-import pickle
-from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 
 

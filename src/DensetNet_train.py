@@ -1,12 +1,11 @@
 import tensorflow as tf
 from absl import app as absl_app
-import os
 from denset_net import DenseNet
 import tensorflow.contrib as tfc
 import argparse
-from utils import describe_model, compute_time_consumed, create_folder
+from utils.utils import *
 from datetime import datetime
-from file import project_dir
+import os
 
 
 def loss(logits, labels):
@@ -20,7 +19,7 @@ def loss(logits, labels):
         logits=logits, labels=labels))
 
 
-def compute_accuracy(logits, labels):
+def compute_accuracy(logits, label_a, label_b, lam):
     """
     计算准确度
     :param logits:
@@ -28,8 +27,11 @@ def compute_accuracy(logits, labels):
     :return:
     """
     predictions = tf.argmax(logits, axis=1, output_type=tf.int64)
-    labels = tf.argmax(labels, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
-    return tf.reduce_sum(tf.cast(tf.equal(predictions, labels), dtype=tf.float32)) / int(logits.shape[0]) * 100
+    label_a = tf.argmax(label_a, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
+    label_b = tf.argmax(label_b, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
+    correct = lam * tf.reduce_sum(tf.cast(tf.equal(predictions, label_a) +
+                                          (1 - lam) * tf.reduce_sum(tf.cast(tf.equal(predictions, label_b)))))
+    return correct / int(logits.shape[0]) * 100
 
 
 def train(model, optimizer, dataset, step_counter, total_batch, log_interval):
@@ -46,20 +48,25 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval):
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
+                audios, label_a, label_b, lam = mix_data(audios, labels, args.alpha)
                 logits = model(audios, training=True)
+
                 # 计算损失
-                loss_value = loss(logits, labels)
+                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
+
+                # loss_value = loss(logits, labels)
                 # 每10步记录日志
+                acc = compute_accuracy(logits, label_a, label_b, lam)
+
                 tfc.summary.scalar('loss', loss_value)
-                tfc.summary.scalar('accuracy', compute_accuracy(logits, labels))
+                tfc.summary.scalar('accuracy', acc)
             # 梯度求解
             grads = tape.gradient(loss_value, model.variables)
             optimizer.apply_gradients(zip(grads, model.variables), global_step=step_counter)
 
         # 打印log
         if log_interval and batch % log_interval == 0:
-            print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
-                                                                     compute_accuracy(logits, labels)))
+            print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value, acc))
 
 
 def test(model, dataset):
@@ -145,8 +152,8 @@ def run_task_eager(args):
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
-    train_path = os.path.join(project_dir, 'evaluation', 'train.tfrecords')
-    test_path = os.path.join(project_dir, 'evaluation', 'test.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).shuffle(7000).batch(args.batch_size)
     test_ds = tf.data.TFRecordDataset(test_path).batch(args.batch_size)
 
@@ -214,11 +221,11 @@ def define_task_eager_flags():
     arg.add_argument('--nb_layers', type=int, default=5)
     arg.add_argument('--n_db', type=int, default=3)
     arg.add_argument('--grow_rate', type=int, default=12)
-    arg.add_argument('--feature_path', type=str, required=True)
     arg.add_argument('--data_format', type=str, required=True)
     arg.add_argument('--output_dir', type=str, required=True)
     arg.add_argument('--lr', type=float, required=True, default=0.001)
     arg.add_argument('--log_interval', type=int, required=True, default=10)
+    arg.add_argument('-－alpha', type=int, required=True, default=0.2)
 
     return arg.parse_args()
 
@@ -233,7 +240,6 @@ def main(args):
 
 
 def finish_instance():
-    import os
     os.system('sh /data/stop_instance.sh')
 
 

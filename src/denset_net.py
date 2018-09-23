@@ -3,6 +3,7 @@ from tensorflow.keras.layers import BatchNormalization, \
     GlobalAveragePooling2D
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.models import Model
+from utils.utils import *
 
 
 class DenseNet:
@@ -137,7 +138,7 @@ class DenseNet:
         x = GlobalAveragePooling2D()(x)
 
         # x = Flatten()(x)
-        x = Dense(78, kernel_initializer='he_uniform', name='fc1')(x)
+        x = Dense(54, kernel_initializer='he_uniform', name='fc1')(x)
         x = BatchNormalization(name='fc1_bn', )(x)
         x = Activation('relu')(x)
         x = Dropout(self.dropout_rate)(x)
@@ -150,3 +151,11 @@ class DenseNet:
 
         model = Model(inputs=[input], outputs=[logits], name='densenet')
         return model
+
+
+if __name__ == '__main__':
+    denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=5,
+                      nb_dense_block=3,
+                      growth_rate=12)
+    model = denset.build()
+    describe_model(model)
