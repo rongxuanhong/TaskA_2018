@@ -24,7 +24,7 @@ class DateSet:
         self.batch_size = 2
 
     def read_fold(self, filename):
-        return pd.read_csv(os.path.join(project_dir, 'evaluation', filename), sep='\t',
+        return pd.read_csv(os.path.join('../../evaluation', filename), sep='\t',
                            names=['file', 'scene'],  # 數組形式
                            converters={'file': lambda s: s.replace('audio/', '')})
 
@@ -128,7 +128,7 @@ def main():
     task = DateSet(None)
     task.load_dataset()
     task.generate_TFRecord(task.train, path)
-    finish_instance()
+    os.system('sh /data/stop_instance.sh')
     # task.generate_TFRecord(task.test, test_path)
     # dataset = tf.data.TFRecordDataset(path)
     # dataset = dataset.map(task.parse_example)
