@@ -1,0 +1,10 @@
+DROPOUT = 0.5
+KERNEL_SIZE = 5
+FOLD_PATH = '/data/2018_TaskA/evaluation_setup/'
+# FOLD_PATH = '../evaluation_setup/'
+AUDIO_PATH = '/data/TUT-urban-acoustic-scenes-2018-development-data/'
+# AUDIO_PATH = '/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/'
+FEATURE_PATH = '/home/ccyoung/Downloads/feature_spectrum_64/'
+# FEATURE_PATH = '/data/pitch_feature_spectrum_64/'
+MODEL_PATH = '/data'
+BATCH_SIZE = 32
