@@ -5,7 +5,7 @@ from tqdm import *
 import librosa
 import os
 import keras
-import config as cfg
+# import config as cfg
 from file import project_dir
 import tensorflow as tf
 from utils import *
@@ -68,7 +68,7 @@ class DateSet:
         writer = tf.python_io.TFRecordWriter(path=tfrecord_path)
 
         for row in tqdm(dataset.itertuples(), total=len(dataset)):
-            path = os.path.join(cfg.AUDIO_PATH, row.file)
+            path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
             # 必须先转成float16，否则librosa无法处理
 
             mel_spec = self.extract_feature(path)
