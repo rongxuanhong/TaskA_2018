@@ -65,16 +65,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # main()
-    tf.enable_eager_execution()
-    index = np.random.permutation(5)
-    index1 = np.array([6,7,8,9,10])
-    index=tf.convert_to_tensor(index)
-    index1=tf.convert_to_tensor(index1)
-    print(index)
-    print(index1)
-    tf.set_random_seed(100)
-    a=tf.random_shuffle(index)
-    b=tf.random_shuffle(index1)
-    print(a)
-    print(b)
+    y, sr = librosa.load('../airport-barcelona-0-0-a.wav', sr=48000, duration=10.0)
+    print(type(y))

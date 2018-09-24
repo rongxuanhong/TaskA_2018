@@ -122,19 +122,22 @@ class DateSet:
 
 def main():
     tf.enable_eager_execution()
-    path_prefix = '/home/ccyoung/DCase'
-    path = os.path.join(path_prefix, 'train.tfrecords')
-    test_path = os.path.join(path_prefix, 'test.tfrecords')
-    task = DateSet(None)
-    # task.load_dataset()
-    # task.generate_TFRecord(task.train, path)
-    # task.generate_TFRecord(task.test, test_path)
-    # os.system('sh /data/stop_instance.sh')
+    # path_prefix = '/home/ccyoung/DCase'
+    # path = os.path.join(path_prefix, 'train.tfrecords')
+    # test_path = os.path.join(path_prefix, 'test.tfrecords')
+    # task = DateSet(None)
+    # # task.load_dataset()
+    # # task.generate_TFRecord(task.train, path)
+    # # task.generate_TFRecord(task.test, test_path)
+    # # os.system('sh /data/stop_instance.sh')
+    #
+    # dataset = tf.data.TFRecordDataset(path)
+    # dataset = dataset.map(task.parse_example).batch(2)
+    data=np.random.rand(5,4,3)
+    data1=np.random.rand(5,4)
+    dataset = tf.data.Dataset.from_tensor_slices((data,data1)).batch(2)
 
-    dataset = tf.data.TFRecordDataset(path)
-    dataset = dataset.map(task.parse_example).batch(2)
-
-    for batch, (x, y) in enumerate(dataset):
+    for batch, (x,y) in enumerate(dataset):
         print(y.shape)
 
 

@@ -175,8 +175,10 @@ def run_task_eager(args):
     test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(70000).batch(args.batch_size)
-    test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).batch(args.batch_size)
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(70000).batch(args.batch_size).apply(
+    tf.contrib.data.batch_and_drop_remainder(args.batch_size))
+    test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).batch(args.batch_size).apply(
+    tf.contrib.data.batch_and_drop_remainder(args.batch_size))
 
     # 4.创建模型和优化器
     denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=args.nb_layers,
