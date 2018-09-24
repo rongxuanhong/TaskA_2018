@@ -29,8 +29,8 @@ def compute_accuracy(logits, label_a, label_b, lam):
     predictions = tf.argmax(logits, axis=1, output_type=tf.int64)
     label_a = tf.argmax(label_a, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
     label_b = tf.argmax(label_b, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
-    correct = lam * tf.reduce_sum(tf.cast(tf.equal(predictions, label_a) +
-                                          (1 - lam) * tf.reduce_sum(tf.cast(tf.equal(predictions, label_b)))))
+    correct = lam * tf.reduce_sum(tf.cast(tf.equal(predictions, label_a), tf.int64))
+    correct += (1 - lam) * tf.reduce_sum(tf.cast(tf.equal(predictions, label_b), tf.int64))
     return correct / int(logits.shape[0]) * 100
 
 
@@ -48,8 +48,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval):
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios, label_a, label_b, lam = mix_data(audios, labels, args.alpha)
-                logits = model(audios, training=True)
+                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.alpha)
+                logits = model(mixed_audios, training=True)
 
                 # 计算损失
                 loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
@@ -154,7 +154,7 @@ def run_task_eager(args):
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
     train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
     test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).shuffle(7000).batch(args.batch_size)
+    train_ds = tf.data.TFRecordDataset(train_path).shuffle(70000).batch(args.batch_size)
     test_ds = tf.data.TFRecordDataset(test_path).batch(args.batch_size)
 
     # 4.创建模型和优化器

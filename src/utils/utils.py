@@ -70,6 +70,7 @@ def finish_instance():
 
 
 def mix_data(x, y, alpha=1.0):
+    """ mixup data augmentation"""
     lam = np.random.beta(alpha, alpha)
 
     batch_size = x.shape[0]
@@ -79,5 +80,3 @@ def mix_data(x, y, alpha=1.0):
     return mixed_x, y_a, y_b,lam
 
 
-def mixup_criterion(y_a, y_b, lam):
-    return lambda criterion, pred: lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)
