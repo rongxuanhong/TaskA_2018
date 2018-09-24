@@ -48,6 +48,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
+                print(audios.shape)
                 audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
                 mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(mixed_audios, training=True)
@@ -82,6 +83,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
+        print(audios.shape)
         audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
