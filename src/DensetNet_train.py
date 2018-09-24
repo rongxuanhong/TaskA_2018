@@ -167,7 +167,7 @@ def run_task_eager(args):
     # print('Using device %s, and data format %s.' % (device, data_format))
 
     # 3.加载数据
-    total_batch = 6122 // args.batch_size
+    total_batch = 61220 // args.batch_size
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
