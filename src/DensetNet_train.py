@@ -225,7 +225,7 @@ def define_task_eager_flags():
     arg.add_argument('--output_dir', type=str, required=True)
     arg.add_argument('--lr', type=float, required=True, default=0.001)
     arg.add_argument('--log_interval', type=int, required=True, default=10)
-    arg.add_argument('-－alpha', type=int, required=True, default=0.2)
+    arg.add_argument('-－alpha', type=float, required=True, default=0.2)
 
     return arg.parse_args()
 
