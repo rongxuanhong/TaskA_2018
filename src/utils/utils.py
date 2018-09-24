@@ -2,6 +2,7 @@ from sklearn import metrics
 import numpy as np
 import os
 from datetime import datetime
+import tensorflow as tf
 
 
 def calculate_auc(y_true, y_pred):
@@ -69,14 +70,14 @@ def finish_instance():
     os.system('sh /data/stop_instance.sh')
 
 
-def mix_data(x, y, alpha=1.0):
+def mix_data(x, y, batch_size, alpha=1.0):
     """ mixup data augmentation"""
     lam = np.random.beta(alpha, alpha)
+    x = x.numpy()
+    y = y.numpy()
 
-    batch_size = x.shape[0]
     index = np.random.permutation(batch_size)
-    mixed_x = lam * x + (1 - lam) * x[index, :]
-    y_a, y_b = y, y[index]
-    return mixed_x, y_a, y_b,lam
 
-
+    mixed_x = tf.convert_to_tensor(lam * x + (1 - lam) * x[index, ...])
+    y_a, y_b = tf.convert_to_tensor(y), tf.convert_to_tensor(y[index, :])
+    return mixed_x, y_a, y_b, lam

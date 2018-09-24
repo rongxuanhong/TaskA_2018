@@ -29,12 +29,12 @@ def compute_accuracy(logits, label_a, label_b, lam):
     predictions = tf.argmax(logits, axis=1, output_type=tf.int64)
     label_a = tf.argmax(label_a, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
     label_b = tf.argmax(label_b, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
-    correct = lam * tf.reduce_sum(tf.cast(tf.equal(predictions, label_a), tf.int64))
-    correct += (1 - lam) * tf.reduce_sum(tf.cast(tf.equal(predictions, label_b), tf.int64))
+    correct = lam * tf.reduce_sum(tf.cast(tf.equal(predictions, label_a), tf.float32))+\
+              (1 - lam) * tf.reduce_sum(tf.cast(tf.equal(predictions, label_b), tf.float32))
     return correct / int(logits.shape[0]) * 100
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, log_interval):
+def train(model, optimizer, dataset, step_counter, total_batch, log_interval, args):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -48,7 +48,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval):
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.alpha)
+                audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
+                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(mixed_audios, training=True)
 
                 # 计算损失
@@ -66,10 +67,11 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval):
 
         # 打印log
         if log_interval and batch % log_interval == 0:
-            print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value, acc))
+            print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
+                                                                     compute_accuracy(logits, label_a, label_b, lam)))
 
 
-def test(model, dataset):
+def test(model, dataset, args):
     """
     使用評估集測試模型效果(带答案的评估集或称测试集)
     :param model:
@@ -80,6 +82,7 @@ def test(model, dataset):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
+        audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
         accuracy(
@@ -125,6 +128,22 @@ def verify_model(dataset, model):
         tfc.summary.scalar('val_acc', accuracy.result())
 
 
+def parse_example(example):
+    """
+    解析样本
+    :param example:
+    :return:
+    """
+    keys_to_features = {
+        'audio': tf.VarLenFeature(tf.float32),
+        'label': tf.VarLenFeature(tf.float32),
+    }
+    parsed = tf.parse_single_example(example, keys_to_features)
+    audios = tf.sparse_tensor_to_dense(parsed['audio'], default_value=0)
+    labels = tf.sparse_tensor_to_dense(parsed['label'], default_value=0)
+    return audios, labels
+
+
 def run_task_eager(args):
     """
     在急切模式下，运行模型的训练以及评估
@@ -152,10 +171,12 @@ def run_task_eager(args):
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
-    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).shuffle(70000).batch(args.batch_size)
-    test_ds = tf.data.TFRecordDataset(test_path).batch(args.batch_size)
+    # train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+    # test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(70000).batch(args.batch_size)
+    test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).batch(args.batch_size)
 
     # 4.创建模型和优化器
     denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=args.nb_layers,
@@ -197,14 +218,14 @@ def run_task_eager(args):
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args.log_interval)
+            train(model, optimizer, train_ds, step_counter, total_batch, args.log_interval, args)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
             # 测试
             # if (i + 1) % 5 == 0:
             # 评估
-            test(model, test_ds)
+            test(model, test_ds, args)
         check_point.save(check_point_prefix)  # 保存检查点
     # 输出训练时间
     print('\nTrain time:', compute_time_consumed(start_time))

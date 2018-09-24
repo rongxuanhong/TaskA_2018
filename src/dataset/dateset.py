@@ -121,32 +121,21 @@ class DateSet:
 
 
 def main():
-    path_prefix = '/data/TFRecord'
+    tf.enable_eager_execution()
+    path_prefix = '/home/ccyoung/DCase'
     path = os.path.join(path_prefix, 'train.tfrecords')
     test_path = os.path.join(path_prefix, 'test.tfrecords')
     task = DateSet(None)
-    task.load_dataset()
-    task.generate_TFRecord(task.train, path)
-    task.generate_TFRecord(task.test, test_path)
-    os.system('sh /data/stop_instance.sh')
+    # task.load_dataset()
+    # task.generate_TFRecord(task.train, path)
+    # task.generate_TFRecord(task.test, test_path)
+    # os.system('sh /data/stop_instance.sh')
 
-    # dataset = tf.data.TFRecordDataset(path)
-    # dataset = dataset.map(task.parse_example)
+    dataset = tf.data.TFRecordDataset(path)
+    dataset = dataset.map(task.parse_example).batch(2)
 
-    # iterator = dataset.make_initializable_iterator()
-    # next_element = iterator.get_next()
-
-    # sess = tf.Session()
-    count = 0
-    # data=list()
-    # for _ in range(100):
-    #     sess.run(iterator.initializer)
-    #     while True:
-    #         try:
-    #             a = sess.run(next_element)
-    #             print(a)
-    #         except tf.errors.OutOfRangeError:
-    #             brea
+    for batch, (x, y) in enumerate(dataset):
+        print(y.shape)
 
 
 if __name__ == '__main__':
