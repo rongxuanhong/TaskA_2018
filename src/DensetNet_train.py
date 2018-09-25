@@ -182,7 +182,8 @@ def run_task_eager(args):
     # print('Using device %s, and data format %s.' % (device, data_format))
 
     # 3.加载数据
-    total_batch = 61220 // args.batch_size
+    batch_size = 128
+    total_batch = 61220 // batch_size
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
@@ -191,9 +192,9 @@ def run_task_eager(args):
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
-        tf.contrib.data.batch_and_drop_remainder(args.batch_size))
+        tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
-        tf.contrib.data.batch_and_drop_remainder(args.batch_size))
+        tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
     denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=args.nb_layers,
@@ -206,8 +207,8 @@ def run_task_eager(args):
     learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
                                                 [args.lr, args.lr * 0.1, args.lr * 0.01])
 
-    optimizer = tf.train.AdamOptimizer()
-    # optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    # optimizer = tf.train.AdamOptimizer()
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
