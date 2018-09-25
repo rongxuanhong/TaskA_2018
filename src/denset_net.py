@@ -9,7 +9,7 @@ from utils.utils import *
 class DenseNet:
     def __init__(self, input_shape, n_classes, nb_layers, nb_dense_block, growth_rate,
                  weight_decay=1e-4,
-                 theta=0.5, dropout_rate=0.4):
+                 theta=0.5, dropout_rate=0.3):
         self.weight_decay = weight_decay
         self.dropout_rate = dropout_rate
         self.n_classes = n_classes

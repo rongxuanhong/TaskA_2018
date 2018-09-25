@@ -253,7 +253,7 @@ def define_task_eager_flags():
     :return:
     """
     arg = argparse.ArgumentParser(description='')
-    arg.add_argument('--batch_size', type=int, default=32)
+    arg.add_argument('-b', '--batch_size', type=int, default=32)
     arg.add_argument('--epochs', type=int, default=40)
     arg.add_argument('--nb_layers', type=int, default=5)
     arg.add_argument('--n_db', type=int, default=3)
