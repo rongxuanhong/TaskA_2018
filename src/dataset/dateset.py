@@ -5,7 +5,6 @@ from tqdm import *
 import librosa
 import os
 import keras
-# import config as cfg
 import tensorflow as tf
 
 
@@ -121,11 +120,11 @@ class DateSet:
 
 
 def main():
-    tf.enable_eager_execution()
+    # tf.enable_eager_execution()
     # path_prefix = '/home/ccyoung/DCase'
     # path = os.path.join(path_prefix, 'train.tfrecords')
     # test_path = os.path.join(path_prefix, 'test.tfrecords')
-    # task = DateSet(None)
+    task = DateSet(None)
     # # task.load_dataset()
     # # task.generate_TFRecord(task.train, path)
     # # task.generate_TFRecord(task.test, test_path)
@@ -133,13 +132,7 @@ def main():
     #
     # dataset = tf.data.TFRecordDataset(path)
     # dataset = dataset.map(task.parse_example).batch(2)
-    data=np.random.rand(5,4,3)
-    data1=np.random.rand(5,4)
-    dataset = tf.data.Dataset.from_tensor_slices((data,data1)).batch(2)
-
-    for batch, (x,y) in enumerate(dataset):
-        print(y.shape)
-
+    task.extract_feature('../airport-barcelona-0-0-a.wav')
 
 if __name__ == '__main__':
     main()

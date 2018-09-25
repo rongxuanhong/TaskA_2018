@@ -1,4 +1,3 @@
-import tensorflow as tf
 from absl import app as absl_app
 from denset_net import DenseNet
 import tensorflow.contrib as tfc
@@ -6,6 +5,8 @@ import argparse
 from utils.utils import *
 from datetime import datetime
 import os
+
+"""使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
 
 def loss(logits, labels):
@@ -19,7 +20,7 @@ def loss(logits, labels):
         logits=logits, labels=labels))
 
 
-def compute_accuracy(logits, label_a, label_b, lam):
+def compute_accuracy(logits, labels):
     """
     计算准确度
     :param logits:
@@ -27,9 +28,21 @@ def compute_accuracy(logits, label_a, label_b, lam):
     :return:
     """
     predictions = tf.argmax(logits, axis=1, output_type=tf.int64)
-    label_a = tf.argmax(label_a, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
-    label_b = tf.argmax(label_b, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
-    correct = lam * tf.reduce_sum(tf.cast(tf.equal(predictions, label_a), tf.float32))+\
+    labels = tf.argmax(labels, axis=1, output_type=tf.int64)  ##labels采用的是独热编码的，也要tf.argmax
+    return tf.reduce_sum(tf.cast(tf.equal(predictions, labels), tf.float32)) / int(logits.shape[0]) * 100
+
+
+def compute_mix_accuracy(logits, label_a, label_b, lam):
+    """
+    计算准确度
+    :param logits:
+    :param labels:
+    :return:
+    """
+    predictions = tf.argmax(logits, axis=1, output_type=tf.int64)
+    label_a = tf.argmax(label_a, axis=1, output_type=tf.int64)
+    label_b = tf.argmax(label_b, axis=1, output_type=tf.int64)
+    correct = lam * tf.reduce_sum(tf.cast(tf.equal(predictions, label_a), tf.float32)) + \
               (1 - lam) * tf.reduce_sum(tf.cast(tf.equal(predictions, label_b), tf.float32))
     return correct / int(logits.shape[0]) * 100
 
@@ -49,15 +62,16 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
                 audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
-                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
-                logits = model(mixed_audios, training=True)
+                # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
+                logits = model(audios, training=True)
 
                 # 计算损失
-                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
+                # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
 
-                # loss_value = loss(logits, labels)
+                loss_value = loss(logits, labels)
                 # 每10步记录日志
-                acc = compute_accuracy(logits, label_a, label_b, lam)
+                # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
+                acc = compute_accuracy(logits, labels)
 
                 tfc.summary.scalar('loss', loss_value)
                 tfc.summary.scalar('accuracy', acc)
@@ -68,7 +82,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
         # 打印log
         if log_interval and batch % log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
-                                                                     compute_accuracy(logits, label_a, label_b, lam)))
+                                                                     compute_accuracy(logits, labels)))
 
 
 def test(model, dataset, args):
@@ -175,10 +189,10 @@ def run_task_eager(args):
     test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(70000).apply(
-    tf.contrib.data.batch_and_drop_remainder(args.batch_size))
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
+        tf.contrib.data.batch_and_drop_remainder(args.batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
-    tf.contrib.data.batch_and_drop_remainder(args.batch_size))
+        tf.contrib.data.batch_and_drop_remainder(args.batch_size))
 
     # 4.创建模型和优化器
     denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=args.nb_layers,
@@ -230,7 +244,7 @@ def run_task_eager(args):
             test(model, test_ds, args)
         check_point.save(check_point_prefix)  # 保存检查点
     # 输出训练时间
-    print('\nTrain time:', compute_time_consumed(start_time))
+    compute_time_consumed(start_time)
 
 
 def define_task_eager_flags():
@@ -248,18 +262,19 @@ def define_task_eager_flags():
     arg.add_argument('--output_dir', type=str, required=True)
     arg.add_argument('--lr', type=float, required=True, default=0.001)
     arg.add_argument('--log_interval', type=int, required=True, default=10)
-    arg.add_argument('--alpha', type=float, default=0.2)
+    # arg.add_argument('--alpha', type=float, default=0.2)
 
     return arg.parse_args()
 
 
 def main(args):
-    # try:
-    #     run_task_eager(args)
-    # except:
-    #     finish_instance()
-    run_task_eager(args)
-    finish_instance()
+    try:
+        run_task_eager(args)
+        finish_instance()
+    except:
+        finish_instance()
+    # run_task_eager(args)
+    # finish_instance()
 
 
 def finish_instance():
