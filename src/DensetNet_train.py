@@ -1,11 +1,9 @@
-from absl import app as absl_app
 from denset_net import DenseNet
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *
 from datetime import datetime
 import os
-import tensorflow.contrib.learn as tflearn
 
 """使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
@@ -182,7 +180,7 @@ def run_task_eager(args):
     # print('Using device %s, and data format %s.' % (device, data_format))
 
     # 3.加载数据
-    batch_size = 128
+    batch_size = args.batch_size
     total_batch = 61220 // batch_size
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
@@ -253,8 +251,8 @@ def define_task_eager_flags():
     定义一些flags方便在终端运行项目
     :return:
     """
-    arg = argparse.ArgumentParser(description='')
-    # arg.add_argument('-b', '--batch_size', type=int, default=32)
+    arg = argparse.ArgumentParser()
+    arg.add_argument('--batch_size', type=int, default=32)
     arg.add_argument('--epochs', type=int, default=40)
     arg.add_argument('--nb_layers', type=int, default=5)
     arg.add_argument('--n_db', type=int, default=3)
@@ -265,7 +263,8 @@ def define_task_eager_flags():
     arg.add_argument('--log_interval', type=int, required=True, default=10)
     arg.add_argument('--alpha', type=float, default=0.2)
 
-    return arg.parse_args()
+    args = arg.parse_args()
+    return args
 
 
 def main(args):
@@ -284,4 +283,4 @@ def finish_instance():
 
 if __name__ == '__main__':
     args = define_task_eager_flags()
-    absl_app.run(main=main(args))
+    main(args)
