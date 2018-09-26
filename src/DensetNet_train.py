@@ -4,6 +4,7 @@ import argparse
 from utils.utils import *
 from datetime import datetime
 import os
+import tensorflow as tf
 
 """使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
@@ -14,6 +15,7 @@ def loss(logits, labels):
     :param logits:
     :param labels:
     :return:
+
     """
     return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(
         logits=logits, labels=labels))
@@ -67,7 +69,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
                 # 计算损失
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
 
-                loss_value = loss(logits, labels)
+                l2_loss = tf.losses.get_regularization_losses()
+                loss_value = loss(logits, labels) + l2_loss
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
                 acc = compute_accuracy(logits, labels)
