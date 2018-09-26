@@ -69,9 +69,9 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
                 # 计算损失
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
 
-                l2_loss = tf.losses.get_regularization_loss()
-                print(l2_loss)
-                loss_value = loss(logits, labels) + l2_loss
+                l2_loss = model.losses
+                cross_ent=loss(logits, labels)
+                loss_value = loss(logits, labels) + tf.add_n(l2_loss)
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
                 acc = compute_accuracy(logits, labels)
@@ -182,17 +182,16 @@ def run_task_eager(args):
     # if args.data_format is not None:
     # data_format = args.data_format
     # print('Using device %s, and data format %s.' % (device, data_format))
-
     # 3.加载数据
     batch_size = args.batch_size
     total_batch = 61220 // batch_size
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
-    # train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-    # test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
-    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
