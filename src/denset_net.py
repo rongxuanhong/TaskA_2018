@@ -29,7 +29,7 @@ class DenseNet:
         return Conv2D(filters, kernel_size=kernel_size, padding='same', kernel_initializer='he_uniform', use_bias=False,
                       kernel_regularizer=l2(self.weight_decay), name=name, data_format=self.data_format)(x)
 
-    def conv_block(self, x, stage, branch, nb_filter):
+    def conv_block(self, x, stage, branch, nb_filter,training):
         """
         Apply BatchNorm, Relu, bottleneck 1x1 Conv2D, 3x3 Conv2D, and option dropout
         :param input:
@@ -52,7 +52,7 @@ class DenseNet:
                    kernel_regularizer=l2(self.weight_decay), name=conv_name_base + '_x1', data_format=self.data_format)(
             x)
         # if self.dropout_rate:
-        x = Dropout(self.dropout_rate)(x)
+        x = Dropout(self.dropout_rate)(x,training=training)
 
         # 3x3 con2d
         x = BatchNormalization(axis=self.axis, name=conv_name_base + '_x2_bn')(
@@ -61,7 +61,7 @@ class DenseNet:
         x = Conv2D(nb_filter, 3, padding='same', use_bias=False, kernel_initializer='he_uniform',
                    kernel_regularizer=l2(self.weight_decay), name=conv_name_base + '_x2', data_format=self.data_format)(
             x)
-        x = Dropout(self.dropout_rate)(x)
+        x = Dropout(self.dropout_rate)(x,training=training)
 
         return x
 
@@ -80,7 +80,7 @@ class DenseNet:
     #                         kernel_regularizer=l2(self.weight_decay), name=deconv_name_base)(x)
     #     return x
 
-    def transition_layers(self, x, stage, nb_filter):
+    def transition_layers(self, x, stage, nb_filter,training):
         """
          a transition part contains bn relu 1x1conv and optional dropout ,followed by AveragePooling2D
         :param x:
@@ -99,13 +99,13 @@ class DenseNet:
         x = Conv2D(nb_filter, 1, padding='same', kernel_initializer='he_uniform', use_bias=False,
                    kernel_regularizer=l2(self.weight_decay), name=conv_name_base, data_format=self.data_format)(x)
         # if self.dropout_rate:
-        x = Dropout(self.dropout_rate)(x)
+        x = Dropout(self.dropout_rate)(x,training=training)
         x = AveragePooling2D(pool_size=2, strides=2, name=pool_name_base, data_format=self.data_format)(
             x)  # non-overlap
 
         return x, nb_filter
 
-    def dense_block(self, x, stage, nb_layers, nb_filter):
+    def dense_block(self, x, stage, nb_layers, nb_filter,training):
         """
 
         :param x:
@@ -117,23 +117,23 @@ class DenseNet:
         concat_feat = x
         for i in range(nb_layers):
             branch = i + 1
-            x = self.conv_block(x, stage, branch, self.growth_rate)  ## simular to H function in paper
+            x = self.conv_block(x, stage, branch, self.growth_rate,training)  ## simular to H function in paper
             concat_feat = Concatenate(axis=self.axis)(
                 [concat_feat, x])  # concatenate feature maps from proceeding layers along feature axis or column
             nb_filter += self.growth_rate  #
         return concat_feat, nb_filter  # nb_filter=k0+k*nb_layers，denseblock has nb_filter output feature maps
 
-    def build(self):
+    def build(self,training=True):
         input = Input(self.input_shape)
         # first convolution layer 3x3 conv
         x = self.Conv_2D(input, 2 * self.growth_rate, 3, name='conv_1')
 
         nb_filter = self.growth_rate
         for i in range(self.nb_dense_block - 1):
-            x, nb_filter = self.dense_block(x, i + 1, self.nb_layers, nb_filter)
-            x, nb_filter = self.transition_layers(x, i + 1, nb_filter)
+            x, nb_filter = self.dense_block(x, i + 1, self.nb_layers, nb_filter,training)
+            x, nb_filter = self.transition_layers(x, i + 1, nb_filter,training)
 
-        x, nb_filter = self.dense_block(x, 5, self.nb_layers, nb_filter)
+        x, nb_filter = self.dense_block(x, 5, self.nb_layers, nb_filter,training)
 
         x = GlobalAveragePooling2D()(x)
 
@@ -149,7 +149,7 @@ class DenseNet:
         #     x = Dropout(self.dropout_rate)(x)
         logits = Dense(10, name='fc1')(x)
 
-        model = Model(inputs=[input], outputs=[logits], name='densenet')
+        model = Model(inputs=[input], outputs=[logits], name='densenet',)
         return model
 
 

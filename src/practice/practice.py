@@ -60,10 +60,9 @@ def test_piece_constant():
 
 def main():
     # generate_spectrum()
-    test_piece_constant()
+
     pass
 
 
 if __name__ == '__main__':
-    y, sr = librosa.load('../airport-barcelona-0-0-a.wav', sr=48000, duration=10.0)
-    print(type(y))
+    main()

@@ -48,7 +48,7 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, log_interval, args):
+def train(densenet, optimizer, dataset, step_counter, total_batch, log_interval, args):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -58,6 +58,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
     :param total_batch:每轮总批次
     :return:
     """
+    model = densenet.build(training=True)
+    describe_model(model)
     for batch, (audios, labels) in enumerate(dataset):  # 遍历一次数据集
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
@@ -70,7 +72,6 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
 
                 l2_loss = model.losses
-                cross_ent=loss(logits, labels)
                 loss_value = loss(logits, labels) + tf.add_n(l2_loss)
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
@@ -88,7 +89,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
                                                                      compute_accuracy(logits, labels)))
 
 
-def test(model, dataset, args):
+def test(denset, dataset, args):
     """
     使用評估集測試模型效果(带答案的评估集或称测试集)
     :param model:
@@ -98,6 +99,7 @@ def test(model, dataset, args):
     avg_loss = tfc.eager.metrics.Mean('loss', dtype=tf.float32)
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
+    model = denset.build(training=False)
     for (audios, labels) in dataset:
         audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
         logits = model(audios, training=False)
@@ -188,10 +190,10 @@ def run_task_eager(args):
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
-    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
-    # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    # train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+    # test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
@@ -201,8 +203,6 @@ def run_task_eager(args):
     denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=args.nb_layers,
                       nb_dense_block=args.n_db,
                       growth_rate=args.grow_rate)
-    model = denset.build()
-    describe_model(model)
 
     step_counter = tf.train.get_or_create_global_step()
     learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
@@ -226,7 +226,7 @@ def run_task_eager(args):
     check_point_prefix = os.path.join(args.output_dir, 'cpkt')
     create_folder(check_point_prefix)
 
-    check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
+    # check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
 
     # check_point.restore(tf.train.latest_checkpoint(args.model_dir))  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
@@ -236,15 +236,15 @@ def run_task_eager(args):
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args.log_interval, args)
+            train(denset, optimizer, train_ds, step_counter, total_batch, args.log_interval, args)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
             # 测试
             # if (i + 1) % 5 == 0:
             # 评估
-            test(model, test_ds, args)
-        check_point.save(check_point_prefix)  # 保存检查点
+            test(denset, test_ds, args)
+        # check_point.save(check_point_prefix)  # 保存检查点
     # 输出训练时间
     compute_time_consumed(start_time)
 
