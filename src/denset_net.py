@@ -138,16 +138,16 @@ class DenseNet:
         x = GlobalAveragePooling2D()(x)
 
         # x = Flatten()(x)
-        x = Dense(54, kernel_initializer='he_uniform', name='fc1')(x)
-        x = BatchNormalization(name='fc1_bn', )(x)
-        x = Activation('relu')(x)
-        x = Dropout(self.dropout_rate)(x)
+        # x = Dense(54, kernel_initializer='he_uniform', name='fc1')(x)
+        # x = BatchNormalization(name='fc1_bn', )(x)
+        # x = Activation('relu')(x)
+        # x = Dropout(self.dropout_rate)(x)
         # x = Dense(420, kernel_initializer='he_uniform', name='fc2')(x)
         # x = BatchNormalization(name='fc2_bn')(x)
         # x = Activation('relu')(x)
         # if self.dropout_rate:
         #     x = Dropout(self.dropout_rate)(x)
-        logits = Dense(10, name='fc3')(x)
+        logits = Dense(10, name='fc1')(x)
 
         model = Model(inputs=[input], outputs=[logits], name='densenet')
         return model

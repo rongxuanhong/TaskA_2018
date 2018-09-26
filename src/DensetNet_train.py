@@ -207,8 +207,8 @@ def run_task_eager(args):
     learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
                                                 [args.lr, args.lr * 0.1, args.lr * 0.01])
 
-    # optimizer = tf.train.AdamOptimizer()
-    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.AdamOptimizer()
+    # optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -254,7 +254,7 @@ def define_task_eager_flags():
     :return:
     """
     arg = argparse.ArgumentParser(description='')
-    arg.add_argument('-b', '--batch_size', type=int, default=32)
+    # arg.add_argument('-b', '--batch_size', type=int, default=32)
     arg.add_argument('--epochs', type=int, default=40)
     arg.add_argument('--nb_layers', type=int, default=5)
     arg.add_argument('--n_db', type=int, default=3)
