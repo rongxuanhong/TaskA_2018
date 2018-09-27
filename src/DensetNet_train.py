@@ -143,11 +143,11 @@ def run_task_eager(args):
     total_batch = 61220 // batch_size
 
     # if  args.local:
-    # train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-    # test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
     # else:
-    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
@@ -157,10 +157,17 @@ def run_task_eager(args):
     # model = DenseNet(n_classes=10, nb_layers=args.nb_layers,
     #                   nb_dense_block=args.n_db,
     #                   growth_rate=args.grow_rate)
+
     model = DenseNet(1, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True, weight_decay=0.0001)
+                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.5, pool_initial=False,
+                     include_top=True)
 
     # describe_model(model(None))
+    rand_input = tf.random_uniform((batch_size, 128, 47, 2)) * 200
+
+    output_shape = model(rand_input).shape
+
+    print('l2----losss', tf.add_n(model.losses))
 
     step_counter = tf.train.get_or_create_global_step()
     learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
@@ -229,37 +236,14 @@ def define_task_eager_flags():
     return args
 
 
-def main():
+def main(args):
     # try:
     #     run_task_eager(args)
     #     finish_instance()
     # except:
     #     finish_instance()
-    # run_task_eager(args)
+    run_task_eager(args)
     # finish_instance()
-    tf.enable_eager_execution()
-    depth = 7
-    growth_rate = 12
-    num_blocks = 3
-    output_classes = 10
-    num_layers_in_each_block = 5
-    batch_size = 64
-    data_format = 'channels_last'
-
-    model = DenseNet(depth, growth_rate, num_blocks,
-                     output_classes, num_layers_in_each_block,
-                     data_format, bottleneck=False, compression=0.5,
-                     weight_decay=1e-4, dropout_rate=0,
-                     pool_initial=False, include_top=True)
-
-    if data_format == 'channels_last':
-        rand_input = tf.random_uniform((batch_size, 128, 47, 2))*200
-    else:
-        rand_input = tf.random_uniform((batch_size, 3, 32, 32))*200
-    output_shape = model(rand_input).shape
-    # sess = tf.Session()
-    # a = sess.run(tf.add_n(model.losses))
-    print(tf.add_n(model.losses))
 
 
 def finish_instance():
@@ -267,4 +251,5 @@ def finish_instance():
 
 
 if __name__ == '__main__':
-    main()
+    args = define_task_eager_flags()
+    main(args)
