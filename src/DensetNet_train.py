@@ -203,7 +203,7 @@ def run_task_eager(args):
     model = DenseNet(1, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
                      bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True)
 
-    describe_model(model)
+    describe_model(model(None))
 
     step_counter = tf.train.get_or_create_global_step()
     learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
