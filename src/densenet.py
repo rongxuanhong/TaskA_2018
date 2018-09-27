@@ -12,7 +12,7 @@ class ConvBlock(tf.keras.Model):
                  , dropout_rate=0):
         super(ConvBlock, self).__init__(name='conv_block')
         self.bottleneck = bottleneck
-        axis = 3 if data_format == 'channels_last' else 1
+        axis = -1 if data_format == 'channels_last' else 1
         inter_filter = num_filters * 4
         self.conv2 = Conv2D(num_filters,
                             (3, 3),
@@ -53,7 +53,7 @@ class TransitionBlock(tf.keras.Model):
     def __init__(self, num_filters, data_format,
                  weight_decay=1e-4, dropout_rate=0):
         super(TransitionBlock, self).__init__()
-        axis = 3 if data_format == 'channels_last' else 1
+        axis = -1 if data_format == 'channels_last' else 1
         self.batchnorm = BatchNormalization(axis=axis)
 
         self.conv = Conv2D(num_filters,
@@ -78,7 +78,7 @@ class DenseBlock(tf.keras.Model):
                  weight_decay=1e-4, dropout_rate=0):
         super(DenseBlock, self).__init__()
         self.num_layers = num_layers
-        self.axis = 3 if data_format == 'channels_last' else 1
+        self.axis = -1 if data_format == 'channels_last' else 1
         self.blocks = []  # save each convblock in each denseblock
         for _ in range(int(self.num_layers)):
             self.blocks.append(ConvBlock(growth_rate, data_format, bottleneck, weight_decay,
@@ -131,7 +131,7 @@ class DenseNet(tf.keras.Model):
             else:  # 每个blocks的层数相同
                 self.num_layers_in_each_block = [self.num_layers_in_each_block] * self.num_of_blocks
 
-        axis = 3 if data_format == 'channels_last' else 1
+        axis = -1 if data_format == 'channels_last' else 1
 
         # setting the filters and stride of the initial covn layer.
         if self.pool_initial:

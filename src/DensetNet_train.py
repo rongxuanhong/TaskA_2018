@@ -154,11 +154,11 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    # denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=args.nb_layers,
+    # model = DenseNet(n_classes=10, nb_layers=args.nb_layers,
     #                   nb_dense_block=args.n_db,
     #                   growth_rate=args.grow_rate)
     model = DenseNet(1, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True)
+                     bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True,weight_decay=0.0001)
 
     # describe_model(model(None))
 
@@ -213,7 +213,7 @@ def define_task_eager_flags():
     :return:
     """
     arg = argparse.ArgumentParser()
-    arg.add_argument('--batch_size', type=int, default=32)
+    arg.add_argument('--batch_size', type=int, default=16)
     arg.add_argument('--epochs', type=int, default=40)
     arg.add_argument('--nb_layers', type=int, default=5)
     arg.add_argument('--n_db', type=int, default=2)
@@ -247,8 +247,8 @@ def main():
     data_format = ('channels_first') if tf.test.is_gpu_available() else (
         'channels_last')
 
-    model = DenseNet(1, 12, 3, 10, 5, data_format='channels_last',
-                     bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True)
+    # model = DenseNet(1, 12, 3, 10, 5, data_format='channels_last',
+    #                  bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True)
 
     train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
