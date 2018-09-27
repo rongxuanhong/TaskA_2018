@@ -106,7 +106,7 @@ class DenseNet(tf.keras.Model):
         self.num_layers_in_each_block = num_layers_in_each_block  # list tuple or integer
         self.data_format = data_format
         self.bottleneck = bottleneck
-        self.compression = compression # compression factor
+        self.compression = compression  # compression factor
         self.weight_decay = weight_decay
         self.dropout_rate = dropout_rate
         self.pool_initial = pool_initial
@@ -189,7 +189,8 @@ class DenseNet(tf.keras.Model):
 
     def call(self, x, training=True, mask=None):
         """ general modelling of DenseNet"""
-        output = self.conv1(x)
+        input = tf.keras.Input((128, 47, 2))
+        output = self.conv1(input)
 
         if self.pool_initial:
             output = self.batchnorm1(output, training=training)
@@ -207,5 +208,6 @@ class DenseNet(tf.keras.Model):
             output = self.last_pool(output)
             output = self.classifier(output)
 
+        model = tf.keras.Model(inputs=[input], output=[output])
 
-        return output
+        return model

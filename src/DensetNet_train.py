@@ -48,7 +48,7 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, log_interval, args, show_model):
+def train(model, optimizer, dataset, step_counter, total_batch, log_interval, args):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -65,9 +65,6 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
                 audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
-                if not show_model:
-                    describe_model(model)
-                    show_model = False
 
                 # 计算损失
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
@@ -206,6 +203,8 @@ def run_task_eager(args):
     model = DenseNet(1, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
                      bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True)
 
+    describe_model(model)
+
     step_counter = tf.train.get_or_create_global_step()
     learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
                                                 [args.lr, args.lr * 0.1, args.lr * 0.01])
@@ -233,13 +232,12 @@ def run_task_eager(args):
     # check_point.restore(tf.train.latest_checkpoint(args.model_dir))  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
-    show_model = False
     start_time = datetime.now()
     for i in range(args.epochs):  # 迭代的轮次
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args.log_interval, args, show_model)
+            train(model, optimizer, train_ds, step_counter, total_batch, args.log_interval, args)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
