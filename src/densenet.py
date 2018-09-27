@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
     Dense, Dropout, MaxPool2D, GlobalAveragePooling2D
 
-l2 = tf.keras.regularizers.l2
+from tensorflow.keras.regularizers import l2
 
 
 class ConvBlock(tf.keras.Model):
@@ -36,6 +36,7 @@ class ConvBlock(tf.keras.Model):
             self.batchnorm2 = BatchNormalization(axis=axis)
 
     def call(self, x, training=True, mask=None):
+        print('cbloss',self.conv1.losses)
         output = self.batchnorm1(x, training=training)
 
         if self.bottleneck:
