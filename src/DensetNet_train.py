@@ -85,10 +85,9 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
                 # 计算损失
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
 
-                # l2_loss = model.losses
-                print(loss(logits, labels))
-                loss_value = loss(logits, labels) + tf.add_n(model.losses)
-                print('总的loss', loss_value)
+                l2_loss = tf.add_n(model.losses)
+                print('l2_loss', l2_loss)
+                loss_value = loss(logits, labels) + l2_loss
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
                 acc = compute_accuracy(logits, labels)
@@ -217,12 +216,12 @@ def define_task_eager_flags():
     arg.add_argument('--batch_size', type=int, default=32)
     arg.add_argument('--epochs', type=int, default=40)
     arg.add_argument('--nb_layers', type=int, default=5)
-    arg.add_argument('--n_db', type=int, default=3)
+    arg.add_argument('--n_db', type=int, default=2)
     arg.add_argument('--grow_rate', type=int, default=12)
-    arg.add_argument('--data_format', type=str, required=True)
-    arg.add_argument('--output_dir', type=str, required=True)
-    arg.add_argument('--lr', type=float, required=True, default=0.001)
-    arg.add_argument('--log_interval', type=int, required=True, default=10)
+    arg.add_argument('--data_format', type=str, default='channels_last')
+    arg.add_argument('--output_dir', type=str, default='/home/ccyoung/')
+    arg.add_argument('--lr', type=float,  default=0.001)
+    arg.add_argument('--log_interval', type=int,  default=10)
     arg.add_argument('--alpha', type=float, default=0.2)
     arg.add_argument('--local', type=bool, default=False)
 
@@ -230,14 +229,42 @@ def define_task_eager_flags():
     return args
 
 
-def main(args):
-    try:
-        run_task_eager(args)
-        finish_instance()
-    except:
-        finish_instance()
+def main():
+    # try:
+    #     run_task_eager(args)
+    #     finish_instance()
+    # except:
+    #     finish_instance()
     # run_task_eager(args)
     # finish_instance()
+    tf.enable_eager_execution()
+    depth = 7
+    growth_rate = 12
+    num_blocks = 3
+    output_classes = 10
+    num_layers_in_each_block = 5
+    batch_size = 64
+    data_format = ('channels_first') if tf.test.is_gpu_available() else (
+        'channels_last')
+
+    model = DenseNet(1, 12, 3, 10, 5, data_format='channels_last',
+                     bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True)
+
+    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    # else:
+    # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
+        tf.contrib.data.batch_and_drop_remainder(batch_size))
+    test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
+        tf.contrib.data.batch_and_drop_remainder(batch_size))
+
+    step_counter = tf.train.get_or_create_global_step()
+    learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
+                                                [args.lr, args.lr * 0.1, args.lr * 0.01])
+
+    optimizer = tf.train.AdamOptimizer()
 
 
 def finish_instance():
@@ -246,4 +273,4 @@ def finish_instance():
 
 if __name__ == '__main__':
     args = define_task_eager_flags()
-    main(args)
+    run_task_eager(args)
