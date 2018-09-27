@@ -187,10 +187,12 @@ def run_task_eager(args):
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
-    # train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-    # test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
-    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    if not args.local:
+        train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+        test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    else:
+        train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+        test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
@@ -266,6 +268,7 @@ def define_task_eager_flags():
     arg.add_argument('--lr', type=float, required=True, default=0.001)
     arg.add_argument('--log_interval', type=int, required=True, default=10)
     arg.add_argument('--alpha', type=float, default=0.2)
+    arg.add_argument('--local', type=bool, default=False)
 
     args = arg.parse_args()
     return args
