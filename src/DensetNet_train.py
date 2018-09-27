@@ -187,12 +187,12 @@ def run_task_eager(args):
     # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
     #     args.batch_size)
     # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
-    if not args.local:
-        train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-        test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
-    else:
-        train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-        test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    # if  args.local:
+    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    # else:
+    #     train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    #     test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
