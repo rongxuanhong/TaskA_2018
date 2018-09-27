@@ -207,4 +207,5 @@ class DenseNet(tf.keras.Model):
             output = self.last_pool(output)
             output = self.classifier(output)
 
+
         return output
