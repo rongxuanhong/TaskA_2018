@@ -159,35 +159,15 @@ def run_task_eager(args):
     #                   growth_rate=args.grow_rate)
 
     model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.1, pool_initial=False,
+                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
                      include_top=True)
-    # depth = 7
-    # growth_rate = 12
-    # num_blocks = 3
-    # output_classes = 10
-    # num_layers_in_each_block = 5
-    # batch_size = 64
-    # data_format = 'channels_last'
-    #
-    # model = DenseNet(depth, growth_rate, num_blocks,
-    #                  output_classes, num_layers_in_each_block,
-    #                  data_format, bottleneck=False, compression=0.5,
-    #                  weight_decay=1e-4, dropout_rate=0,
-    #                  pool_initial=False, include_top=True)
-    #
-    # # describe_model(model(None))
-    # rand_input = tf.random_uniform((batch_size, 128, 47, 2)) * 200
-    #
-    # output_shape = model(rand_input).shape
-    #
-    # print('l2----losss', tf.add_n(model.losses))
 
     step_counter = tf.train.get_or_create_global_step()
     learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
                                                 [args.lr, args.lr * 0.1, args.lr * 0.01])
 
-    optimizer = tf.train.AdamOptimizer()
-    # optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    # optimizer = tf.train.AdamOptimizer()
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -250,12 +230,12 @@ def define_task_eager_flags():
 
 
 def main(args):
-    # try:
-    #     run_task_eager(args)
-    #     finish_instance()
-    # except:
-    #     finish_instance()
-    run_task_eager(args)
+    try:
+        run_task_eager(args)
+        finish_instance()
+    except:
+        finish_instance()
+    # run_task_eager(args)
     # finish_instance()
 
 
