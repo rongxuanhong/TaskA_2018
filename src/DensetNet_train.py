@@ -159,7 +159,7 @@ def run_task_eager(args):
     #                   growth_rate=args.grow_rate)
 
     model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.5, pool_initial=False,
+                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.1, pool_initial=False,
                      include_top=True)
     # depth = 7
     # growth_rate = 12
