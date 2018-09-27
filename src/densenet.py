@@ -189,8 +189,7 @@ class DenseNet(tf.keras.Model):
 
     def call(self, x, training=True, mask=None):
         """ general modelling of DenseNet"""
-        input = tf.keras.Input((128, 47, 2))
-        output = self.conv1(input)
+        output = self.conv1(x)
 
         if self.pool_initial:
             output = self.batchnorm1(output, training=training)
@@ -208,6 +207,4 @@ class DenseNet(tf.keras.Model):
             output = self.last_pool(output)
             output = self.classifier(output)
 
-        model = tf.keras.Model(inputs=[input], output=[output])
-
-        return model
+        return output
