@@ -9,6 +9,22 @@ import tensorflow as tf
 """使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
 
+def parse_example(example):
+    """
+    解析样本
+    :param example:
+    :return:
+    """
+    keys_to_features = {
+        'audio': tf.VarLenFeature(tf.float32),
+        'label': tf.VarLenFeature(tf.float32),
+    }
+    parsed = tf.parse_single_example(example, keys_to_features)
+    audios = tf.sparse_tensor_to_dense(parsed['audio'], default_value=0)
+    labels = tf.sparse_tensor_to_dense(parsed['label'], default_value=0)
+    return audios, labels
+
+
 def loss(logits, labels):
     """
     定义损失函数
@@ -48,7 +64,7 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, log_interval, args):
+def train(model, optimizer, dataset, step_counter, total_batch, args):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -69,8 +85,10 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
                 # 计算损失
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
 
-                l2_loss = model.losses
-                loss_value = loss(logits, labels) + tf.add_n(l2_loss)
+                # l2_loss = model.losses
+                print(loss(logits, labels))
+                loss_value = loss(logits, labels) + tf.add_n(model.losses)
+                print('总的loss', loss_value)
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
                 acc = compute_accuracy(logits, labels)
@@ -82,7 +100,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, log_interval, ar
             optimizer.apply_gradients(zip(grads, model.variables), global_step=step_counter)
 
         # 打印log
-        if log_interval and batch % log_interval == 0:
+        if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
                                                                      compute_accuracy(logits, labels)))
 
@@ -112,54 +130,6 @@ def test(model, dataset, args):
         tfc.summary.scalar('test_acc', accuracy.result())
 
 
-def predict_evaluation():
-    """
-    预测评估集的标签
-    :return:
-    """
-    pass
-
-
-def verify_model(dataset, model):
-    """
-    验证集评估模型
-    :param dataset:
-    :param model:
-    :return:
-    """
-    avg_loss = tfc.eager.metrics.Mean('loss', dtype=tf.float32)
-    accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
-
-    for (audios, labels) in dataset:
-        logits = model(audios, training=False)
-        avg_loss(loss(logits, labels))
-        accuracy(
-            tf.argmax(logits, axis=1, output_type=tf.int64),
-            tf.argmax(labels, axis=1, output_type=tf.int64)
-        )
-    print('validation set: Average loss: %.4f, Accuracy: %4f%%\n' %
-          (avg_loss.result(), 100 * accuracy.result()))
-    with tfc.summary.always_record_summaries():
-        tfc.summary.scalar('val_loss', avg_loss.result())
-        tfc.summary.scalar('val_acc', accuracy.result())
-
-
-def parse_example(example):
-    """
-    解析样本
-    :param example:
-    :return:
-    """
-    keys_to_features = {
-        'audio': tf.VarLenFeature(tf.float32),
-        'label': tf.VarLenFeature(tf.float32),
-    }
-    parsed = tf.parse_single_example(example, keys_to_features)
-    audios = tf.sparse_tensor_to_dense(parsed['audio'], default_value=0)
-    labels = tf.sparse_tensor_to_dense(parsed['label'], default_value=0)
-    return audios, labels
-
-
 def run_task_eager(args):
     """
     在急切模式下，运行模型的训练以及评估
@@ -169,30 +139,16 @@ def run_task_eager(args):
     # 1. 手动开始急切执行
     tf.enable_eager_execution()
 
-    # dateset = DateSet(args)
-    # dateset.load_dataset()
-    # task.prepare_data()
-
-    # 2.自动决定运行设备和数据格式
-    # (device, data_format) = ('/gpu:0', 'channels_first')
-    # if args.no_gpu or not tf.test.is_gpu_available():
-    #     (device, data_format) = ('/cpu:0', 'channels_last')
-    # If data_format is defined in FLAGS, overwrite automatically set value.
-    # if args.data_format is not None:
-    # data_format = args.data_format
-    # print('Using device %s, and data format %s.' % (device, data_format))
     # 3.加载数据
     batch_size = args.batch_size
     total_batch = 61220 // batch_size
-    # train_ds = tf.data.Dataset.from_tensor_slices(task.train).shuffle(10000).batch(
-    #     args.batch_size)
-    # test_ds = tf.data.Dataset.from_tensor_slices(task.test).batch(args.batch_size)
+
     # if  args.local:
     train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
     test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
     # else:
-    #     train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    #     test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
@@ -239,7 +195,7 @@ def run_task_eager(args):
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args.log_interval, args)
+            train(model, optimizer, train_ds, step_counter, total_batch, args)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
