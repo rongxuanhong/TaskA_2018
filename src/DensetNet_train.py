@@ -253,9 +253,9 @@ def main():
                      pool_initial=False, include_top=True)
 
     if data_format == 'channels_last':
-        rand_input = tf.random_uniform((batch_size, 128, 47, 2))
+        rand_input = tf.random_uniform((batch_size, 128, 47, 2))*200
     else:
-        rand_input = tf.random_uniform((batch_size, 3, 32, 32))
+        rand_input = tf.random_uniform((batch_size, 3, 32, 32))*200
     output_shape = model(rand_input).shape
     # sess = tf.Session()
     # a = sess.run(tf.add_n(model.losses))
