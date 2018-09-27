@@ -36,7 +36,7 @@ class ConvBlock(tf.keras.Model):
             self.batchnorm2 = BatchNormalization(axis=axis)
 
     def call(self, x, training=True, mask=None):
-        print('cbloss',self.conv1.losses)
+
         output = self.batchnorm1(x, training=training)
 
         if self.bottleneck:

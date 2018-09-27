@@ -143,11 +143,11 @@ def run_task_eager(args):
     total_batch = 61220 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    # train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
+    # test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
     # else:
-    # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
+    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
@@ -158,7 +158,7 @@ def run_task_eager(args):
     #                   nb_dense_block=args.n_db,
     #                   growth_rate=args.grow_rate)
     model = DenseNet(1, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True,weight_decay=0.0001)
+                     bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True, weight_decay=0.0001)
 
     # describe_model(model(None))
 
@@ -220,8 +220,8 @@ def define_task_eager_flags():
     arg.add_argument('--grow_rate', type=int, default=12)
     arg.add_argument('--data_format', type=str, default='channels_last')
     arg.add_argument('--output_dir', type=str, default='/home/ccyoung/')
-    arg.add_argument('--lr', type=float,  default=0.001)
-    arg.add_argument('--log_interval', type=int,  default=10)
+    arg.add_argument('--lr', type=float, default=0.001)
+    arg.add_argument('--log_interval', type=int, default=10)
     arg.add_argument('--alpha', type=float, default=0.2)
     arg.add_argument('--local', type=bool, default=False)
 
@@ -244,27 +244,22 @@ def main():
     output_classes = 10
     num_layers_in_each_block = 5
     batch_size = 64
-    data_format = ('channels_first') if tf.test.is_gpu_available() else (
-        'channels_last')
+    data_format = 'channels_last'
 
-    # model = DenseNet(1, 12, 3, 10, 5, data_format='channels_last',
-    #                  bottleneck=True, dropout_rate=0.5, pool_initial=False, include_top=True)
+    model = DenseNet(depth, growth_rate, num_blocks,
+                     output_classes, num_layers_in_each_block,
+                     data_format, bottleneck=False, compression=0.5,
+                     weight_decay=1e-4, dropout_rate=0,
+                     pool_initial=False, include_top=True)
 
-    train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    # else:
-    # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
-    # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
-        tf.contrib.data.batch_and_drop_remainder(batch_size))
-    test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
-        tf.contrib.data.batch_and_drop_remainder(batch_size))
-
-    step_counter = tf.train.get_or_create_global_step()
-    learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
-                                                [args.lr, args.lr * 0.1, args.lr * 0.01])
-
-    optimizer = tf.train.AdamOptimizer()
+    if data_format == 'channels_last':
+        rand_input = tf.random_uniform((batch_size, 128, 47, 2))
+    else:
+        rand_input = tf.random_uniform((batch_size, 3, 32, 32))
+    output_shape = model(rand_input).shape
+    # sess = tf.Session()
+    # a = sess.run(tf.add_n(model.losses))
+    print(tf.add_n(model.losses))
 
 
 def finish_instance():
@@ -272,5 +267,4 @@ def finish_instance():
 
 
 if __name__ == '__main__':
-    args = define_task_eager_flags()
-    run_task_eager(args)
+    main()
