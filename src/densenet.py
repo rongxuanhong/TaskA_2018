@@ -211,9 +211,6 @@ class DenseNet(tf.keras.Model):
         return output
 
 
-from functools import reduce
-from operator import mul
-
 
 def get_num_params(trainable_variables):
     total_parameters = 0

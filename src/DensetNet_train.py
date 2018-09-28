@@ -158,11 +158,11 @@ def run_task_eager(args):
     #                   growth_rate=args.grow_rate)
 
     model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
+                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.2, pool_initial=False,
                      include_top=True)
 
     step_counter = tf.train.get_or_create_global_step()
-    learning_rate = tf.train.piecewise_constant(step_counter, [int(0.5 * args.epochs), int(0.75 * args.epochs)],
+    learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
                                                 [args.lr, args.lr * 0.1, args.lr * 0.01])
 
     # optimizer = tf.train.AdamOptimizer()

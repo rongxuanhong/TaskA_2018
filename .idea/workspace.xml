@@ -4,7 +4,28 @@
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DensetNet_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DensetNet_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-31.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-31.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-32.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-32.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-33.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-33.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-34.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-34.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-35.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpkt-35.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/densenet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/densenet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538040151.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538111273.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538111340.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538115790.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538115840.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538040151.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538111273.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538111340.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538115790.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538115840.ccyounghrx.v2" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -27,11 +48,20 @@
       <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1218">
-              <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
+            <state relative-caret-position="228">
+              <caret line="160" column="72" selection-start-line="160" selection-start-column="72" selection-end-line="160" selection-end-column="72" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="util.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/checkpointable/util.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="389">
+              <caret line="1239" column="28" selection-start-line="1239" selection-start-column="17" selection-end-line="1239" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -51,22 +81,10 @@
       <file leaf-file-name="densenet.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/densenet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
+            <state relative-caret-position="19">
+              <caret line="211" selection-start-line="211" selection-end-line="211" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="denset_net.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/denset_net.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="444">
-              <caret line="149" column="41" selection-start-line="149" selection-start-column="41" selection-end-line="149" selection-end-column="41" />
-              <folding>
-                <element signature="e#0#173#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,8 +93,8 @@
       <file leaf-file-name="run_tf_dense_net_server.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
+            <state relative-caret-position="38">
+              <caret line="2" column="71" selection-start-line="2" selection-start-column="71" selection-end-line="2" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -84,8 +102,8 @@
       <file leaf-file-name="local_run_tf_dense_net.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/local_run_tf_dense_net.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="105" selection-start-line="2" selection-start-column="105" selection-end-line="2" selection-end-column="105" />
+            <state relative-caret-position="19">
+              <caret line="1" column="91" selection-start-line="1" selection-start-column="91" selection-end-line="1" selection-end-column="91" />
             </state>
           </provider>
         </entry>
@@ -124,10 +142,10 @@
         <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
         <option value="$PROJECT_DIR$/src/practice/practice.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/src/local_run_tf_dense_net.sh" />
         <option value="$PROJECT_DIR$/src/denset_net.py" />
-        <option value="$PROJECT_DIR$/src/densenet.py" />
+        <option value="$PROJECT_DIR$/src/local_run_tf_dense_net.sh" />
         <option value="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" />
+        <option value="$PROJECT_DIR$/src/densenet.py" />
         <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
       </list>
     </option>
@@ -158,6 +176,17 @@
               <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
               <item name="evaluation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -462,13 +491,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/momentum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="40" column="37" lean-forward="true" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/adam.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="397">
@@ -575,27 +597,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/local_run_tf_dense_net.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="105" selection-start-line="2" selection-start-column="105" selection-end-line="2" selection-end-column="105" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/regularizers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="215">
           <caret line="55" column="24" selection-start-line="55" selection-start-column="24" selection-end-line="55" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/denset_net.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="149" column="41" selection-start-line="149" selection-start-column="41" selection-end-line="149" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#173#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -630,16 +635,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/checkpoint">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/checkpointable/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="1239" column="6" selection-start-line="1239" selection-start-column="6" selection-end-line="1239" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/layers/normalization.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-485">
@@ -647,27 +642,65 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/local_run_tf_dense_net.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="91" selection-start-line="1" selection-start-column="91" selection-end-line="1" selection-end-column="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/checkpoint">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="58" lean-forward="true" selection-start-line="5" selection-start-column="58" selection-end-line="5" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/momentum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1349">
+          <caret line="79" column="17" selection-start-line="79" selection-start-column="4" selection-end-line="79" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/checkpointable/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="1239" column="28" selection-start-line="1239" selection-start-column="17" selection-end-line="1239" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="71" selection-start-line="2" selection-start-column="71" selection-end-line="2" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/denset_net.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="458">
+          <caret line="149" column="41" selection-start-line="149" selection-start-column="41" selection-end-line="149" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#173#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/densenet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        <state relative-caret-position="19">
+          <caret line="211" selection-start-line="211" selection-end-line="211" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1218">
-          <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
+        <state relative-caret-position="228">
+          <caret line="160" column="72" selection-start-line="160" selection-start-column="72" selection-end-line="160" selection-end-column="72" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
