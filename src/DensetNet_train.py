@@ -166,7 +166,7 @@ def run_task_eager(args):
                                                 [args.lr, args.lr * 0.1, args.lr * 0.01])
 
     # optimizer = tf.train.AdamOptimizer()
-    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(0.0001, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -185,7 +185,7 @@ def run_task_eager(args):
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
 
-    # check_point.restore(tf.train.latest_checkpoint(args.model_dir))  # 存在就恢复模型(可不使用)
+    check_point.restore(tf.train.latest_checkpoint(args.model_dir))  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
@@ -213,7 +213,7 @@ def define_task_eager_flags():
     """
     arg = argparse.ArgumentParser()
     arg.add_argument('--batch_size', type=int, default=16)
-    arg.add_argument('--epochs', type=int, default=40)
+    arg.add_argument('--epochs', type=int, default=5)
     arg.add_argument('--nb_layers', type=int, default=5)
     arg.add_argument('--n_db', type=int, default=2)
     arg.add_argument('--grow_rate', type=int, default=12)
@@ -229,12 +229,12 @@ def define_task_eager_flags():
 
 
 def main(args):
-    try:
-        run_task_eager(args)
-        finish_instance()
-    except:
-        finish_instance()
-    # run_task_eager(args)
+    # try:
+    #     run_task_eager(args)
+    #     finish_instance()
+    # except:
+    #     finish_instance()
+    run_task_eager(args)
     # finish_instance()
 
 

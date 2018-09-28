@@ -52,7 +52,7 @@ class TransitionBlock(tf.keras.Model):
     """transition block to reduce the number of filters"""
 
     def __init__(self, num_filters, data_format,
-                 weight_decay=1e-4, dropout_rate=0):
+                 weight_decay=1e-4, dropout_rate=0.):
         super(TransitionBlock, self).__init__()
         axis = -1 if data_format == 'channels_last' else 1
         self.batchnorm = BatchNormalization(axis=axis)
@@ -98,7 +98,7 @@ class DenseNet(tf.keras.Model):
     def __init__(self, depth_of_model, growth_rate, num_of_blocks,
                  output_classes, num_layers_in_each_block, data_format,
                  bottleneck=True, compression=0.5, weight_decay=1e-4,
-                 dropout_rate=0., pool_initial=False, include_top=True):
+                 dropout_rate=0., pool_initial=True, include_top=True):
         super(DenseNet, self).__init__()
         self.depth_of_model = depth_of_model  # valid when num_layers_in_each_block is integer
         self.growth_rate = growth_rate
@@ -209,3 +209,53 @@ class DenseNet(tf.keras.Model):
             output = self.classifier(output)
 
         return output
+
+
+from functools import reduce
+from operator import mul
+
+
+def get_num_params(trainable_variables):
+    total_parameters = 0
+    for variable in trainable_variables:
+        # shape is an array of tf.Dimension
+        shape = variable.get_shape()
+        variable_parameters = 1
+        for dim in shape:
+            variable_parameters *= dim.value
+        total_parameters += variable_parameters
+    print("Model size: %dK" % (total_parameters / 1000,))
+
+def print_num_of_total_parameters(trainable_variables,output_detail=True,):
+    total_parameters = 0
+    parameters_string = ""
+
+    for variable in trainable_variables:
+
+        shape = variable.get_shape()
+        variable_parameters = 1
+        for dim in shape:
+            variable_parameters *= dim.value
+        total_parameters += variable_parameters
+        if len(shape) == 1:
+            parameters_string += ("%s %d, " % (variable.name, variable_parameters))
+        else:
+            parameters_string += ("%s %s=%d, " % (variable.name, str(shape), variable_parameters))
+
+    else:
+        if output_detail:
+            print(parameters_string)
+        print("Total %d variables, %s params" % (len(tf.trainable_variables()), "{:,}".format(total_parameters)))
+
+def main():
+    model = DenseNet(7, 12, 5, 10, 5, 'channels_last', True)
+    rand_input = tf.random_uniform((64, 128, 47, 2))
+    output = model(rand_input)
+    # from utils.utils import describe_model
+    # model = tf.keras.models.Model(inputs=[input], outputs=[output], name='densenet',)
+    # describe_model(model)
+    # print_num_of_total_parameters(model.trainable_variables)
+
+
+if __name__ == '__main__':
+    main()
