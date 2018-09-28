@@ -4,64 +4,7 @@
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DensetNet_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DensetNet_train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/densenet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/densenet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537885200.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537927273.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537929719.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537931016.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537931172.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537945006.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537945106.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537945202.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537946406.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537947757.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537947844.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537953532.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1537957848.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538017060.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538017823.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538017881.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538023416.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538023989.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538024879.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538030951.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538034566.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538038981.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538039141.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538039345.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538039600.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538039700.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538039794.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/events.out.tfevents.1538040039.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537885200.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537927273.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537929719.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537931016.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537931172.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537945006.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537945106.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537945202.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537946406.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537947757.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537947844.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537953532.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1537957848.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538017060.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538017823.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538017881.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538023416.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538023989.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538024879.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538030951.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538034566.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538038981.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538039141.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538039345.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538039600.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538039700.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538039794.ccyounghrx.v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/train/events.out.tfevents.1538040039.ccyounghrx.v2" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -81,11 +24,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="215" column="52" selection-start-line="215" selection-start-column="52" selection-end-line="215" selection-end-column="52" />
+            <state relative-caret-position="1218">
+              <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -97,7 +40,7 @@
         <entry file="file://$PROJECT_DIR$/src/utils/utils.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="57">
-              <caret line="31" column="16" lean-forward="true" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
+              <caret line="31" column="16" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
               </folding>
@@ -109,28 +52,10 @@
         <entry file="file://$PROJECT_DIR$/src/densenet.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="361">
-              <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+              <caret line="40" selection-start-line="40" selection-end-line="40" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="normalization.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/layers/normalization.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-485">
-              <caret line="123" column="29" lean-forward="true" selection-start-line="123" selection-start-column="29" selection-end-line="123" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="regularizers.py" pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/regularizers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="55" column="24" selection-start-line="55" selection-start-column="24" selection-end-line="55" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -147,11 +72,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_tf_dense_net_server.sh" pinned="false" current-in-tab="true">
+      <file leaf-file-name="run_tf_dense_net_server.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="19">
-              <caret line="1" column="43" selection-start-line="1" selection-start-column="40" selection-end-line="1" selection-end-column="43" />
+              <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -202,8 +127,8 @@
         <option value="$PROJECT_DIR$/src/local_run_tf_dense_net.sh" />
         <option value="$PROJECT_DIR$/src/denset_net.py" />
         <option value="$PROJECT_DIR$/src/densenet.py" />
-        <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
         <option value="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" />
+        <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
       </list>
     </option>
   </component>
@@ -233,17 +158,6 @@
               <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
               <item name="evaluation" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="dataset" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -413,13 +327,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/lib/python3.5/pickle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="1575" column="4" selection-start-line="1575" selection-start-column="4" selection-end-line="1575" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/sklearn/preprocessing/data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2141">
@@ -716,10 +623,20 @@
     <entry file="file://$PROJECT_DIR$/src/utils/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
-          <caret line="31" column="16" lean-forward="true" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
+          <caret line="31" column="16" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/checkpoint">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/checkpointable/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="1239" column="6" selection-start-line="1239" selection-start-column="6" selection-end-line="1239" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -733,22 +650,9 @@
     <entry file="file://$PROJECT_DIR$/src/densenet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="361">
-          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/checkpoint">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="215" column="52" selection-start-line="215" selection-start-column="52" selection-end-line="215" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -756,7 +660,17 @@
     <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="19">
-          <caret line="1" column="43" selection-start-line="1" selection-start-column="40" selection-end-line="1" selection-end-column="43" />
+          <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1218">
+          <caret line="92" lean-forward="true" selection-start-line="92" selection-end-line="92" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
