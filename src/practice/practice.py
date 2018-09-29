@@ -49,13 +49,13 @@ def test_piece_constant():
     """
     learning_rates = [0.01, 0.01 * 0.1, 0.01 * 0.01]
     boundaries = [int(0.4 * 30), int(0.75 * 30)]
-
-    with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
-        for global_step in range(30):
-            learning_rate = tf.train.piecewise_constant(global_step, boundaries=boundaries, values=learning_rates)
-            a = sess.run([learning_rate])
-            print(a)
+    check_point = tf.train.Checkpoint(a='')
+    # with tf.Session() as sess:
+    #     sess.run(tf.global_variables_initializer())
+    #     for global_step in range(30):
+    #         learning_rate = tf.train.piecewise_constant(global_step, boundaries=boundaries, values=learning_rates)
+    #         a = sess.run([learning_rate])
+    #         print(a)
 
 
 def main():

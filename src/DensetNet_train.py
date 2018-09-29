@@ -184,8 +184,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    manager = tf.contrib.checkpoint.CheckpointManager(check_point, directory=check_point_prefix, max_to_keep=15)
-    check_point.restore(manager.latest_checkpoint)  # 存在就恢复模型(可不使用)
+    check_point.restore(tf.train.latest_checkpoint(args.output_dir))  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
@@ -196,7 +195,7 @@ def run_task_eager(args):
             train(model, optimizer, train_ds, step_counter, total_batch, args)
             # 验证
             # verify_model(validation_ds, model)
-            manager.save()  # 保存检查点
+            check_point.save(check_point_prefix)  # 保存检查点
         with test_summary_writer.as_default():
             # 测试
             # if (i + 1) % 5 == 0:
