@@ -158,15 +158,15 @@ def run_task_eager(args):
     #                   growth_rate=args.grow_rate)
 
     model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.2, pool_initial=False,
+                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
                      include_top=True)
 
     step_counter = tf.train.get_or_create_global_step()
-    learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
-                                                [args.lr, args.lr * 0.1, args.lr * 0.01])
+    # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
+    #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
     # optimizer = tf.train.AdamOptimizer()
-    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -184,8 +184,9 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-
-    # check_point.restore(tf.train.latest_checkpoint(args.output_dir))  # 存在就恢复模型(可不使用)
+    manager = tf.contrib.checkpoint.CheckpointManager(
+        check_point, directory=check_point_prefix, max_to_keep=15)
+    check_point.restore(manager.latest_checkpoint)  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
@@ -196,12 +197,12 @@ def run_task_eager(args):
             train(model, optimizer, train_ds, step_counter, total_batch, args)
             # 验证
             # verify_model(validation_ds, model)
+            manager.save()  # 保存检查点
         with test_summary_writer.as_default():
             # 测试
             # if (i + 1) % 5 == 0:
             # 评估
             test(model, test_ds, args)
-        check_point.save(check_point_prefix)  # 保存检查点
     # 输出训练时间
     compute_time_consumed(start_time)
 

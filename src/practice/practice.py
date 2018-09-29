@@ -47,8 +47,8 @@ def test_piece_constant():
     测试学习率手动衰减
     :return:
     """
-    learning_rates = [0.1, 0.01, 0.001]
-    boundaries = [15, 23]
+    learning_rates = [0.01, 0.01 * 0.1, 0.01 * 0.01]
+    boundaries = [int(0.4 * 30), int(0.75 * 30)]
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -59,9 +59,7 @@ def test_piece_constant():
 
 
 def main():
-    # generate_spectrum()
-
-    pass
+    test_piece_constant()
 
 
 if __name__ == '__main__':
