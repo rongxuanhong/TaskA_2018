@@ -1,9 +1,10 @@
 from keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Input, Activation,Concatenate
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Input, Activation, Concatenate
 
 from keras.regularizers import l2
 from utils.utils import describe_model
 from keras.models import Model
+
 
 class ConvBlock:
     """bn->relu->-conv"""
