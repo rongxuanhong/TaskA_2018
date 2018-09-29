@@ -130,7 +130,7 @@ class DenseNet:
 
         nb_filter = self.growth_rate
         for i in range(self.nb_dense_block - 1):
-            x, nb_filter = self.dense_block(x, i + 1, self.nb_layers, nb_filter,training)
+            x, nb_filter = self.dense_block(x, i + 1, self.nb_layers, nb_filter)
             x, nb_filter = self.transition_layers(x, i + 1, nb_filter,training)
 
         x, nb_filter = self.dense_block(x, 5, self.nb_layers, nb_filter,training)
