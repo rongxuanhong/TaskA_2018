@@ -203,7 +203,6 @@ def run_task_eager(args):
             test(model, test_ds, args)
     # 输出训练时间
     compute_time_consumed(start_time)
-    finish_instance()
     print('stop instance complete!!')
 
 
