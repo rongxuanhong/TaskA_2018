@@ -239,7 +239,7 @@ def main(args):
 
 
 def finish_instance():
-    os.system('sh stop.sh')
+    os.system('sh /data/stop.sh')
 
 
 if __name__ == '__main__':
