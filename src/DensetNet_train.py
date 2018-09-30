@@ -231,6 +231,7 @@ def define_task_eager_flags():
 def main(args):
     try:
         run_task_eager(args)
+        finish_instance()
     except:
         finish_instance()
     # run_task_eager(args)
@@ -238,7 +239,7 @@ def main(args):
 
 
 def finish_instance():
-    os.system('sh /data/stop.sh')
+    os.system('sh /data/stop_instance.sh')
 
 
 if __name__ == '__main__':
