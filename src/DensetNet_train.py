@@ -228,7 +228,6 @@ def define_task_eager_flags():
 
 
 def main(args):
-    run_task_eager(args)
     try:
         run_task_eager(args)
         finish_instance()

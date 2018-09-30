@@ -1,6 +1,6 @@
 import tensorflow as tf
 import os
-from densenet_keras import DenseNet
+import argparse
 
 
 def parse_example(example):
@@ -19,16 +19,21 @@ def parse_example(example):
     return audios, labels
 
 
-train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
+test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
 
 
 def create_model():
-    dense_net = DenseNet(7, 12, 3, 10, 5,
-                         bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
-                         include_top=True)
+    from densenet import DenseNet
+    # dense_net = DenseNet(7, 12, 3, 10, 5,
+    #                      bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
+    #                      include_top=True)
 
-    return dense_net.build(input_shape=(128, 47, 2))
+    # return dense_net.build(input_shape=(128, 47, 2)
+    # )
+    return DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
+                    bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
+                    include_top=True)
 
 
 def model_fn(features, labels, mode, params):
@@ -37,10 +42,10 @@ def model_fn(features, labels, mode, params):
     if mode == tf.estimator.ModeKeys.TRAIN:
         optimizer = tf.train.MomentumOptimizer(0.001, momentum=0.9, use_nesterov=True)
 
-        logits = model(features, training=True)
+        logits = model(features)
         loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits) + tf.add_n(model.losses)
         accuracy = tf.metrics.accuracy(
-            labels=labels, predictions=tf.argmax(logits, axis=1, name='acc_op')
+            labels=tf.argmax(labels, axis=1, output_type=tf.int64), predictions=tf.argmax(logits, axis=1, name='acc_op')
         )
         tf.summary.scalar('acc', accuracy[1])
         tf.summary.scalar('loss', loss)
@@ -50,10 +55,10 @@ def model_fn(features, labels, mode, params):
             train_op=optimizer.minimize(loss, tf.train.get_or_create_global_step())
         )
     if mode == tf.estimator.ModeKeys.EVAL:
-        logits = model(features, training=False)
+        logits = model(features, )
         loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
         accuracy = tf.metrics.accuracy(
-            labels=labels, predictions=tf.argmax(logits, axis=1, name='acc_op')
+            labels=tf.argmax(labels, axis=1, output_type=tf.int64), predictions=tf.argmax(logits, axis=1, name='acc_op')
         )
         tf.summary.scalar('eval_oss', loss)
         tf.summary.scalar('eval_acc', accuracy[1])
@@ -63,7 +68,7 @@ def model_fn(features, labels, mode, params):
             eval_metric_ops={'accuracy': accuracy})
 
     if mode == tf.estimator.ModeKeys.PREDICT:
-        logits = model(features, training=False)
+        logits = model(features)
         predictions = {
             'classes': tf.argmax(logits, axis=1),
             'probabilities': tf.nn.softmax(logits),
@@ -81,20 +86,75 @@ def train_input_fn(args):
     """ like generator"""
     train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).cache().shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(args.batch_size)).repeat(args.epochs)
-    return train_ds.make_one_shot_iterator().get_next()
+    audios, labels = train_ds.make_one_shot_iterator().get_next()
+    audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
+    labels = tf.cast(labels, tf.int64)
+    return audios, labels
 
 
 def eval_input_fn(args):
     """ like generator"""
-    return tf.data.TFRecordDataset(train_path).map(parse_example).batch(args.batch_size) \
-        .make_one_shot_iterator().get_next()
+    dataset = tf.data.TFRecordDataset(train_path).map(parse_example).apply(
+        tf.contrib.data.batch_and_drop_remainder(args.batch_size))
+
+    audios, labels = dataset.make_one_shot_iterator().get_next()
+    audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
+    labels = tf.cast(labels, tf.int64)
+    return audios, labels
 
 
 def run_estimator_train(args):
-    classifier = tf.estimator.Estimator(
+    estimator = tf.estimator.Estimator(
+        config=tf.estimator.RunConfig(
+            model_dir=args.output_dir, save_summary_steps=100, keep_checkpoint_max=5,),
         model_fn=model_fn,
         model_dir=args.output_dir,
         params={
             'data_format': args.data_format,
         })
-    classifier.train(input_fn=lambda: train_input_fn(args), steps=61220 // args.batch_size, )
+    train_spec = tf.estimator.TrainSpec(input_fn=lambda: train_input_fn(args),
+                                        max_steps=(61220 // args.batch_size) * args.epochs)
+    eval_spec = tf.estimator.EvalSpec(input_fn=lambda: eval_input_fn(args))
+
+    tf.estimator.train_and_evaluate(estimator, train_spec, eval_spec)
+
+
+def define_task_eager_flags():
+    """
+    定义一些flags方便在终端运行项目
+    :return:
+    """
+    arg = argparse.ArgumentParser()
+    arg.add_argument('--batch_size', type=int, default=16)
+    arg.add_argument('--epochs', type=int, default=5)
+    arg.add_argument('--nb_layers', type=int, default=5)
+    arg.add_argument('--n_db', type=int, default=2)
+    arg.add_argument('--grow_rate', type=int, default=12)
+    arg.add_argument('--data_format', type=str, default='channels_last')
+    arg.add_argument('--output_dir', type=str, default='/home/ccyoung/')
+    arg.add_argument('--lr', type=float, default=0.001)
+    arg.add_argument('--log_interval', type=int, default=10)
+    arg.add_argument('--alpha', type=float, default=0.2)
+
+    args = arg.parse_args()
+    return args
+
+
+def main(args):
+    run_estimator_train(args)
+    try:
+        run_estimator_train(args)
+        finish_instance()
+    except:
+        finish_instance()
+    # run_task_eager(args)
+    # finish_instance()
+
+
+def finish_instance():
+    os.system('sh /data/stop_instance.sh')
+
+
+if __name__ == '__main__':
+    args = define_task_eager_flags()
+    main(args)
