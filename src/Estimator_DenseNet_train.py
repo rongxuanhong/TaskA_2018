@@ -43,6 +43,7 @@ def model_fn(features, labels, mode, params):
         optimizer = tf.train.MomentumOptimizer(0.001, momentum=0.9, use_nesterov=True)
 
         logits = model(features)
+        print(labels.shape)
         loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits) + tf.add_n(model.losses)
         accuracy = tf.metrics.accuracy(
             labels=tf.argmax(labels, axis=1, output_type=tf.int64), predictions=tf.argmax(logits, axis=1, name='acc_op')
@@ -84,17 +85,17 @@ def model_fn(features, labels, mode, params):
 
 def train_input_fn(args):
     """ like generator"""
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).cache().shuffle(62000).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
         tf.contrib.data.batch_and_drop_remainder(args.batch_size)).repeat(args.epochs)
     audios, labels = train_ds.make_one_shot_iterator().get_next()
     audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
-    labels = tf.cast(labels, tf.int64)
+    labels = tf.cast(labels,tf.int64)
     return audios, labels
 
 
 def eval_input_fn(args):
     """ like generator"""
-    dataset = tf.data.TFRecordDataset(train_path).map(parse_example).apply(
+    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(args.batch_size))
 
     audios, labels = dataset.make_one_shot_iterator().get_next()
