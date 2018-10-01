@@ -47,15 +47,24 @@ def test_piece_constant():
     测试学习率手动衰减
     :return:
     """
-    learning_rates = [0.01, 0.01 * 0.1, 0.01 * 0.01]
-    boundaries = [int(0.4 * 30), int(0.75 * 30)]
-    check_point = tf.train.Checkpoint(a='')
+    # learning_rates = [0.01, 0.01 * 0.1, 0.01 * 0.01]
+    # boundaries = [int(0.4 * 30), int(0.75 * 30)]
+    # check_point = tf.train.Checkpoint(a='')
     # with tf.Session() as sess:
     #     sess.run(tf.global_variables_initializer())
     #     for global_step in range(30):
     #         learning_rate = tf.train.piecewise_constant(global_step, boundaries=boundaries, values=learning_rates)
     #         a = sess.run([learning_rate])
     #         print(a)
+    learning_rate = tf.train.exponential_decay(0.01, 1, decay_steps=100, decay_rate=0.0001)
+    # train_step = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss, global_step=current_epoch)...
+    with tf.Session() as sess:
+        init = tf.global_variables_initializer()
+        sess.run(init)
+        for i in range(40):
+            lr=sess.run([learning_rate])
+            print(lr)
+
 
 
 def main():

@@ -214,7 +214,7 @@ class DenseNet:
 
 
 def main():
-    model = DenseNet(7, 16, 3, 10, 5,
+    model = DenseNet(7, 24, 3, 10, 5,
                      bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
                      include_top=True)
     model = model.build(input_shape=(128, 47, 2))
