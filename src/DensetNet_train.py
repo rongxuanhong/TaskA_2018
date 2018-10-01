@@ -79,17 +79,16 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
                 audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
-                # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
-                logits = model(audios, training=True)
+                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
+                logits = model(mixed_audios, training=True)
 
                 # 计算损失
-                # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b)
 
                 l2_loss = tf.add_n(model.losses)
-                loss_value = loss(logits, labels) + l2_loss
+                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
-                # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
-                acc = compute_accuracy(logits, labels)
+                acc = compute_mix_accuracy(logits, label_a, label_b, lam)
+                # acc = compute_accuracy(logits, labels)
 
                 tfc.summary.scalar('loss', loss_value)
                 tfc.summary.scalar('accuracy', acc)
@@ -100,7 +99,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
         # 打印log
         if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
-                                                                     compute_accuracy(logits, labels)))
+                                                                     compute_mix_accuracy(logits, label_a, label_b,
+                                                                                          lam)))
 
 
 def test(model, dataset, args):
@@ -184,7 +184,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore('/data/TaskA_2018/src/check_point/cpkt-29')  # 存在就恢复模型(可不使用)
+    # check_point.restore('/data/TaskA_2018/src/check_point/cpkt-29')  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
