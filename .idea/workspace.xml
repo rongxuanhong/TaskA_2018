@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/model/cpkt-29.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/densenet_keras.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/densenet_keras.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/practice/practice.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/practice/practice.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/check_point/test/events.out.tfevents.1538377958.ccyounghrx.v2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/check_point/train/events.out.tfevents.1538377958.ccyounghrx.v2" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -179,7 +178,7 @@
               <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="check_point" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
