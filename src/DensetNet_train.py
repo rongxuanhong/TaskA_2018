@@ -184,7 +184,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    # check_point.restore('/data/TaskA_2018/src/check_point/cpkt-29')  # 存在就恢复模型(可不使用)
+    check_point.restore('/data/TaskA_2018/src/check_point/cpkt-3')  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
