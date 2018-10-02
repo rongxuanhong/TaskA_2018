@@ -135,12 +135,14 @@ class DenseNet:
         axis = -1 if data_format == 'channels_last' else 1
 
         # setting the filters and stride of the initial covn layer.
-        if self.pool_initial:
-            init_filters = (7, 7)
-            stride = (2, 2)
-        else:
-            init_filters = (3, 3)
-            stride = (1, 1)
+        # if self.pool_initial:
+        # init_filters = (7, 7)
+        # stride = (2, 2)
+        # else:
+        #     init_filters = (3, 3)
+        #     stride = (1, 1)
+        init_filters = (3, 3)
+        stride = (1, 1)
         self.num_filters = 2 * self.growth_rate
 
         # 定义第一个conv以及pool
@@ -192,7 +194,6 @@ class DenseNet:
         """ general modelling of DenseNet"""
         input = Input(shape=input_shape)
         output = self.conv1(input)
-
         if self.pool_initial:
             output = self.batchnorm1(output)
             output = Activation('relu')(output)
@@ -215,7 +216,7 @@ class DenseNet:
 
 def main():
     model = DenseNet(7, 20, 3, 10, 5,
-                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
+                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.2, pool_initial=True,
                      include_top=True)
     model = model.build(input_shape=(128, 47, 2))
 
