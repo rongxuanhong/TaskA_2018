@@ -158,7 +158,7 @@ def run_task_eager(args):
     #                   growth_rate=args.grow_rate)
 
     model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.0, pool_initial=True,
+                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.1, pool_initial=True,
                      include_top=True)
 
     step_counter = tf.train.get_or_create_global_step()
@@ -184,7 +184,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore('/data/TaskA_2018/src/check_point/cpkt-10')  # 存在就恢复模型(可不使用)
+    # check_point.restore('/data/TaskA_2018/src/check_point/cpkt-10')  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
@@ -229,12 +229,12 @@ def define_task_eager_flags():
 
 
 def main(args):
-    # try:
-    #     run_task_eager(args)
-    #     finish_instance()
-    # except:
-    #     finish_instance()
-    run_task_eager(args)
+    try:
+        run_task_eager(args)
+        finish_instance()
+    except:
+        finish_instance()
+    # run_task_eager(args)
     # finish_instance()
 
 
