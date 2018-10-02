@@ -44,7 +44,7 @@ def model_fn(features, labels, mode, params):
 
         logits = model(features)
         print(labels.shape)
-        loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits) + tf.add_n(model.losses)
+        loss = tf.losses.sparse_softmax_cross_entropy(labels=tf.argmax(labels, axis=1, output_type=tf.int64), logits=logits) + tf.add_n(model.losses)
         accuracy = tf.metrics.accuracy(
             labels=tf.argmax(labels, axis=1, output_type=tf.int64), predictions=tf.argmax(logits, axis=1, name='acc_op')
         )
@@ -56,8 +56,8 @@ def model_fn(features, labels, mode, params):
             train_op=optimizer.minimize(loss, tf.train.get_or_create_global_step())
         )
     if mode == tf.estimator.ModeKeys.EVAL:
-        logits = model(features, )
-        loss = tf.losses.sparse_softmax_cross_entropy(labels=labels, logits=logits)
+        logits = model(features)
+        loss = tf.losses.sparse_softmax_cross_entropy(labels=tf.argmax(labels, axis=1, output_type=tf.int64), logits=logits)
         accuracy = tf.metrics.accuracy(
             labels=tf.argmax(labels, axis=1, output_type=tf.int64), predictions=tf.argmax(logits, axis=1, name='acc_op')
         )
@@ -68,19 +68,19 @@ def model_fn(features, labels, mode, params):
             loss=loss,
             eval_metric_ops={'accuracy': accuracy})
 
-    if mode == tf.estimator.ModeKeys.PREDICT:
-        logits = model(features)
-        predictions = {
-            'classes': tf.argmax(logits, axis=1),
-            'probabilities': tf.nn.softmax(logits),
-        }
-        return tf.estimator.EstimatorSpec(
-            mode=tf.estimator.ModeKeys.PREDICT,
-            predictions=predictions,
-            export_outputs={
-                'classify': tf.estimator.export.PredictOutput(predictions)
-            }
-        )
+    # if mode == tf.estimator.ModeKeys.PREDICT:
+    #     logits = model(features)
+    #     predictions = {
+    #         'classes': tf.argmax(logits, axis=1),
+    #         'probabilities': tf.nn.softmax(logits),
+    #     }
+    #     return tf.estimator.EstimatorSpec(
+    #         mode=tf.estimator.ModeKeys.PREDICT,
+    #         predictions=predictions,
+    #         export_outputs={
+    #             'classify': tf.estimator.export.PredictOutput(predictions)
+    #         }
+    #     )
 
 
 def train_input_fn(args):
@@ -106,10 +106,10 @@ def eval_input_fn(args):
 
 def run_estimator_train(args):
     estimator = tf.estimator.Estimator(
-        config=tf.estimator.RunConfig(
-            model_dir=args.output_dir, save_summary_steps=100, keep_checkpoint_max=5,),
+        # config=tf.estimator.RunConfig(
+        #     model_dir=args.output_dir, save_summary_steps=100, keep_checkpoint_max=5,),
         model_fn=model_fn,
-        model_dir=args.output_dir,
+        # model_dir=args.output_dir,
         params={
             'data_format': args.data_format,
         })
@@ -126,9 +126,9 @@ def define_task_eager_flags():
     :return:
     """
     arg = argparse.ArgumentParser()
-    arg.add_argument('--batch_size', type=int, default=16)
+    arg.add_argument('--batch_size', type=int, default=1)
     arg.add_argument('--epochs', type=int, default=5)
-    arg.add_argument('--nb_layers', type=int, default=5)
+    arg.add_argument('--nb_layers', type=int, default=2)
     arg.add_argument('--n_db', type=int, default=2)
     arg.add_argument('--grow_rate', type=int, default=12)
     arg.add_argument('--data_format', type=str, default='channels_last')
