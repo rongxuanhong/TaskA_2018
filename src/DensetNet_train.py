@@ -165,8 +165,8 @@ def run_task_eager(args):
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
-    optimizer = tf.train.AdamOptimizer()
-    # optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
+    # optimizer = tf.train.AdamOptimizer()
+    optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -184,7 +184,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore('/data/TaskA_2018/src/check_point/cpkt-10')  # 存在就恢复模型(可不使用)
+    check_point.restore('/data/TaskA_2018/src/check_point/cpkt-15')  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
