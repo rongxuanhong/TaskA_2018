@@ -184,7 +184,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    # check_point.restore('/data/TaskA_2018/src/check_point/cpkt-10')  # 存在就恢复模型(可不使用)
+    check_point.restore('/data/TaskA_2018/src/check_point/cpkt-12')  # 存在就恢复模型(可不使用)
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
@@ -202,8 +202,8 @@ def run_task_eager(args):
             # 评估
             test(model, test_ds, args)
     # 输出训练时间
-    compute_time_consumed(start_time)
-    print('stop instance complete!!')
+    # compute_time_consumed(start_time)
+    # print('stop instance complete!!')
 
 
 def define_task_eager_flags():
@@ -229,13 +229,13 @@ def define_task_eager_flags():
 
 
 def main(args):
-    try:
-        run_task_eager(args)
-        finish_instance()
-    except:
-        finish_instance()
-    # run_task_eager(args)
-    # finish_instance()
+    # try:
+    #     run_task_eager(args)
+    #     finish_instance()
+    # except:
+    #     finish_instance()
+    run_task_eager(args)
+    finish_instance()
 
 
 def finish_instance():
