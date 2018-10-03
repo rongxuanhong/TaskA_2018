@@ -166,9 +166,10 @@ def run_task_eager(args):
     step_counter = tf.train.get_or_create_global_step()
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
-
-    optimizer = tf.train.AdamOptimizer()
-    # optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
+    import keras
+    keras.applications.DenseNet121()
+    # optimizer = tf.train.AdamOptimizer()
+    optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -187,7 +188,7 @@ def run_task_eager(args):
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
     # check_point.restore('/data/TaskA_2018/src/check_point/cpkt-20')  # 存在就恢复模型(可不使用)
-    # check_point.restore(tf.train.latest_checkpoint(args.output_dir))
+    check_point.restore(tf.train.latest_checkpoint(args.output_dir))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
@@ -246,7 +247,7 @@ def main(args):
 
 
 def finish_instance():
-    os.system('sh /data/stop_instance.sh')
+    os.system('sh /data/stop.sh')
     print('finish_instance')
 
 

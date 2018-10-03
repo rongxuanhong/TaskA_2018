@@ -39,13 +39,14 @@ class DateSet:
         使用hpss源分离并抽取mel特征
         :return:
         """
-        audio, sr = librosa.core.load(path, sr=48000, duration=10.0)  # mono
+        audio, sr = librosa.core.load(path, sr=44100,duration=10.0)  # mono
 
         y_harmonic, y_percussive = librosa.effects.hpss(audio)
         mel_harmonic = librosa.feature.melspectrogram(y_harmonic, sr=sr, hop_length=1024, fmax=24000)
         mel_percussive = librosa.feature.melspectrogram(y_percussive, sr=sr, hop_length=1024, fmax=24000)
         mel_harmonic = librosa.power_to_db(mel_harmonic)
         mel_percussive = librosa.power_to_db(mel_percussive)
+        print(mel_harmonic.shape)
 
         mel_harmonic = (mel_harmonic - np.mean(mel_harmonic)) / np.std(mel_harmonic)
         mel_percussive = (mel_percussive - np.mean(mel_percussive)) / np.std(mel_percussive)
