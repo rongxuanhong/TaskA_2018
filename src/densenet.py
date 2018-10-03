@@ -9,7 +9,7 @@ class ConvBlock(tf.keras.Model):
     """bn->relu->-conv"""
 
     def __init__(self, num_filters, data_format, bottleneck, weight_decay=1e-4
-                 , dropout_rate=0):
+                 , dropout_rate=0.):
         super(ConvBlock, self).__init__(name='conv_block')
         self.bottleneck = bottleneck
         axis = -1 if data_format == 'channels_last' else 1
@@ -23,7 +23,8 @@ class ConvBlock(tf.keras.Model):
                             kernel_regularizer=l2(weight_decay))
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis)
-        self.dropout = Dropout(dropout_rate)
+        self.dropout1 = Dropout(dropout_rate)
+        self.dropout2 = Dropout(dropout_rate)
 
         if self.bottleneck:
             self.conv1 = Conv2D(inter_filter,
@@ -41,10 +42,11 @@ class ConvBlock(tf.keras.Model):
 
         if self.bottleneck:
             output = self.conv1(tf.nn.relu(output))
+            output = self.dropout1(output, training=training)
             output = self.batchnorm2(output, training=training)
 
         output = self.conv2(tf.nn.relu(output))
-        output = self.dropout(output, training=training)
+        output = self.dropout2(output, training=training)
         return output
 
 
@@ -65,18 +67,20 @@ class TransitionBlock(tf.keras.Model):
                            kernel_initializer='he_uniform',
                            kernel_regularizer=l2(weight_decay))
         self.avg_pool = AveragePooling2D(data_format=data_format)
+        self.dropout = Dropout(dropout_rate)
 
     def call(self, x, training=True, mask=None):
         #### 这里没有加 dropout ###
         output = self.batchnorm(x)
         output = self.conv(tf.nn.relu(output))
+        output = self.dropout(output, training=training)
         output = self.avg_pool(output)
         return output
 
 
 class DenseBlock(tf.keras.Model):
     def __init__(self, num_layers, growth_rate, data_format, bottleneck,
-                 weight_decay=1e-4, dropout_rate=0):
+                 weight_decay=1e-4, dropout_rate=0.):
         super(DenseBlock, self).__init__()
         self.num_layers = num_layers
         self.axis = -1 if data_format == 'channels_last' else 1

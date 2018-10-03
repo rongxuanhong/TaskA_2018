@@ -207,7 +207,7 @@ def run_task_eager(args):
             if acc > max_acc:  ## 保证保存的最后一个cpkt是acc最大的
                 check_point.save(check_point_prefix)  # 保存检查点
                 max_acc = acc
-                print('max_acc={.2f}'.format(max_acc))
+                print('max_acc:{0:.2f}'.format(max_acc))
     # 输出训练时间
     compute_time_consumed(start_time)
     # print('stop instance complete!!')
