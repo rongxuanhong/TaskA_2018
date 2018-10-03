@@ -243,7 +243,7 @@ def main(args):
     # except:
     #     finish_instance()
     run_task_eager(args)
-    finish_instance()
+    # finish_instance()
 
 
 def finish_instance():
