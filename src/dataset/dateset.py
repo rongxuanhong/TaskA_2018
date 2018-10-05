@@ -245,7 +245,7 @@ def main():
     path_prefix = '/data/TFRecord'
     test_path = os.path.join(path_prefix, 'test2.tfrecords')
     dataset = tf.data.TFRecordDataset(test_path)
-    dataset = dataset.map(parse_example).
+    dataset = dataset.map(parse_example)
     cnt = 0
     try:
         for _ in dataset:
