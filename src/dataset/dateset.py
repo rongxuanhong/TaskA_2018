@@ -241,7 +241,15 @@ def main():
     # start_time = datetime.now()
     # generate_overlap_tfrecords()
     # compute_time_consumed(start_time)
-    generate_tfrecords()
+    # generate_tfrecords()
+    path_prefix = '/data/TFRecord'
+    test_path = os.path.join(path_prefix, 'test2.tfrecords')
+    dataset = tf.data.TFRecordDataset(test_path)
+    dataset = dataset.map(parse_example)
+    cnt = 0
+    for _ in dataset:
+        cnt += 1
+    print(cnt)
 
 
 if __name__ == '__main__':
