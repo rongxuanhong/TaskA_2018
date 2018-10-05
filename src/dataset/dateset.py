@@ -226,7 +226,7 @@ def compute_time_consumed(start_time):
 def main():
     # path_prefix = '/home/ccyoung/DCase/Task1_2018/evaluation'
     # generate_non_overlap_TFRecord(train, os.path.join(path_prefix, 'train2.tfrecords'))
-    # tf.enable_eager_execution()
+    tf.enable_eager_execution()
     # path_prefix = '/home/ccyoung/DCase/Task1_2018/evaluation'
     # dataset = tf.data.TFRecordDataset(os.path.join(path_prefix, 'train2.tfrecords'))
     # dataset = dataset.map(parse_example)
