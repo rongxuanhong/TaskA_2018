@@ -7,7 +7,7 @@ import tensorflow as tf
 import concurrent.futures
 import os
 import numpy as np
-import datetime.datetime
+import datetime
 
 # DATA_PATH = '/home/ccyoung/DCase/development_data/'
 
@@ -215,7 +215,7 @@ def compute_time_consumed(start_time):
     :param start_time:
     :return:
     """
-    time_elapsed = datetime.now() - start_time
+    time_elapsed = datetime.datetime.now() - start_time
     seconds = time_elapsed.seconds
     hour = seconds // 3600
     minute = (seconds % 3600) // 60
