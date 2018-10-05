@@ -1,5 +1,5 @@
 from keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Input, Activation, Concatenate
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Input, Activation, Concatenate,Conv2DTranspose
 
 from keras.regularizers import l2
 from utils.utils import describe_model
@@ -207,6 +207,10 @@ class DenseNet:
         output = self.batchnorm2(output)
         output = Activation('relu')(output)
 
+        print(output.shape)
+        a=Conv2DTranspose(filters=128,kernel_size=3,padding='same')(output)
+        print(a.shape)
+
         if self.include_top:
             output = self.last_pool(output)
             output = self.classifier(output)
@@ -220,7 +224,7 @@ def main():
                      include_top=True)
     model = model.build(input_shape=(128, 47, 2))
 
-    describe_model(model)
+    # describe_model(model)
 
 
 if __name__ == '__main__':
