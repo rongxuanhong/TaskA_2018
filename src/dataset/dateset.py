@@ -206,7 +206,7 @@ def generate_tfrecords():
     test_path = os.path.join(path_prefix, 'test2.tfrecords')
     generate_overlap_TFRecord(train, path)
     generate_non_overlap_TFRecord(test, test_path)
-    os.system('sh /data/stop.sh')
+    # os.system('sh /data/stop.sh')
 
 
 def compute_time_consumed(start_time):
