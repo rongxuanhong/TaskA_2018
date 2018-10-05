@@ -245,11 +245,14 @@ def main():
     path_prefix = '/data/TFRecord'
     test_path = os.path.join(path_prefix, 'test2.tfrecords')
     dataset = tf.data.TFRecordDataset(test_path)
-    dataset = dataset.map(parse_example)
+    dataset = dataset.map(parse_example).
     cnt = 0
-    for _ in dataset:
-        cnt += 1
-    print(cnt)
+    try:
+        for _ in dataset:
+            cnt += 1
+        print(cnt)
+    except Exception as e:
+        print(e)
 
 
 if __name__ == '__main__':
