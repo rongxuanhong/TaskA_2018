@@ -248,7 +248,8 @@ def main():
     dataset = dataset.map(parse_example)
     cnt = 0
     try:
-        for _ in dataset:
+        for a in dataset:
+            print(a[0].shape)
             cnt += 1
         print(cnt)
     except Exception as e:
