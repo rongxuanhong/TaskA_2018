@@ -246,7 +246,9 @@ def main():
     test_path = os.path.join(path_prefix, 'test2.tfrecords')
     dataset = tf.data.TFRecordDataset(test_path)
     dataset = dataset.map(parse_example).batch(25180)
-
+    for batch, (a, b) in enumerate(dataset):
+        print(b.shape)
+        print(batch)
 
 
 if __name__ == '__main__':
