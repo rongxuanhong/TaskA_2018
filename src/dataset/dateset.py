@@ -1,13 +1,13 @@
-import numpy as np
 import sklearn as sk
 import pandas as pd
 from tqdm import *
 import librosa
-import os
 import keras
 import tensorflow as tf
 import concurrent.futures
-from utils.utils import *
+import os
+import numpy as np
+import datetime.datetime
 
 # DATA_PATH = '/home/ccyoung/DCase/development_data/'
 
@@ -207,6 +207,20 @@ def generate_tfrecords():
     generate_overlap_TFRecord(train, path)
     generate_non_overlap_TFRecord(test, test_path)
     os.system('sh /data/stop.sh')
+
+
+def compute_time_consumed(start_time):
+    """
+    计算训练总耗时
+    :param start_time:
+    :return:
+    """
+    time_elapsed = datetime.now() - start_time
+    seconds = time_elapsed.seconds
+    hour = seconds // 3600
+    minute = (seconds % 3600) // 60
+    second = seconds % 3600 % 60
+    print("本次训练共耗时 {0} 时 {1} 分 {2} 秒".format(hour, minute, second))
 
 
 def main():
