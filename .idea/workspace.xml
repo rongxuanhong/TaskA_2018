@@ -2,7 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/dataset/dateset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/dateset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DensetNet_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DensetNet_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/checkpoint" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-1.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-1.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-10.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-10.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-11.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-11.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-2.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-2.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-3.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-3.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-4.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-4.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-5.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-5.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-6.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-6.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-7.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-7.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-8.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-8.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-9.data-00000-of-00001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/cpkt-9.index" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/test/events.out.tfevents.1538568927.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/train/events.out.tfevents.1538568927.ccyounghrx.v2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -49,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="146" column="45" selection-start-line="146" selection-start-column="37" selection-end-line="146" selection-end-column="45" />
+            <state relative-caret-position="416">
+              <caret line="194" column="41" lean-forward="true" selection-start-line="194" selection-start-column="41" selection-end-line="194" selection-end-column="41" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -61,14 +87,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dateset.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
+      <file leaf-file-name="run_tf_dense_net_server.sh" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-667">
-              <caret line="95" column="21" lean-forward="true" selection-start-line="95" selection-start-column="21" selection-end-line="95" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="19">
+              <caret line="1" column="54" selection-start-line="1" selection-start-column="54" selection-end-line="1" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -113,10 +136,10 @@
         <option value="$PROJECT_DIR$/src/Estimator_DenseNet_train.py" />
         <option value="$PROJECT_DIR$/src/local_run_tf_dense_net.sh" />
         <option value="$PROJECT_DIR$/src/densenet.py" />
-        <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
-        <option value="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" />
         <option value="$PROJECT_DIR$/src/densenet_keras.py" />
         <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
+        <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
+        <option value="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" />
       </list>
     </option>
   </component>
@@ -597,13 +620,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="94" selection-start-line="1" selection-start-column="94" selection-end-line="1" selection-end-column="94" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/densenet_keras.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="665">
@@ -710,22 +726,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
+    <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="146" column="45" selection-start-line="146" selection-start-column="37" selection-end-line="146" selection-end-column="45" />
+        <state relative-caret-position="93">
+          <caret line="162" column="11" lean-forward="true" selection-start-line="162" selection-start-column="11" selection-end-line="162" selection-end-column="11" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
+    <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-667">
-          <caret line="95" column="21" lean-forward="true" selection-start-line="95" selection-start-column="21" selection-end-line="95" selection-end-column="21" />
+        <state relative-caret-position="19">
+          <caret line="1" column="54" selection-start-line="1" selection-start-column="54" selection-end-line="1" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="194" column="41" lean-forward="true" selection-start-line="194" selection-start-column="41" selection-end-line="194" selection-end-column="41" />
           <folding>
-            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>

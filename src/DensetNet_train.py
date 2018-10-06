@@ -141,15 +141,15 @@ def run_task_eager(args):
 
     # 3.加载数据
     batch_size = args.batch_size
-    total_batch = 61220 // batch_size
+    total_batch = 55098 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train2.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test2.tfrecords')
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(62000).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(56000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
@@ -166,8 +166,8 @@ def run_task_eager(args):
     step_counter = tf.train.get_or_create_global_step()
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
-    # optimizer = tf.train.AdamOptimizer()
-    optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.AdamOptimizer()
+    # optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -241,7 +241,7 @@ def main(args):
     # except:
     #     finish_instance()
     run_task_eager(args)
-    # finish_instance()
+    finish_instance()
 
 
 def finish_instance():
