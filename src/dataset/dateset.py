@@ -83,7 +83,7 @@ class DataSet:
         """
 
         writer = tf.python_io.TFRecordWriter(tfrecord_path)
-        for row in tqdm(dataset.head(4).itertuples(), total=len(dataset)):
+        for row in tqdm(dataset.itertuples(), total=len(dataset)):
             # path = os.path.join('/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/',
             #                     row.file)
             path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
