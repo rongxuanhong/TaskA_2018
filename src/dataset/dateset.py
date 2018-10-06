@@ -198,7 +198,7 @@ def main():
 
     task = DataSet()
     task.load_dataset()
-    task.generate_overlap_TFRecord(task.train, os.path.join(path_prefix, 'train2.tfrecords'))
+    # task.generate_overlap_TFRecord(task.train, os.path.join(path_prefix, 'train2.tfrecords'))
     # task.generate_non_overlap_TFRecord(task.train, os.path.join(path_prefix, 'test2.tfrecords'))
     task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test2.tfrecords'))
     compute_time_consumed(start_time)
