@@ -78,7 +78,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
+                audios = tf.reshape(audios, (args.batch_size, 128, 94, 2))
                 mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(mixed_audios, training=True)
 
