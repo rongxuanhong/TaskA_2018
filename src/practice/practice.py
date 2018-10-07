@@ -56,19 +56,53 @@ def test_piece_constant():
     #         learning_rate = tf.train.piecewise_constant(global_step, boundaries=boundaries, values=learning_rates)
     #         a = sess.run([learning_rate])
     #         print(a)
-    learning_rate = tf.train.exponential_decay(0.01, 1, decay_steps=100, decay_rate=0.0001)
+    step_counter = tf.train.get_or_create_global_step()
+    learning_rate = tf.train.exponential_decay(0.01, step_counter, decay_steps=10, decay_rate=0.96)
     # train_step = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss, global_step=current_epoch)...
     with tf.Session() as sess:
         init = tf.global_variables_initializer()
         sess.run(init)
         for i in range(40):
-            lr=sess.run([learning_rate])
+            lr = sess.run([learning_rate])
             print(lr)
 
 
-
 def main():
-    test_piece_constant()
+    # coding:utf-8
+    import matplotlib.pyplot as plt
+    import tensorflow as tf
+
+    num_epoch = tf.Variable(0, name='global_step', trainable=False)
+
+    y = []
+    z = []
+    N = 30
+
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+        for num_epoch in range(N):
+            # 阶梯型衰减
+            learing_rate1 = tf.train.exponential_decay(
+                learning_rate=0.001, global_step=num_epoch, decay_steps=5, decay_rate=0.1, staircase=True)
+            # 标准指数型衰减
+            learing_rate2 = tf.train.exponential_decay(
+                learning_rate=0.001, global_step=num_epoch, decay_steps=5, decay_rate=0.1, staircase=False)
+            lr1 = sess.run([learing_rate1])
+            lr2 = sess.run([learing_rate2])
+            y.append(lr1)
+            z.append(lr2)
+
+    x = range(N)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    # ax.set_ylim([0, 0.55])
+
+    plt.plot(x, y, 'r-', linewidth=2)
+    plt.plot(x, z, 'g-', linewidth=2)
+    plt.title('exponential_decay')
+    ax.set_xlabel('step')
+    ax.set_ylabel('learing rate')
+    plt.show()
 
 
 if __name__ == '__main__':

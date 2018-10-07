@@ -79,16 +79,17 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
                 audios = tf.reshape(audios, (args.batch_size, 128, 94, 2))
-                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
-                logits = model(mixed_audios, training=True)
+                # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
+                logits = model(audios, training=True)
 
                 # 计算损失
 
                 l2_loss = tf.add_n(model.losses)
-                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
+                loss_value = loss(logits, labels) + l2_loss
+                # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
-                acc = compute_mix_accuracy(logits, label_a, label_b, lam)
-                # acc = compute_accuracy(logits, labels)
+                # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
+                acc = compute_accuracy(logits, labels)
 
                 tfc.summary.scalar('loss', loss_value)
                 tfc.summary.scalar('accuracy', acc)
@@ -99,8 +100,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
         # 打印log
         if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
-                                                                     compute_mix_accuracy(logits, label_a, label_b,
-                                                                                          lam)))
+                                                                     compute_accuracy(logits, labels)))
 
 
 def test(model, dataset, args):
@@ -159,15 +159,17 @@ def run_task_eager(args):
     #                   nb_dense_block=args.n_db,
     #                   growth_rate=args.grow_rate)
 
-    model = DenseNet(7, args.grow_rate, args.n_db, 10, [6, 12, 24, 16], data_format=args.data_format,
+    model = DenseNet(7, args.grow_rate, args.n_db, 10, 5, data_format=args.data_format,
                      bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
                      include_top=True)
 
     step_counter = tf.train.get_or_create_global_step()
-    # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
-    #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
-    optimizer = tf.train.AdamOptimizer()
-    # optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
+    learning_rate = tf.train.piecewise_constant(step_counter, [10, 15, 25],
+                                                [args.lr, args.lr * 0.1, args.lr * 0.01, args.lr * 0.001])
+    # optimizer = tf.train.AdamOptimizer()
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    # learing_rate2 = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs, decay_rate=0.9,
+    #                                            staircase=True)
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -241,7 +243,7 @@ def main(args):
     # except:
     #     finish_instance()
     run_task_eager(args)
-    finish_instance()
+    os.system('sh /data/stop.sh')
 
 
 def finish_instance():
