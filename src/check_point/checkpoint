@@ -1,0 +1,6 @@
+model_checkpoint_path: "/data/TaskA_2018/src/check_point/cpkt-21"
+all_model_checkpoint_paths: "/data/TaskA_2018/src/check_point/cpkt-17"
+all_model_checkpoint_paths: "/data/TaskA_2018/src/check_point/cpkt-18"
+all_model_checkpoint_paths: "/data/TaskA_2018/src/check_point/cpkt-19"
+all_model_checkpoint_paths: "/data/TaskA_2018/src/check_point/cpkt-20"
+all_model_checkpoint_paths: "/data/TaskA_2018/src/check_point/cpkt-21"
