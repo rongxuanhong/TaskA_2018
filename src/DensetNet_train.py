@@ -164,12 +164,17 @@ def run_task_eager(args):
                      include_top=True)
 
     step_counter = tf.train.get_or_create_global_step()
+
     learning_rate = tf.train.piecewise_constant(step_counter, [10, 15, 25],
                                                 [args.lr, args.lr * 0.1, args.lr * 0.01, args.lr * 0.001])
     # optimizer = tf.train.AdamOptimizer()
     optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
     # learing_rate2 = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs, decay_rate=0.9,
     #                                            staircase=True)
+    # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
+    #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
+   # optimizer = tf.train.AdamOptimizer()
+
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
