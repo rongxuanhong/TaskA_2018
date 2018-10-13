@@ -74,6 +74,30 @@ class DataSet:
 
         return mel_spec
 
+    def extract_feature3(self, path):
+        """
+        使用hpss源分离并抽取mel特征 不足补0
+        :return:
+        """
+        audio, sr = librosa.core.load(path, sr=44100, duration=10.0)  # mono
+
+        y_harmonic, y_percussive = librosa.effects.hpss(audio)
+
+        mel_harmonic = librosa.feature.melspectrogram(y_harmonic, sr=sr, n_fft=2205, hop_length=882, n_mels=100)
+        mel_percussive = librosa.feature.melspectrogram(y_percussive, sr=sr, n_fft=2205, hop_length=882, n_mels=100)
+        mel_original = librosa.feature.melspectrogram(audio, sr=sr, n_fft=2205, hop_length=882, n_mels=100)
+
+        mel_harmonic = librosa.power_to_db(mel_harmonic)
+        mel_percussive = librosa.power_to_db(mel_percussive)
+        mel_original = librosa.power_to_db(mel_original)
+
+        mel_harmonic = (mel_harmonic - np.mean(mel_harmonic)) / np.std(mel_harmonic)
+        mel_percussive = (mel_percussive - np.mean(mel_percussive)) / np.std(mel_percussive)
+        mel_original = (mel_original - np.mean(mel_original)) / np.std(mel_original)
+
+        mel_spec = np.stack([mel_harmonic, mel_percussive, mel_original], axis=-1)
+        return mel_spec
+
     def generate_non_overlap_TFRecord(self, dataset, tfrecord_path):
         """
         use with extract_feature1
@@ -89,24 +113,24 @@ class DataSet:
             path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
             # 必须先转成float16，否则librosa无法处理
 
-            mel_spec = self.extract_feature2(path)
+            mel_spec = self.extract_feature3(path)
             # print('mel_spec shape:', mel_spec.shape)
 
             # 开始分片 non-overlap 1s 47帧
             start = 0
-            win_len = 47
+            win_len = 100
             label = self.label_encoder.transform([row.scene])[0]
             label = keras.utils.to_categorical(label, self.n_scenes)
             while start < mel_spec.shape[1]:
                 end = start + win_len
                 patch = mel_spec[:, start:end, :]
+                print(patch.shape)
                 patch = patch.reshape(-1)
 
                 example = self.encapsulate_example(patch, label)
                 writer.write(example.SerializeToString())
 
                 start = end
-
         writer.close()
 
     def generate_overlap_TFRecord(self, dataset, tfrecord_path):
@@ -119,11 +143,12 @@ class DataSet:
         writer = tf.python_io.TFRecordWriter(tfrecord_path)
         for row in tqdm(dataset.itertuples(), total=len(dataset)):
 
-            path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
-            # path = os.path.join('/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/',row.file)
+            # path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
+            path = os.path.join('/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/',
+                                row.file)
             # 必须先转成float16，否则librosa无法处理
 
-            mel_spec = self.extract_feature2(path)
+            mel_spec = self.extract_feature3(path)
             # print('mel_spec shape:', mel_spec.shape)
 
             # 开始分片 overlap1s 2s 94帧
@@ -135,6 +160,43 @@ class DataSet:
             end = start + win_len
             while end <= mel_spec.shape[1]:
                 patch = mel_spec[:, start:end, :]
+                patch = patch.reshape(-1)
+
+                example = self.encapsulate_example(patch, label)
+                writer.write(example.SerializeToString())
+
+                start += overlap
+                end += overlap
+        writer.close()
+
+    def generate_overlap_TFRecord2(self, dataset, tfrecord_path):
+        """
+        use with extract_feature2
+        :param dataset:
+        :param tfrecord_path:
+        :return:
+        """
+        writer = tf.python_io.TFRecordWriter(tfrecord_path)
+        for row in tqdm(dataset.itertuples(), total=len(dataset)):
+
+            path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
+            # path = os.path.join('/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/',
+            #                     row.file)
+            # 必须先转成float16，否则librosa无法处理
+
+            mel_spec = self.extract_feature3(path)
+            # print('mel_spec shape:', mel_spec.shape)
+
+            # 开始分片 overlap1s 2s 94帧
+            start = 0
+            win_len = 100
+            overlap = 50
+            label = self.label_encoder.transform([row.scene])[0]
+            label = keras.utils.to_categorical(label, self.n_scenes)
+            end = start + win_len
+            while end <= mel_spec.shape[1]:
+                patch = mel_spec[:, start:end, :]
+                print(patch.shape)
                 patch = patch.reshape(-1)
 
                 example = self.encapsulate_example(patch, label)
@@ -198,9 +260,8 @@ def main():
 
     task = DataSet()
     task.load_dataset()
-    # task.generate_overlap_TFRecord(task.train, os.path.join(path_prefix, 'train2.tfrecords'))
-    # task.generate_non_overlap_TFRecord(task.train, os.path.join(path_prefix, 'test2.tfrecords'))
-    task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test2.tfrecords'))
+    task.generate_overlap_TFRecord2(task.train, os.path.join(path_prefix, 'train3.tfrecords'))
+    task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test3.tfrecords'))
     compute_time_consumed(start_time)
     os.system('sh /data/stop.sh')
 
