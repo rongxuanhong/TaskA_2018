@@ -124,7 +124,6 @@ class DataSet:
             while start < mel_spec.shape[1]:
                 end = start + win_len
                 patch = mel_spec[:, start:end, :]
-                print(patch.shape)
                 patch = patch.reshape(-1)
 
                 example = self.encapsulate_example(patch, label)
@@ -196,7 +195,6 @@ class DataSet:
             end = start + win_len
             while end <= mel_spec.shape[1]:
                 patch = mel_spec[:, start:end, :]
-                print(patch.shape)
                 patch = patch.reshape(-1)
 
                 example = self.encapsulate_example(patch, label)
