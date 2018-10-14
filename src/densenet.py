@@ -140,7 +140,7 @@ class DenseNet(tf.keras.Model):
 
         # setting the filters and stride of the initial covn layer.
         if self.pool_initial:
-            init_filters = (7, 7)
+            init_filters = (3, 3)
             stride = (2, 2)
         else:
             init_filters = (3, 3)

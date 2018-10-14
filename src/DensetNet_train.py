@@ -1,4 +1,4 @@
-# from densenet import DenseNet
+from densenet import DenseNet
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *
@@ -159,12 +159,12 @@ def run_task_eager(args):
     #                   nb_dense_block=args.n_db,
     #                   growth_rate=args.grow_rate)
 
-    # model = DenseNet(7, args.grow_rate, args.n_db, 10, [6, 12, 24, 16], data_format=args.data_format,
-    #                  bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
-    #                  include_top=True)
+    model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
+                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.5, pool_initial=True,
+                     include_top=True)
 
-    model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
-    model = model.build()
+    # model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
+    # model = model.build()
 
     step_counter = tf.train.get_or_create_global_step()
 

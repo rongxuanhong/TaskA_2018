@@ -130,7 +130,7 @@ class DenseNet:
 
         nb_filter = self.growth_rate
         for i in range(self.nb_dense_block - 1):
-            x, nb_filter = self.dense_block(x, i + 1, self.nb_layers, nb_filter)
+            x, nb_filter = self.dense_block(x, i + 1, self.nb_layers, nb_filter,training)
             x, nb_filter = self.transition_layers(x, i + 1, nb_filter,training)
 
         x, nb_filter = self.dense_block(x, 5, self.nb_layers, nb_filter,training)
@@ -154,8 +154,8 @@ class DenseNet:
 
 
 if __name__ == '__main__':
-    denset = DenseNet(input_shape=(128, 47, 2), n_classes=10, nb_layers=5,
-                      nb_dense_block=3,
-                      growth_rate=12)
+    denset = DenseNet(input_shape=(100, 100, 3), n_classes=10, nb_layers=5,
+                      nb_dense_block=5,
+                      growth_rate=24)
     model = denset.build()
     describe_model(model)
