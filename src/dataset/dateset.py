@@ -261,7 +261,7 @@ def main():
     task.generate_overlap_TFRecord2(task.train, os.path.join(path_prefix, 'train3.tfrecords'))
     task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test3.tfrecords'))
     compute_time_consumed(start_time)
-    os.system('sh /data/stop.sh')
+    os.system('sh /data/stop_instance.sh')
 
 
 if __name__ == '__main__':
