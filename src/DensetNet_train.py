@@ -1,10 +1,11 @@
-from densenet import DenseNet
+# from densenet import DenseNet
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *
 from datetime import datetime
 import os
 import tensorflow as tf
+from practice.densenet import DenseNet
 
 """使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
@@ -78,7 +79,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 128, 94, 2))
+                audios = tf.reshape(audios, (args.batch_size, 100, 100, 3))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
 
@@ -113,7 +114,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
+        audios = tf.reshape(audios, (args.batch_size, 100, 100, 3))
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
         accuracy(
@@ -143,8 +144,8 @@ def run_task_eager(args):
     total_batch = 55098 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train2.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test2.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train3.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test3.tfrecords')
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
@@ -158,16 +159,19 @@ def run_task_eager(args):
     #                   nb_dense_block=args.n_db,
     #                   growth_rate=args.grow_rate)
 
-    model = DenseNet(7, args.grow_rate, args.n_db, 10, [6, 12, 24, 16], data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
-                     include_top=True)
+    # model = DenseNet(7, args.grow_rate, args.n_db, 10, [6, 12, 24, 16], data_format=args.data_format,
+    #                  bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
+    #                  include_top=True)
+
+    model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
+    model = model.build()
 
     step_counter = tf.train.get_or_create_global_step()
 
-    learning_rate = tf.train.piecewise_constant(step_counter, [10, 15, 25],
-                                                [args.lr, args.lr * 0.1, args.lr * 0.01, args.lr * 0.001])
-    optimizer = tf.train.AdamOptimizer()
-    # optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    learning_rate = tf.train.piecewise_constant(step_counter, [15, 22],
+                                                [args.lr, args.lr * 0.1, args.lr * 0.01, ])
+    # optimizer = tf.train.AdamOptimizer()
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
     # learing_rate2 = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs, decay_rate=0.9,
     #                                            staircase=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
@@ -240,18 +244,16 @@ def define_task_eager_flags():
 
 
 def main(args):
-    # try:
-    #     run_task_eager(args)
-    #     finish_instance()
-    # except:
-    #     finish_instance()
-    run_task_eager(args)
-    os.system('sh /data/stop.sh')
+    try:
+        run_task_eager(args)
+        finish_instance()
+    except:
+        finish_instance()
+    # run_task_eager(args)
 
 
 def finish_instance():
-    os.system('sh /data/stop.sh')
-    print('finish_instance')
+    os.system('sh /data/stop_instance.sh')
 
 
 if __name__ == '__main__':
