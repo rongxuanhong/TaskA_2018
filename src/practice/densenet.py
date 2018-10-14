@@ -166,7 +166,7 @@ class DenseNet:
         x = Concatenate(axis=-1)([x1, x2, x3, x4])
         # print(x.shape)
 
-        output = Dense(10, activation='softmax', name='prediction')(x)
+        output = Dense(10, name='prediction')(x)
         print(output.shape)
 
         model = Model(input, output, name='densenet')
@@ -198,6 +198,10 @@ def describe_model(model):
 
 
 if __name__ == '__main__':
+    # import tensorflow as tf
+    # tf.enable_eager_execution()
     model = DenseNet((100, 100, 3), 10, 5, 5, 24, dropout_rate=0.5)
     model = model.build()
+    # l2_loss = tf.add_n(model.losses)
+    # print(l2_loss)
     describe_model(model)
