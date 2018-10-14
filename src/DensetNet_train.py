@@ -1,4 +1,4 @@
-from densenet import DenseNet
+from denset_net import DenseNet
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *
@@ -155,13 +155,14 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    # model = DenseNet(n_classes=10, nb_layers=args.nb_layers,
-    #                   nb_dense_block=args.n_db,
-    #                   growth_rate=args.grow_rate)
+    model = DenseNet(input_shape=(100, 100, 3), n_classes=10, nb_layers=args.nb_layers,
+                     nb_dense_block=args.n_db,
+                     growth_rate=args.grow_rate)
 
-    model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.5, pool_initial=True,
-                     include_top=True)
+    # model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
+    #                  bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.5, pool_initial=True,
+    #                  include_top=True)
+    model.build()
 
     # model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
     # model = model.build()
