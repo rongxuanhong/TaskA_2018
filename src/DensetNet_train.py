@@ -162,7 +162,7 @@ def run_task_eager(args):
     # model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
     #                  bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.5, pool_initial=True,
     #                  include_top=True)
-    model.build()
+    model = model.build()
 
     # model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
     # model = model.build()
@@ -245,12 +245,12 @@ def define_task_eager_flags():
 
 
 def main(args):
-    try:
-        run_task_eager(args)
-        finish_instance()
-    except:
-        finish_instance()
-    # run_task_eager(args)
+    # try:
+    #     run_task_eager(args)
+    #     finish_instance()
+    # except:
+    #     finish_instance()
+    run_task_eager(args)
 
 
 def finish_instance():
