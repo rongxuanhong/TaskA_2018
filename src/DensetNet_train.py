@@ -5,7 +5,6 @@ from utils.utils import *
 from datetime import datetime
 import os
 import tensorflow as tf
-from practice.densenet3 import DenseNet
 
 """使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
