@@ -212,7 +212,7 @@ class DenseNet(tf.keras.Model):
             output = self.last_pool(output)
             output = self.classifier(output)
 
-    #     return output
+        return output
     # def call(self, x, training=True, mask=None):
     #     """ general modelling of DenseNet"""
     #     output = self.conv1(x)
