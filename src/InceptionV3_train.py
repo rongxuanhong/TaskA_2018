@@ -1,4 +1,4 @@
-from densenet import DenseNet
+from densenet2 import DenseNet
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *

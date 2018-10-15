@@ -24,7 +24,7 @@ test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
 
 
 def create_model():
-    from densenet import DenseNet
+    from densenet2 import DenseNet
     # dense_net = DenseNet(7, 12, 3, 10, 5,
     #                      bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=False,
     #                      include_top=True)
