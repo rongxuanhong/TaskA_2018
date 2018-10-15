@@ -22,7 +22,7 @@ class ConvBlock(tf.keras.Model):
                             kernel_initializer='he_normal',
                             kernel_regularizer=l2(weight_decay))
         # 初始化本模块所需要的op
-        self.batchnorm1 = BatchNormalization(axis=axis,)
+        self.batchnorm1 = BatchNormalization(axis=axis, )
         self.dropout1 = Dropout(dropout_rate)
         self.dropout2 = Dropout(dropout_rate)
 
@@ -57,7 +57,7 @@ class TransitionBlock(tf.keras.Model):
                  weight_decay=1e-4, dropout_rate=0.):
         super(TransitionBlock, self).__init__()
         axis = -1 if data_format == 'channels_last' else 1
-        self.batchnorm = BatchNormalization(axis=axis,)
+        self.batchnorm = BatchNormalization(axis=axis, )
 
         self.conv = Conv2D(num_filters,
                            (1, 1),
@@ -102,7 +102,7 @@ class DenseNet(tf.keras.Model):
     def __init__(self, depth_of_model, growth_rate, num_of_blocks,
                  output_classes, num_layers_in_each_block, data_format='channels_last',
                  bottleneck=True, compression=0.5, weight_decay=1e-4,
-                 dropout_rate=0.0, pool_initial=True, include_top=False):
+                 dropout_rate=0.0, pool_initial=True, include_top=True):
         super(DenseNet, self).__init__()
         self.depth_of_model = depth_of_model  # valid when num_layers_in_each_block is integer
         self.growth_rate = growth_rate
@@ -162,7 +162,7 @@ class DenseNet(tf.keras.Model):
                                    strides=(2, 2),
                                    padding='same',
                                    data_format=self.data_format)
-            self.batchnorm1 = BatchNormalization(axis=axis,)
+            self.batchnorm1 = BatchNormalization(axis=axis, )
         self.batchnorm2 = BatchNormalization(axis=axis, )
 
         # last pool and fc layer
