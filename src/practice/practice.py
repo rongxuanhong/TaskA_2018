@@ -4,15 +4,18 @@ import tensorflow as tf
 
 
 def generate_spectrum():
-    y, sr = librosa.load('../airport-barcelona-0-0-a.wav', sr=44100, duration=10.0)
+    y, sr = librosa.load('../airport-barcelona-0-0-a.wav', sr=48000, duration=10.0)
     y_harmonic, y_percussive = librosa.effects.hpss(y)
-    mel_harmonic = librosa.power_to_db(librosa.feature.melspectrogram(y_harmonic, n_fft=2205, sr=sr, hop_length=882))
-    mel_percussive = librosa.power_to_db(
-        librosa.feature.melspectrogram(y_percussive, sr=sr, hop_length=1024, fmax=24000))
+    mel_harmonic = librosa.power_to_db(
+        librosa.feature.melspectrogram(y_harmonic, sr=sr, n_fft=1920, hop_length=960, n_mels=64, fmax=24000))
+    # mel_percussive = librosa.power_to_db(
+    #     librosa.feature.melspectrogram(y_percussive, sr=sr, hop_length=1024, fmax=24000))
+    mel_harmonic = np.concatenate((mel_harmonic, mel_harmonic[:, -11:]),axis=-1)
+
 
     print(mel_harmonic.shape)
     mel_harmonic = (mel_harmonic - np.mean(mel_harmonic)) / np.std(mel_harmonic)
-    mel_percussive = (mel_percussive - np.mean(mel_percussive)) / np.std(mel_percussive)
+    # mel_percussive = (mel_percussive - np.mean(mel_percussive)) / np.std(mel_percussive)
     # print(mel_harmonic[0, :10])
     # writer = tf.python_io.TFRecordWriter(path='train.tfrecords')
     # example = tf.train.Example(
