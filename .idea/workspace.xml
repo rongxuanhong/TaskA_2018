@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DensetNet_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DensetNet_train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/densenet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/densenet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/densenet_keras.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/densenet_keras.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/denset_net.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/denset_net.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/practice/densenet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/practice/densenet3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +17,8 @@
       <file leaf-file-name="densenet.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/densenet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="101" column="8" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="8" />
+            <state relative-caret-position="893">
+              <caret line="254" lean-forward="true" selection-start-line="254" selection-end-line="254" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -34,8 +29,8 @@
       <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="853">
-              <caret line="96" column="18" lean-forward="true" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
+            <state relative-caret-position="304">
+              <caret line="166" column="35" selection-start-line="166" selection-start-column="35" selection-end-line="166" selection-end-column="35" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -48,6 +43,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="57">
               <caret line="3" column="103" selection-start-line="3" selection-start-column="103" selection-end-line="3" selection-end-column="103" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="denset_net.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/denset_net.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -102,9 +106,9 @@
         <option value="$PROJECT_DIR$/src/denset_net.py" />
         <option value="$PROJECT_DIR$/src/practice/densenet.py" />
         <option value="$PROJECT_DIR$/src/densenet_keras.py" />
-        <option value="$PROJECT_DIR$/src/densenet.py" />
         <option value="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" />
         <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
+        <option value="$PROJECT_DIR$/src/densenet.py" />
       </list>
     </option>
   </component>
@@ -307,13 +311,13 @@
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14246725" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14246725" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32829374" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32905483" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.20950323" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.23110151" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -684,30 +688,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/denset_net.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2394">
-          <caret line="126" column="39" lean-forward="true" selection-start-line="126" selection-start-column="39" selection-end-line="126" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#173#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/densenet_keras.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="840">
           <caret line="229" column="52" lean-forward="true" selection-start-line="229" selection-start-column="52" selection-end-line="229" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/densenet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="101" column="8" selection-start-line="101" selection-start-column="8" selection-end-line="101" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -718,10 +702,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/denset_net.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" selection-start-line="5" selection-end-line="5" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/densenet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="893">
+          <caret line="254" lean-forward="true" selection-start-line="254" selection-end-line="254" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="853">
-          <caret line="96" column="18" lean-forward="true" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
+        <state relative-caret-position="304">
+          <caret line="166" column="35" selection-start-line="166" selection-start-column="35" selection-end-line="166" selection-end-column="35" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>

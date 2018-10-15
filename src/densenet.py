@@ -252,7 +252,6 @@ def main():
     # from utils.utils import describe_model
     # model = tf.keras.models.Model(inputs=[input], outputs=[output], name='densenet',)
     # describe_model(model)
-    # print_num_of_total_parameters(model.trainable_variables)
 
 
 if __name__ == '__main__':
