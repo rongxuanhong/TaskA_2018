@@ -85,17 +85,14 @@ class DataSet:
 
         mel_harmonic = librosa.feature.melspectrogram(y_harmonic, sr=sr, n_fft=2205, hop_length=882, n_mels=100)
         mel_percussive = librosa.feature.melspectrogram(y_percussive, sr=sr, n_fft=2205, hop_length=882, n_mels=100)
-        mel_original = librosa.feature.melspectrogram(audio, sr=sr, n_fft=2205, hop_length=882, n_mels=100)
 
         mel_harmonic = librosa.power_to_db(mel_harmonic)
         mel_percussive = librosa.power_to_db(mel_percussive)
-        mel_original = librosa.power_to_db(mel_original)
 
         mel_harmonic = (mel_harmonic - np.mean(mel_harmonic)) / np.std(mel_harmonic)
         mel_percussive = (mel_percussive - np.mean(mel_percussive)) / np.std(mel_percussive)
-        mel_original = (mel_original - np.mean(mel_original)) / np.std(mel_original)
 
-        mel_spec = np.stack([mel_harmonic, mel_percussive, mel_original], axis=-1)
+        mel_spec = np.stack([mel_harmonic, mel_percussive], axis=-1)
         return mel_spec
 
     def generate_non_overlap_TFRecord(self, dataset, tfrecord_path):

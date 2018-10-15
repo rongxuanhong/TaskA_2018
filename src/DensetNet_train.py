@@ -64,6 +64,26 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
+def get_next_batch(path, num_examples):
+    """
+    取出每一批数据
+    :param path: TFRecord格式的数据地址
+    :param num_examples: 样本总数
+    :return:
+    """
+    filename_queue = tf.train.string_input_producer([path], num_epochs=None)
+    reader = tf.TFRecordReader()
+    _, serialized_train_example = reader.read(filename_queue)
+    features, labels = parse_example(serialized_train_example)
+
+    min_after_dequeue = int(num_examples * 0.4)
+    feature, label = tf.train.shuffle_batch([features, labels],
+                                            batch_size=args.batch_size,
+                                            capacity=min_after_dequeue + 3 * args.batch_size,  # 默认设置
+                                            min_after_dequeue=min_after_dequeue)
+    return feature, label
+
+
 def train(model, optimizer, dataset, step_counter, total_batch, args):
     """
     在dataset上使用optimizer训练model，
@@ -144,6 +164,7 @@ def run_task_eager(args):
     # if  args.local:
     train_path = os.path.join('/data/TFRecord', 'train2.tfrecords')
     test_path = os.path.join('/data/TFRecord', 'test2.tfrecords')
+
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
@@ -164,10 +185,10 @@ def run_task_eager(args):
 
     step_counter = tf.train.get_or_create_global_step()
 
-    learning_rate = tf.train.piecewise_constant(step_counter, [15, 22],
-                                                [args.lr, args.lr * 0.1, args.lr * 0.01, ])
-    # optimizer = tf.train.AdamOptimizer()
-    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    # learning_rate = tf.train.piecewise_constant(step_counter, [15, 22],
+    #                                             [args.lr, args.lr * 0.1, args.lr * 0.01, ])
+    optimizer = tf.train.AdamOptimizer()
+    # optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
     # learing_rate2 = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs, decay_rate=0.9,
     #                                            staircase=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],

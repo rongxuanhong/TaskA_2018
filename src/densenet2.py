@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate,Input
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Input
 
 from tensorflow.keras.regularizers import l2
 
@@ -22,7 +22,7 @@ class ConvBlock(tf.keras.Model):
                             kernel_initializer='he_normal',
                             kernel_regularizer=l2(weight_decay))
         # 初始化本模块所需要的op
-        self.batchnorm1 = BatchNormalization(axis=axis, epsilon=1.1e-5)
+        self.batchnorm1 = BatchNormalization(axis=axis,)
         self.dropout1 = Dropout(dropout_rate)
         self.dropout2 = Dropout(dropout_rate)
 
@@ -34,7 +34,7 @@ class ConvBlock(tf.keras.Model):
                                 data_format=data_format,
                                 kernel_initializer='he_normal',
                                 kernel_regularizer=l2(weight_decay))
-            self.batchnorm2 = BatchNormalization(axis=axis, epsilon=1.1e-5)
+            self.batchnorm2 = BatchNormalization(axis=axis)
 
     def call(self, x, training=True, mask=None):
 
@@ -57,7 +57,7 @@ class TransitionBlock(tf.keras.Model):
                  weight_decay=1e-4, dropout_rate=0.):
         super(TransitionBlock, self).__init__()
         axis = -1 if data_format == 'channels_last' else 1
-        self.batchnorm = BatchNormalization(axis=axis, epsilon=1.1e-5)
+        self.batchnorm = BatchNormalization(axis=axis,)
 
         self.conv = Conv2D(num_filters,
                            (1, 1),
@@ -162,8 +162,8 @@ class DenseNet(tf.keras.Model):
                                    strides=(2, 2),
                                    padding='same',
                                    data_format=self.data_format)
-            self.batchnorm1 = BatchNormalization(axis=axis, epsilon=1.1e-5)
-        self.batchnorm2 = BatchNormalization(axis=axis, epsilon=1.1e-5)
+            self.batchnorm1 = BatchNormalization(axis=axis,)
+        self.batchnorm2 = BatchNormalization(axis=axis, )
 
         # last pool and fc layer
         # if self.include_top:  # is need top layer
@@ -221,33 +221,33 @@ class DenseNet(tf.keras.Model):
             output = self.batchnorm1(output, training=training)
             output = self.pool1(tf.nn.relu(output))
 
-        avg_pool_list = list()
+        # avg_pool_list = list()
         for i in range(self.num_of_blocks - 1):
             output = self.dense_block[i](output, training=training)
             output = self.transition_blocks[i](output, training=training)
-            if i != 0:
-                avg_pool_list.append(GlobalAveragePooling2D()(output))
+            # if i > 1:
+            #     avg_pool_list.append(GlobalAveragePooling2D()(output))
 
         output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
         output = self.batchnorm2(output, training=training)
         output = tf.nn.relu(output)
-        avg_pool_list.append(GlobalAveragePooling2D()(output))
-        output = Concatenate()(avg_pool_list)
+        # avg_pool_list.append(GlobalAveragePooling2D()(output))
+        # output = Concatenate()(avg_pool_list)
+        #
+        # output = Dense(self.output_classes, )(output)
 
-        output = Dense(self.output_classes, )(output)
-
-        # if self.include_top:
-        #     output = self.last_pool(output)
-        #     output = self.classifier(output)
+        if self.include_top:
+            output = self.last_pool(output)
+            output = self.classifier(output)
 
         return output
 
 
 def main():
     tf.enable_eager_execution()
-    model = DenseNet(7, 16, 5, 10, 5,)
+    model = DenseNet(7, 16, 5, 10, 5, )
     rand_input = tf.random_uniform((3, 100, 100, 3))
-    output = model(rand_input,training=True)
+    output = model(rand_input, training=True)
     # print(tf.add_n(model.losses))
 
     from utils.utils import describe_model
