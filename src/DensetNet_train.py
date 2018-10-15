@@ -113,7 +113,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 128, 94, 2))
+        audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
         accuracy(
