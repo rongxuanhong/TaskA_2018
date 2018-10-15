@@ -1,11 +1,11 @@
-from denset_net import DenseNet
+from densenet import DenseNet
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *
 from datetime import datetime
 import os
 import tensorflow as tf
-from practice.densenet import DenseNet
+from practice.densenet3 import DenseNet
 
 """使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
@@ -85,6 +85,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
 
                 # 计算损失
                 l2_loss = tf.add_n(model.losses)
+                print('l2_loss',l2_loss)
                 loss_value = loss(logits, labels) + l2_loss
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
@@ -155,14 +156,13 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    model = DenseNet(input_shape=(100, 100, 3), n_classes=10, nb_layers=args.nb_layers,
-                     nb_dense_block=args.n_db,
-                     growth_rate=args.grow_rate)
+    # model = DenseNet(input_shape=(100, 100, 3), n_classes=10, nb_layers=args.nb_layers,
+    #                  nb_dense_block=args.n_db,
+    #                  growth_rate=args.grow_rate)
 
-    # model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-    #                  bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.5, pool_initial=True,
-    #                  include_top=True)
-    model = model.build()
+    model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
+                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.5, pool_initial=True,
+                     include_top=True)
 
     # model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
     # model = model.build()

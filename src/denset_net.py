@@ -52,7 +52,7 @@ class DenseNet:
                    kernel_regularizer=l2(self.weight_decay), name=conv_name_base + '_x1', data_format=self.data_format)(
             x)
         # if self.dropout_rate:
-        x = Dropout(self.dropout_rate)(x,training=training)
+        # x = Dropout(self.dropout_rate)(x)
 
         # 3x3 con2d
         x = BatchNormalization(axis=self.axis, name=conv_name_base + '_x2_bn')(
@@ -61,7 +61,7 @@ class DenseNet:
         x = Conv2D(nb_filter, 3, padding='same', use_bias=False, kernel_initializer='he_uniform',
                    kernel_regularizer=l2(self.weight_decay), name=conv_name_base + '_x2', data_format=self.data_format)(
             x)
-        x = Dropout(self.dropout_rate)(x,training=training)
+        x = Dropout(0.1)(x)
 
         return x
 
@@ -154,8 +154,10 @@ class DenseNet:
 
 
 if __name__ == '__main__':
+    tf.enable_eager_execution()
     denset = DenseNet(input_shape=(100, 100, 3), n_classes=10, nb_layers=5,
                       nb_dense_block=5,
                       growth_rate=24)
     model = denset.build()
-    describe_model(model)
+    print(tf.add_n(model.losses))
+    # describe_model(model)

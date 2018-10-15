@@ -222,12 +222,17 @@ class DenseNet:
 
 
 def main():
-    model = DenseNet(7, 24, 5, 10, 5,
-                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.2, pool_initial=True,
-                     include_top=True)
-    model = model.build(input_shape=(100, 100, 3))
+    import tensorflow as tf
+    tf.enable_eager_execution()
+    # model = DenseNet(7, 24, 5, 10, 5,
+    #                  bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.2, pool_initial=True,
+    #                  include_top=True)
+    # model = model.build(input_shape=(100, 100, 3))
 
-    describe_model(model)
+    model=tf.keras.applications.DenseNet121(input_shape=(224,224,3))
+
+    # describe_model(model)
+    print(tf.add_n(model.losses))
 
 
 if __name__ == '__main__':

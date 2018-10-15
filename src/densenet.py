@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate
 
 from tensorflow.keras.regularizers import l2
 
@@ -19,10 +19,10 @@ class ConvBlock(tf.keras.Model):
                             padding='same',
                             use_bias=False,
                             data_format=data_format,
-                            kernel_initializer='he_uniform',
+                            kernel_initializer='he_normal',
                             kernel_regularizer=l2(weight_decay))
         # 初始化本模块所需要的op
-        self.batchnorm1 = BatchNormalization(axis=axis)
+        self.batchnorm1 = BatchNormalization(axis=axis, epsilon=1.1e-5)
         self.dropout1 = Dropout(dropout_rate)
         self.dropout2 = Dropout(dropout_rate)
 
@@ -32,9 +32,9 @@ class ConvBlock(tf.keras.Model):
                                 padding='same',
                                 use_bias=False,
                                 data_format=data_format,
-                                kernel_initializer='he_uniform',
+                                kernel_initializer='he_normal',
                                 kernel_regularizer=l2(weight_decay))
-            self.batchnorm2 = BatchNormalization(axis=axis)
+            self.batchnorm2 = BatchNormalization(axis=axis, epsilon=1.1e-5)
 
     def call(self, x, training=True, mask=None):
 
@@ -42,7 +42,7 @@ class ConvBlock(tf.keras.Model):
 
         if self.bottleneck:
             output = self.conv1(tf.nn.relu(output))
-            output = self.dropout1(output, training=training)
+            # output = self.dropout1(output, training=training) #暂时去除
             output = self.batchnorm2(output, training=training)
 
         output = self.conv2(tf.nn.relu(output))
@@ -57,14 +57,14 @@ class TransitionBlock(tf.keras.Model):
                  weight_decay=1e-4, dropout_rate=0.):
         super(TransitionBlock, self).__init__()
         axis = -1 if data_format == 'channels_last' else 1
-        self.batchnorm = BatchNormalization(axis=axis)
+        self.batchnorm = BatchNormalization(axis=axis, epsilon=1.1e-5)
 
         self.conv = Conv2D(num_filters,
                            (1, 1),
                            padding='same',
                            use_bias=False,
                            data_format=data_format,
-                           kernel_initializer='he_uniform',
+                           kernel_initializer='he_normal',
                            kernel_regularizer=l2(weight_decay))
         self.avg_pool = AveragePooling2D(data_format=data_format)
         self.dropout = Dropout(dropout_rate)
@@ -73,7 +73,7 @@ class TransitionBlock(tf.keras.Model):
         #### 这里没有加 dropout ###
         output = self.batchnorm(x)
         output = self.conv(tf.nn.relu(output))
-        output = self.dropout(output, training=training)
+        # output = self.dropout(output, training=training) # 暂时去除
         output = self.avg_pool(output)
         return output
 
@@ -102,7 +102,7 @@ class DenseNet(tf.keras.Model):
     def __init__(self, depth_of_model, growth_rate, num_of_blocks,
                  output_classes, num_layers_in_each_block, data_format,
                  bottleneck=True, compression=0.5, weight_decay=1e-4,
-                 dropout_rate=0., pool_initial=True, include_top=True):
+                 dropout_rate=0.0, pool_initial=True, include_top=True):
         super(DenseNet, self).__init__()
         self.depth_of_model = depth_of_model  # valid when num_layers_in_each_block is integer
         self.growth_rate = growth_rate
@@ -154,7 +154,7 @@ class DenseNet(tf.keras.Model):
                             padding='same',
                             use_bias=False,
                             data_format=self.data_format,
-                            kernel_initializer='he_uniform',
+                            kernel_initializer='he_normal',
                             kernel_regularizer=l2(self.weight_decay))
 
         if self.pool_initial:
@@ -162,8 +162,8 @@ class DenseNet(tf.keras.Model):
                                    strides=(2, 2),
                                    padding='same',
                                    data_format=self.data_format)
-            self.batchnorm1 = BatchNormalization(axis=axis)
-        self.batchnorm2 = BatchNormalization(axis=axis)
+            self.batchnorm1 = BatchNormalization(axis=axis, epsilon=1.1e-5)
+        self.batchnorm2 = BatchNormalization(axis=axis, epsilon=1.1e-5)
 
         # last pool and fc layer
         if self.include_top:  # is need top layer
@@ -192,6 +192,27 @@ class DenseNet(tf.keras.Model):
                                                               self.weight_decay,
                                                               self.dropout_rate))
 
+    # def call(self, x, training=True, mask=None):
+    #     """ general modelling of DenseNet"""
+    #     output = self.conv1(x)
+    #
+    #     if self.pool_initial:
+    #         output = self.batchnorm1(output, training=training)
+    #         output = self.pool1(tf.nn.relu(output))
+    #
+    #     for i in range(self.num_of_blocks - 1):
+    #         output = self.dense_block[i](output, training=training)
+    #         output = self.transition_blocks[i](output, training=training)
+    #
+    #     output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
+    #     output = self.batchnorm2(output, training=training)
+    #     output = tf.nn.relu(output)
+    #
+    #     if self.include_top:
+    #         output = self.last_pool(output)
+    #         output = self.classifier(output)
+    #
+    #     return output
     def call(self, x, training=True, mask=None):
         """ general modelling of DenseNet"""
         output = self.conv1(x)
@@ -200,58 +221,34 @@ class DenseNet(tf.keras.Model):
             output = self.batchnorm1(output, training=training)
             output = self.pool1(tf.nn.relu(output))
 
+        avg_pool_list = list()
         for i in range(self.num_of_blocks - 1):
             output = self.dense_block[i](output, training=training)
             output = self.transition_blocks[i](output, training=training)
+            if i != 0:
+                avg_pool_list.append(GlobalAveragePooling2D()(output))
 
         output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
         output = self.batchnorm2(output, training=training)
         output = tf.nn.relu(output)
+        avg_pool_list.append(GlobalAveragePooling2D()(output))
+        output = Concatenate()(avg_pool_list)
 
-        if self.include_top:
-            output = self.last_pool(output)
-            output = self.classifier(output)
+        output = Dense(self.output_classes, )(output)
+
+        # if self.include_top:
+        #     output = self.last_pool(output)
+        #     output = self.classifier(output)
 
         return output
 
 
-
-def get_num_params(trainable_variables):
-    total_parameters = 0
-    for variable in trainable_variables:
-        # shape is an array of tf.Dimension
-        shape = variable.get_shape()
-        variable_parameters = 1
-        for dim in shape:
-            variable_parameters *= dim.value
-        total_parameters += variable_parameters
-    print("Model size: %dK" % (total_parameters / 1000,))
-
-def print_num_of_total_parameters(trainable_variables,output_detail=True,):
-    total_parameters = 0
-    parameters_string = ""
-
-    for variable in trainable_variables:
-
-        shape = variable.get_shape()
-        variable_parameters = 1
-        for dim in shape:
-            variable_parameters *= dim.value
-        total_parameters += variable_parameters
-        if len(shape) == 1:
-            parameters_string += ("%s %d, " % (variable.name, variable_parameters))
-        else:
-            parameters_string += ("%s %s=%d, " % (variable.name, str(shape), variable_parameters))
-
-    else:
-        if output_detail:
-            print(parameters_string)
-        print("Total %d variables, %s params" % (len(tf.trainable_variables()), "{:,}".format(total_parameters)))
-
 def main():
-    model = DenseNet(7, 12, 5, 10, 5, 'channels_last', True)
-    rand_input = tf.random_uniform((64, 128, 47, 2))
+    tf.enable_eager_execution()
+    model = DenseNet(7, 16, 5, 10, 5, 'channels_last', True)
+    rand_input = tf.random_uniform((3, 100, 100, 3))
     output = model(rand_input)
+    print(tf.add_n(model.losses))
     # from utils.utils import describe_model
     # model = tf.keras.models.Model(inputs=[input], outputs=[output], name='densenet',)
     # describe_model(model)

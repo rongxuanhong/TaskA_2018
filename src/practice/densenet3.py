@@ -167,7 +167,6 @@ class DenseNet:
         # print(x.shape)
 
         output = Dense(10, name='prediction')(x)
-        print(output.shape)
 
         model = Model(input, output, name='densenet')
         return model
