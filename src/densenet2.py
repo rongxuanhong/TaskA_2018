@@ -166,9 +166,9 @@ class DenseNet(tf.keras.Model):
         self.batchnorm2 = BatchNormalization(axis=axis, )
 
         # last pool and fc layer
-        # if self.include_top:  # is need top layer
-        #     self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
-        #     self.classifier = Dense(self.output_classes)
+        if self.include_top:  # is need top layer
+            self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
+            self.classifier = Dense(self.output_classes)
 
         # calculate the number of filters after each denseblock
         num_filters_after_each_block = [self.num_filters]
@@ -192,27 +192,6 @@ class DenseNet(tf.keras.Model):
                                                               self.weight_decay,
                                                               self.dropout_rate))
 
-    # def call(self, x, training=True, mask=None):
-    #     """ general modelling of DenseNet"""
-    #     output = self.conv1(x)
-    #
-    #     if self.pool_initial:
-    #         output = self.batchnorm1(output, training=training)
-    #         output = self.pool1(tf.nn.relu(output))
-    #
-    #     for i in range(self.num_of_blocks - 1):
-    #         output = self.dense_block[i](output, training=training)
-    #         output = self.transition_blocks[i](output, training=training)
-    #
-    #     output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
-    #     output = self.batchnorm2(output, training=training)
-    #     output = tf.nn.relu(output)
-    #
-    #     if self.include_top:
-    #         output = self.last_pool(output)
-    #         output = self.classifier(output)
-    #
-    #     return output
     def call(self, x, training=True, mask=None):
         """ general modelling of DenseNet"""
         output = self.conv1(x)
@@ -221,26 +200,47 @@ class DenseNet(tf.keras.Model):
             output = self.batchnorm1(output, training=training)
             output = self.pool1(tf.nn.relu(output))
 
-        # avg_pool_list = list()
         for i in range(self.num_of_blocks - 1):
             output = self.dense_block[i](output, training=training)
             output = self.transition_blocks[i](output, training=training)
-            # if i > 1:
-            #     avg_pool_list.append(GlobalAveragePooling2D()(output))
 
         output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
         output = self.batchnorm2(output, training=training)
         output = tf.nn.relu(output)
-        # avg_pool_list.append(GlobalAveragePooling2D()(output))
-        # output = Concatenate()(avg_pool_list)
-        #
-        # output = Dense(self.output_classes, )(output)
 
         if self.include_top:
             output = self.last_pool(output)
             output = self.classifier(output)
 
-        return output
+    #     return output
+    # def call(self, x, training=True, mask=None):
+    #     """ general modelling of DenseNet"""
+    #     output = self.conv1(x)
+    #
+    #     if self.pool_initial:
+    #         output = self.batchnorm1(output, training=training)
+    #         output = self.pool1(tf.nn.relu(output))
+    #
+    #     # avg_pool_list = list()
+    #     for i in range(self.num_of_blocks - 1):
+    #         output = self.dense_block[i](output, training=training)
+    #         output = self.transition_blocks[i](output, training=training)
+    #         # if i > 1:
+    #         #     avg_pool_list.append(GlobalAveragePooling2D()(output))
+    #
+    #     output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
+    #     output = self.batchnorm2(output, training=training)
+    #     output = tf.nn.relu(output)
+    #     # avg_pool_list.append(GlobalAveragePooling2D()(output))
+    #     # output = Concatenate()(avg_pool_list)
+    #     #
+    #     # output = Dense(self.output_classes, )(output)
+    #
+    #     if self.include_top:
+    #         output = self.last_pool(output)
+    #         output = self.classifier(output)
+    #
+    #     return output
 
 
 def main():
