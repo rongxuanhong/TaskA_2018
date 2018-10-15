@@ -166,9 +166,9 @@ class DenseNet(tf.keras.Model):
         self.batchnorm2 = BatchNormalization(axis=axis, epsilon=1.1e-5)
 
         # last pool and fc layer
-        if self.include_top:  # is need top layer
-            self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
-            self.classifier = Dense(self.output_classes)
+        # if self.include_top:  # is need top layer
+        #     self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
+        #     self.classifier = Dense(self.output_classes)
 
         # calculate the number of filters after each denseblock
         num_filters_after_each_block = [self.num_filters]
