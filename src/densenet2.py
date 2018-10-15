@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate,Input
 
 from tensorflow.keras.regularizers import l2
 
@@ -245,13 +245,13 @@ class DenseNet(tf.keras.Model):
 
 def main():
     tf.enable_eager_execution()
-    model = DenseNet(7, 16, 5, 10, 5, 'channels_last', True)
+    model = DenseNet(7, 16, 5, 10, 5,)
     rand_input = tf.random_uniform((3, 100, 100, 3))
-    output = model(rand_input)
-    print(tf.add_n(model.losses))
-    # from utils.utils import describe_model
-    # model = tf.keras.models.Model(inputs=[input], outputs=[output], name='densenet',)
-    # describe_model(model)
+    output = model(rand_input,training=True)
+    # print(tf.add_n(model.losses))
+
+    from utils.utils import describe_model
+    describe_model(model)
 
 
 if __name__ == '__main__':
