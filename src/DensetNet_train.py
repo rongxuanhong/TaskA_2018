@@ -85,7 +85,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
 
                 # 计算损失
                 l2_loss = tf.add_n(model.losses)
-                print('l2_loss',l2_loss)
+                print('l2_loss', l2_loss)
                 loss_value = loss(logits, labels) + l2_loss
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
@@ -160,8 +160,10 @@ def run_task_eager(args):
     #                  nb_dense_block=args.n_db,
     #                  growth_rate=args.grow_rate)
 
-    model = DenseNet(7, args.grow_rate, args.n_db, 10, args.nb_layers, data_format=args.data_format,
-                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.5,)
+    model = DenseNet(7, args.grow_rate,
+                     args.n_db, 10,
+                     args.nb_layers,
+                     dropout_rate=0.5, )
 
     # model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
     # model = model.build()

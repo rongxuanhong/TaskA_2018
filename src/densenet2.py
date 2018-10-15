@@ -100,9 +100,9 @@ class DenseBlock(tf.keras.Model):
 
 class DenseNet(tf.keras.Model):
     def __init__(self, depth_of_model, growth_rate, num_of_blocks,
-                 output_classes, num_layers_in_each_block, data_format,
+                 output_classes, num_layers_in_each_block, data_format='channels_last',
                  bottleneck=True, compression=0.5, weight_decay=1e-4,
-                 dropout_rate=0.0, pool_initial=True, include_top=True):
+                 dropout_rate=0.0, pool_initial=True, include_top=False):
         super(DenseNet, self).__init__()
         self.depth_of_model = depth_of_model  # valid when num_layers_in_each_block is integer
         self.growth_rate = growth_rate
