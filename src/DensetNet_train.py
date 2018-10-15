@@ -78,7 +78,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 100, 100, 3))
+                audios = tf.reshape(audios, (args.batch_size, 128, 94, 2))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
 
@@ -113,7 +113,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 100, 100, 3))
+        audios = tf.reshape(audios, (args.batch_size, 128, 94, 2))
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
         accuracy(
@@ -143,8 +143,8 @@ def run_task_eager(args):
     total_batch = 55098 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train3.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test3.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train2.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test2.tfrecords')
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
@@ -162,9 +162,6 @@ def run_task_eager(args):
                      args.n_db, 10,
                      args.nb_layers,
                      dropout_rate=0.5, )
-
-    # model = DenseNet((100, 100, 3), 10, args.nb_layers, args.n_db, args.grow_rate, dropout_rate=0.5)
-    # model = model.build()
 
     step_counter = tf.train.get_or_create_global_step()
 
