@@ -120,8 +120,7 @@ def test(model, dataset, args):
             tf.argmax(logits, axis=1, output_type=tf.int64),
             tf.argmax(labels, axis=1, output_type=tf.int64)
         )
-    print('Test set: Average loss: %.4f, Accuracy: %2f%%\n' %
-          (avg_loss.result(), 100 * accuracy.result()))
+    print('Test set: Average loss：{0:.2f}  acc:{1:.2f}'.format(avg_loss.result(), 100 * accuracy.result()))
     with tfc.summary.always_record_summaries():
         tfc.summary.scalar('test_loss', avg_loss.result())
         tfc.summary.scalar('test_acc', accuracy.result())
