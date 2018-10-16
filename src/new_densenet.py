@@ -122,7 +122,7 @@ class DenseNet(tf.keras.Model):
 
         # first DT
         x, nb_filter = self.dense_block(x, 1, self.nb_layers, self.growth_rate, training)
-        L1, nb_filter1 = self.transition_layers(x, 1, nb_filter)
+        L1, nb_filter1 = self.transition_layers(x, 1, nb_filter,training)
 
         # print(x.shape)
 
