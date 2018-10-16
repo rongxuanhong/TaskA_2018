@@ -122,7 +122,7 @@ class DenseNet(tf.keras.Model):
 
         # first DT
         x, nb_filter = self.dense_block(x, 1, self.nb_layers, self.growth_rate, training)
-        L1, nb_filter1 = self.transition_layers(x, 1, nb_filter,training)
+        L1, nb_filter1 = self.transition_layers(x, 1, nb_filter, training)
 
         # print(x.shape)
 
@@ -138,7 +138,7 @@ class DenseNet(tf.keras.Model):
 
         # fourth DT
         x, nb_filter = self.dense_block(L3, 4, self.nb_layers, nb_filter3, training)
-        L4, nb_filter4 = self.transition_layers(x, 4, nb_filter,training)
+        L4, nb_filter4 = self.transition_layers(x, 4, nb_filter, training)
         # print(x.shape)
 
         # fifth DT
@@ -160,9 +160,9 @@ class DenseNet(tf.keras.Model):
 
         L0 = self.Conv_2D(L3D, self.n_classes, 1, name='conv_L3D')  # bottleneck layer 64x64x6# bottleneck layer 64x64x6
         L = GlobalAveragePooling2D()(L0)  # gvp along frequency axis 64x6
-        x = Dense(self.n_classes)(L)
-        model = Model(inputs, x, name='densenet')
-        return model
+        output = Dense(self.n_classes)(L)
+        # model = Model(inputs, x, name='densenet')
+        return output
 
 
 def describe_model(model):
@@ -190,5 +190,7 @@ def describe_model(model):
 
 
 if __name__ == '__main__':
-    model = DenseNet( n_classes=10, nb_layers=5, nb_dense_block=5, growth_rate=16)
+    model = DenseNet(n_classes=10, nb_layers=5, nb_dense_block=5, growth_rate=16)
+    rand_input = tf.random_uniform((3, 64, 64, 2))
+    output = model(rand_input, training=True)
     # describe_model(model)
