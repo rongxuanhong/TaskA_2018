@@ -58,7 +58,6 @@ class TransitionBlock(tf.keras.Model):
         self.dropout = Dropout(dropout_rate)
 
     def call(self, inputs, training=None, mask=None):
-        print(training)
         output = self.batchnorm(inputs, training=training)
         output = self.conv1(tf.nn.relu(output))
         output = self.avg_pool(output)
