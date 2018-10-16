@@ -7,7 +7,7 @@ from keras.models import Model
 
 class DenseNet:
     def __init__(self, input_shape, n_classes, nb_layers, nb_dense_block, growth_rate, axis=3, dropout_rate=0.2,
-                 weight_decay=1e-4,theta=0.5):
+                 weight_decay=1e-4, theta=0.5):
         self.weight_decay = weight_decay
         self.dropout_rate = dropout_rate
         self.n_classes = n_classes
@@ -37,8 +37,7 @@ class DenseNet:
 
         # 1x1 bottleneck 4k filters
 
-        x = BatchNormalization(axis=self.axis, name=conv_name_base + '_x1_bn')(
-            x)
+        x = BatchNormalization(axis=self.axis, name=conv_name_base + '_x1_bn')(x)
         x = Activation('relu', name=relu_name_base + '_x1')(x)
         x = Conv2D(4 * nb_filter, 1, padding='same', use_bias=False, kernel_initializer='he_uniform',
                    kernel_regularizer=l2(self.weight_decay), name=conv_name_base + '_x1')(x)
@@ -83,13 +82,12 @@ class DenseNet:
         relu_name_base = 'relu' + str(stage) + '_blk'
         pool_name_base = 'pool' + str(stage)
 
-        x = BatchNormalization(axis=self.axis, name=conv_name_base + '_bn')(
-            x)
+        x = BatchNormalization(axis=self.axis, name=conv_name_base + '_bn')(x)
         x = Activation('relu', name=relu_name_base)(x)
         x = Conv2D(int(nb_filter * self.theta), 1, padding='same', kernel_initializer='he_uniform', use_bias=False,
                    kernel_regularizer=l2(self.weight_decay), name=conv_name_base)(x)
-        if self.dropout_rate:
-            x = Dropout(self.dropout_rate)(x)
+        # if self.dropout_rate:##去掉了dropout
+        #     x = Dropout(self.dropout_rate)(x)
         x = AveragePooling2D(pool_size=2, strides=2, name=pool_name_base)(x)  # non-overlap
         nb_filter = int(self.theta * nb_filter)
 
@@ -118,54 +116,53 @@ class DenseNet:
         input = Input(self.input_shape)
         # first convolution layer 3x3 conv
         x = self.Conv_2D(input, 2 * self.growth_rate, 3, name='conv_1')
-        print(x.shape)
+        # print(x.shape)
 
         # first DT
         x, nb_filter = self.dense_block(x, 1, self.nb_layers, self.growth_rate)
         L1, nb_filter1 = self.transition_layers(x, 1, nb_filter)
 
-        print(x.shape)
+        # print(x.shape)
 
         # second DT
         x, nb_filter = self.dense_block(L1, 2, self.nb_layers, nb_filter1)
         L2, nb_filter2 = self.transition_layers(x, 2, nb_filter)
-        print(x.shape)
+        # print(x.shape)
 
         # third DT
-        L2 = ZeroPadding2D(((1, 0), (1, 0)))(L2)
         x, nb_filter = self.dense_block(L2, 3, self.nb_layers, nb_filter2)
         L3, nb_filter3 = self.transition_layers(x, 3, nb_filter)
-        print(x.shape)
+        # print(x.shape)
 
         # fourth DT
-        L3 = ZeroPadding2D((1, 1,))(L3)
         x, nb_filter = self.dense_block(L3, 4, self.nb_layers, nb_filter3)
         L4, nb_filter4 = self.transition_layers(x, 4, nb_filter)
-        print(x.shape)
+        # print(x.shape)
 
         # fifth DT
         x, nb_filter = self.dense_block(L4, 5, self.nb_layers, nb_filter4)
         L5, nb_filter5 = self.transition_layers(x, 5, nb_filter)
-        print(x.shape)
+        # print(x.shape)
 
-        print('L5的shape{}'.format(L5.shape))
+        # print('L5的shape{}'.format(L5.shape))
 
         L1D = self.conv_transpose_block(L5, 1, nb_filter5, kernel_size=4, strides=4)  # batch_sizex8x8x78
 
-        L3 = self.Conv_2D(L3, 78, 1, name='deconv_L1D')  # batch_sizex8x8x72
+        L3 = self.Conv_2D(L3, 78, 1, name='deconv_L1D')  # batch_sizex8x8x78
 
         L2D = self.conv_transpose_block(Add()([L3, L1D]), 2, nb_filter3, kernel_size=2, strides=2)
 
-        L2 = self.Conv_2D(L2, 72, 1, name='deconv_L2D')
+        L2 = self.Conv_2D(L2, 72, 1, name='deconv_L2D')  # batch_sizex16x16x72
 
         L3D = self.conv_transpose_block(Add()([L2, L2D]), 3, nb_filter2, kernel_size=4, strides=4)
 
         L0 = self.Conv_2D(L3D, self.n_classes, 1, name='conv_L3D')  # bottleneck layer 64x64x6# bottleneck layer 64x64x6
         L = GlobalAveragePooling2D()(L0)  # gvp along frequency axis 64x6
-
         x = Dense(10)(L)
         model = Model(inputs=[input], outputs=[x], name='densenet')
         return model
+
+
 def describe_model(model):
     """
     描述keras模型的结构
@@ -189,6 +186,7 @@ def describe_model(model):
 
     print(description)
 
+
 if __name__ == '__main__':
-    model = DenseNet(input_shape=(100, 100, 3), n_classes=10, nb_layers=5, nb_dense_block=5, growth_rate=16).build()
+    model = DenseNet(input_shape=(64, 64, 2), n_classes=10, nb_layers=5, nb_dense_block=5, growth_rate=16).build()
     describe_model(model)

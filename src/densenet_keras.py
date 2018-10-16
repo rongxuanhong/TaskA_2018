@@ -164,9 +164,9 @@ class DenseNet:
         self.batchnorm2 = BatchNormalization(axis=axis)
 
         # last pool and fc layer
-        # if self.include_top:  # is need top layer
-        #     self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
-        #     self.classifier = Dense(self.output_classes)
+        if self.include_top:  # is need top layer
+            self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
+            self.classifier = Dense(self.output_classes)
 
         # calculate the number of filters after each denseblock
         num_filters_after_each_block = [self.num_filters]
@@ -199,24 +199,17 @@ class DenseNet:
             output = Activation('relu')(output)
             output = self.pool1(output)
 
-        output_list = list()
         for i in range(self.num_of_blocks - 1):
             output = self.dense_block[i].build(output)
             output = self.transition_blocks[i].build(output)
-            if i:
-                output_list.append(GlobalAveragePooling2D()(output))
 
         output = self.dense_block[self.num_of_blocks - 1].build(output)  # output of the last denseblock
-        output_list.append(GlobalAveragePooling2D()(output))
-        # output = self.batchnorm2(output)
-        # output = Activation('relu')(output)
-        output = Concatenate(axis=-1)(output_list)
+        output = self.batchnorm2(output)
+        output = Activation('relu')(output)
 
-
-        # if self.include_top:
-        #     output = self.last_pool(output)
-        #     output = self.classifier(output)
-        output=Dense(self.output_classes)(output)
+        if self.include_top:
+            output = self.last_pool(output)
+            output = self.classifier(output)
 
         return Model(inputs=[input], outputs=[output], name='densenet')
 
@@ -227,7 +220,7 @@ def main():
     model = DenseNet(7, 24, 5, 10, 5,
                      bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.2, pool_initial=True,
                      include_top=True)
-    model = model.build(input_shape=(128,94,2))
+    model = model.build(input_shape=(128, 94, 2))
 
     # model=tf.keras.applications.DenseNet121(input_shape=(128,94,3))
 
