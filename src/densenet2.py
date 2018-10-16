@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Input
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Add, Conv2DTranspose
 
 from tensorflow.keras.regularizers import l2
 
@@ -24,7 +24,7 @@ class ConvBlock(tf.keras.Model):
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis, )
         self.dropout1 = Dropout(dropout_rate)
-        self.dropout2 = Dropout(dropout_rate)
+        # self.dropout2 = Dropout(dropout_rate)
 
         if self.bottleneck:
             self.conv1 = Conv2D(inter_filter,
@@ -46,7 +46,7 @@ class ConvBlock(tf.keras.Model):
             output = self.batchnorm2(output, training=training)
 
         output = self.conv2(tf.nn.relu(output))
-        output = self.dropout2(output, training=training)
+        output = self.dropout1(output, training=training)
         return output
 
 
@@ -102,7 +102,7 @@ class DenseNet(tf.keras.Model):
     def __init__(self, depth_of_model, growth_rate, num_of_blocks,
                  output_classes, num_layers_in_each_block, data_format='channels_last',
                  bottleneck=True, compression=0.5, weight_decay=1e-4,
-                 dropout_rate=0.0, pool_initial=True, include_top=True):
+                 dropout_rate=0.0, pool_initial=False, include_top=True):
         super(DenseNet, self).__init__()
         self.depth_of_model = depth_of_model  # valid when num_layers_in_each_block is integer
         self.growth_rate = growth_rate
@@ -186,33 +186,41 @@ class DenseNet(tf.keras.Model):
                                                self.data_format,
                                                self.weight_decay,
                                                self.dropout_rate))
-            if i + 1 < self.num_of_blocks:
-                self.transition_blocks.append(TransitionBlock(num_filters_after_each_block[i],
-                                                              self.data_format,
-                                                              self.weight_decay,
-                                                              self.dropout_rate))
+            # if i + 1 < self.num_of_blocks:
+            self.transition_blocks.append(TransitionBlock(num_filters_after_each_block[i],
+                                                          self.data_format,
+                                                          self.weight_decay,
+                                                          self.dropout_rate))
 
-    def call(self, x, training=True, mask=None):
-        """ general modelling of DenseNet"""
-        output = self.conv1(x)
+        self.conv_transpose_block1 = Conv2DTranspose(num_filters_after_each_block[4], kernel_size=4, strides=4)
+        self.conv_transpose_block2 = Conv2DTranspose(num_filters_after_each_block[2], kernel_size=2, strides=2)
+        self.conv_transpose_block3 = Conv2DTranspose(num_filters_after_each_block[1], kernel_size=4, strides=4)
 
-        if self.pool_initial:
-            output = self.batchnorm1(output, training=training)
-            output = self.pool1(tf.nn.relu(output))
+        self.conv2 = Conv2D(78,
+                            1,
+                            strides=stride,
+                            padding='same',
+                            use_bias=False,
+                            data_format=self.data_format,
+                            kernel_initializer='he_uniform',
+                            kernel_regularizer=l2(self.weight_decay))
+        self.conv3 = Conv2D(74,
+                            1,
+                            strides=stride,
+                            padding='same',
+                            use_bias=False,
+                            data_format=self.data_format,
+                            kernel_initializer='he_uniform',
+                            kernel_regularizer=l2(self.weight_decay))
+        self.conv4 = Conv2D(10,
+                            1,
+                            strides=stride,
+                            padding='same',
+                            use_bias=False,
+                            data_format=self.data_format,
+                            kernel_initializer='he_uniform',
+                            kernel_regularizer=l2(self.weight_decay))
 
-        for i in range(self.num_of_blocks - 1):
-            output = self.dense_block[i](output, training=training)
-            output = self.transition_blocks[i](output, training=training)
-
-        output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
-        output = self.batchnorm2(output, training=training)
-        output = tf.nn.relu(output)
-
-        if self.include_top:
-            output = self.last_pool(output)
-            output = self.classifier(output)
-
-        return output
     # def call(self, x, training=True, mask=None):
     #     """ general modelling of DenseNet"""
     #     output = self.conv1(x)
@@ -221,37 +229,70 @@ class DenseNet(tf.keras.Model):
     #         output = self.batchnorm1(output, training=training)
     #         output = self.pool1(tf.nn.relu(output))
     #
-    #     # avg_pool_list = list()
     #     for i in range(self.num_of_blocks - 1):
     #         output = self.dense_block[i](output, training=training)
     #         output = self.transition_blocks[i](output, training=training)
-    #         # if i > 1:
-    #         #     avg_pool_list.append(GlobalAveragePooling2D()(output))
     #
     #     output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
     #     output = self.batchnorm2(output, training=training)
     #     output = tf.nn.relu(output)
-    #     # avg_pool_list.append(GlobalAveragePooling2D()(output))
-    #     # output = Concatenate()(avg_pool_list)
-    #     #
-    #     # output = Dense(self.output_classes, )(output)
     #
     #     if self.include_top:
     #         output = self.last_pool(output)
     #         output = self.classifier(output)
     #
     #     return output
+    def call(self, x, training=True, mask=None):
+        """ general modelling of DenseNet"""
+        output = self.conv1(x)
+
+        # output = self.batchnorm1(output, training=training)
+        # output = self.pool1(tf.nn.relu(output))
+
+        # avg_pool_list = list()
+        output_list = list()
+        for i in range(self.num_of_blocks):
+            output = self.dense_block[i](output, training=training)
+            output = self.transition_blocks[i](output, training=training)
+            output_list.append(output)
+
+        L1D = self.conv_transpose_block1(output_list[-1])
+        L3 = self.conv2(output_list[3])
+
+        L2D = self.conv_transpose_block2(Add()([L3, L1D]))
+        L2 = self.conv3(output_list[2])
+
+        L3D = self.conv_transpose_block3(Add()([L2, L2D]))
+        print(L3D.shape)
+
+        output = self.conv3(L3D)
+        # L1D = self.conv_transpose_block(L5, 1, nb_filter5, kernel_size=4, strides=4)  # batch_sizex8x8x78
+        #
+        # L3 = self.Conv_2D(L3, 78, 1, name='deconv_L1D')  # batch_sizex8x8x78
+        #
+        # L2D = self.conv_transpose_block(Add()([L3, L1D]), 2, nb_filter3, kernel_size=2, strides=2)
+        #
+        # L2 = self.Conv_2D(L2, 72, 1, name='deconv_L2D')  # batch_sizex16x16x72
+        #
+        # L3D = self.conv_transpose_block(Add()([L2, L2D]), 3, nb_filter2, kernel_size=4, strides=4)
+        #
+        # L0 = self.Conv_2D(L3D, self.n_classes, 1, name='conv_L3D')  # bottleneck layer 64x64x6# bottleneck layer 64x64x6
+        if self.include_top:
+            output = self.last_pool(output)
+            output = self.classifier(output)
+
+        return output
 
 
 def main():
     tf.enable_eager_execution()
-    model = DenseNet(7, 16, 5, 10, 5, )
-    rand_input = tf.random_uniform((3, 100, 100, 3))
+    model = DenseNet(7, 16, 5, 10, 5)
+    rand_input = tf.random_uniform((3, 64, 64, 2))
     output = model(rand_input, training=True)
     # print(tf.add_n(model.losses))
 
-    from utils.utils import describe_model
-    describe_model(model)
+    # from utils.utils import describe_model
+    # describe_model(model)
 
 
 if __name__ == '__main__':
