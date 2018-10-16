@@ -1,8 +1,8 @@
-from keras.layers.normalization import BatchNormalization
-from keras.layers import Conv2D, Activation, Dropout, GlobalAveragePooling2D, AveragePooling2D, Concatenate, Input, \
-    Conv2DTranspose, Add, Dense, ZeroPadding2D
-from keras.regularizers import l2
-from keras.models import Model
+from tensorflow.keras.layers import Conv2D, Activation, Dropout, GlobalAveragePooling2D, AveragePooling2D, Concatenate, \
+    Input, \
+    Conv2DTranspose, Add, Dense, BatchNormalization
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.models import Model
 
 
 class DenseNet:
