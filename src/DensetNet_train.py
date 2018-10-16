@@ -182,9 +182,9 @@ def run_task_eager(args):
     #                  args.n_db, 10,
     #                  args.nb_layers,
     #                  dropout_rate=0.5, )
-    model = DenseNet(input_shape=(64, 64, 2), n_classes=10, nb_layers=args.nb_layers, nb_dense_block=args.n_db,
-                     growth_rate=args.grow_rate).build()
-    describe_model(model)
+    model = DenseNet(n_classes=10, nb_layers=args.nb_layers, nb_dense_block=args.n_db,
+                     growth_rate=args.grow_rate)
+    # describe_model(model)
 
     step_counter = tf.train.get_or_create_global_step()
 
