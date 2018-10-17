@@ -183,7 +183,7 @@ def run_task_eager(args):
     #                  args.n_db, 10,
     #                  args.nb_layers,
     #                  dropout_rate=0.5, )
-    denset = DenseNet(input_shape=(64, 64, 3), n_classes=10, nb_layers=5,
+    denset = DenseNet(input_shape=(64, 64, 2), n_classes=10, nb_layers=5,
                       nb_dense_block=5,
                       growth_rate=16,dropout_rate=0.5)
     model = denset.build()
