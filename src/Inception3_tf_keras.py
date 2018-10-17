@@ -300,6 +300,5 @@ class InceptionV3(tf.keras.Model):
 if __name__ == '__main__':
     # tf.enable_eager_execution()
     model = InceptionV3(num_classes=10)
-    tf.keras.applications.InceptionV3
     rand_input = tf.random_uniform((3, 64, 64, 2))
     output = model(rand_input, training=True)
