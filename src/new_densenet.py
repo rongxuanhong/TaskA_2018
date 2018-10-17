@@ -55,7 +55,7 @@ class TransitionBlock(tf.keras.Model):
                             kernel_regularizer=l2(weight_decay), name=conv_name_base + '_x1')
         self.batchnorm = BatchNormalization(axis=axis)
         self.avg_pool = AveragePooling2D(data_format=data_format, name=pool_name_base)
-        self.dropout = Dropout(dropout_rate)
+        # self.dropout = Dropout(dropout_rate)
 
     def call(self, inputs, training=None, mask=None):
         output = self.batchnorm(inputs, training=training)
@@ -154,21 +154,21 @@ class DenseNet(tf.keras.Model):
                                      self.weight_decay)(output, training=training)
             output_list.append((output, nb_filter))
 
-        L1D = Conv2DTranspose(nb_filter, kernel_size=4, strides=4, use_bias=False,
-                              kernel_initializer='he_uniform', padding='same',
-                              kernel_regularizer=l2(self.weight_decay), name='convt1')(output)
-
-        output = self.conv2(output_list[2][0])
-        L2D = Conv2DTranspose(output_list[2][1], kernel_size=2, strides=2, use_bias=False,
-                              kernel_initializer='he_uniform', padding='same',
-                              kernel_regularizer=l2(self.weight_decay), name='convt2')(Add()([output, L1D]))
-        output = self.conv3(output_list[1][0])
-        L3D = Conv2DTranspose(output_list[1][1], kernel_size=4, strides=4, use_bias=False,
-                              kernel_initializer='he_uniform', padding='same',
-                              kernel_regularizer=l2(self.weight_decay), name='convt2')(Add()([output, L2D]))
-
-        L0 = self.conv4(L3D)
-        L = self.avg_pool(L0)  # gvp along frequency axis 64x6
+        # L1D = Conv2DTranspose(nb_filter, kernel_size=4, strides=4, use_bias=False,
+        #                       kernel_initializer='he_uniform', padding='same',
+        #                       kernel_regularizer=l2(self.weight_decay), name='convt1')(output)
+        #
+        # output = self.conv2(output_list[2][0])
+        # L2D = Conv2DTranspose(output_list[2][1], kernel_size=2, strides=2, use_bias=False,
+        #                       kernel_initializer='he_uniform', padding='same',
+        #                       kernel_regularizer=l2(self.weight_decay), name='convt2')(Add()([output, L1D]))
+        # output = self.conv3(output_list[1][0])
+        # L3D = Conv2DTranspose(output_list[1][1], kernel_size=4, strides=4, use_bias=False,
+        #                       kernel_initializer='he_uniform', padding='same',
+        #                       kernel_regularizer=l2(self.weight_decay), name='convt2')(Add()([output, L2D]))
+        #
+        # L0 = self.conv4(L3D)
+        L = self.avg_pool(output)  # gvp along frequency axis 64x6
         output = self.dense(L)
         return output
 

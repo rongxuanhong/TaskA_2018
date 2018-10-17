@@ -128,7 +128,7 @@ class DenseNet:
         # first convolution layer 3x3 conv
         x = self.Conv_2D(input, 2 * self.growth_rate, 3, name='conv_1')
 
-        nb_filter = self.growth_rate
+        nb_filter = 2*self.growth_rate
         for i in range(self.nb_dense_block - 1):
             x, nb_filter = self.dense_block(x, i + 1, self.nb_layers, nb_filter,training)
             x, nb_filter = self.transition_layers(x, i + 1, nb_filter,training)
