@@ -104,7 +104,6 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
 
                 # 计算损失
                 l2_loss = tf.add_n(model.losses)
-                print("l2_loss:", l2_loss)
                 loss_value = loss(logits, labels) + l2_loss
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志

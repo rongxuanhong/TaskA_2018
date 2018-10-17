@@ -1,11 +1,10 @@
-from densenet2 import DenseNet
+from Inception3_tf_keras import InceptionV3
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *
 from datetime import datetime
 import os
 import tensorflow as tf
-from InceptionV3 import InceptionV3
 
 """使用 Eager Execution编写， 适合与 NumPy 一起使用"""
 
@@ -65,6 +64,26 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
+def get_next_batch(path, num_examples):
+    """
+    取出每一批数据
+    :param path: TFRecord格式的数据地址
+    :param num_examples: 样本总数
+    :return:
+    """
+    filename_queue = tf.train.string_input_producer([path], num_epochs=None)
+    reader = tf.TFRecordReader()
+    _, serialized_train_example = reader.read(filename_queue)
+    features, labels = parse_example(serialized_train_example)
+
+    min_after_dequeue = int(num_examples * 0.4)
+    feature, label = tf.train.shuffle_batch([features, labels],
+                                            batch_size=args.batch_size,
+                                            capacity=min_after_dequeue + 3 * args.batch_size,  # 默认设置
+                                            min_after_dequeue=min_after_dequeue)
+    return feature, label
+
+
 def train(model, optimizer, dataset, step_counter, total_batch, args):
     """
     在dataset上使用optimizer训练model，
@@ -79,13 +98,13 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 128, 94, 2))
+                audios = tf.reshape(audios, (args.batch_size, 64, 64, 2))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
 
                 # 计算损失
-                l2_loss = tf.add_n(model.losses)
-                loss_value = loss(logits, labels) + l2_loss
+                # l2_loss = tf.add_n(model.losses)
+                loss_value = loss(logits, labels)
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
@@ -114,15 +133,14 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 128, 47, 2))
+        audios = tf.reshape(audios, (args.batch_size, 64, 64, 2))
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
         accuracy(
             tf.argmax(logits, axis=1, output_type=tf.int64),
             tf.argmax(labels, axis=1, output_type=tf.int64)
         )
-    print('Test set: Average loss: %.4f, Accuracy: %2f%%\n' %
-          (avg_loss.result(), 100 * accuracy.result()))
+    print('Test set: Average loss：{0:.4f}  acc:{1:.2f}'.format(avg_loss.result(), 100 * accuracy.result()))
     with tfc.summary.always_record_summaries():
         tfc.summary.scalar('test_loss', avg_loss.result())
         tfc.summary.scalar('test_acc', accuracy.result())
@@ -141,40 +159,32 @@ def run_task_eager(args):
 
     # 3.加载数据
     batch_size = args.batch_size
-    total_batch = 55098 // batch_size
+    total_batch = 91830 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train2.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test2.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train4.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test4.tfrecords')
+
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(56000).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(92000).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    # model = DenseNet(n_classes=10, nb_layers=args.nb_layers,
-    #                   nb_dense_block=args.n_db,
-    #                   growth_rate=args.grow_rate)
-
-    # model = DenseNet(7, args.grow_rate, args.n_db, 10, [6, 12, 24, 16], data_format=args.data_format,
-    #                  bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
-    #                  include_top=True)
-    model = InceptionV3(input_shape=(128, 94, 2), num_classes=10)
-
+    model = InceptionV3(num_classes=10)
     step_counter = tf.train.get_or_create_global_step()
 
-    learning_rate = tf.train.piecewise_constant(step_counter, [10, 15, 30],
-                                                [args.lr, args.lr * 0.1, args.lr * 0.01, args.lr * 0.001])
-    # optimizer = tf.train.RMSPropOptimizer()
-    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    # learning_rate = tf.train.piecewise_constant(step_counter, [15, 22],
+    #                                             [args.lr, args.lr * 0.1, args.lr * 0.01, ])
+    optimizer = tf.train.AdamOptimizer()
+    # optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
     # learing_rate2 = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs, decay_rate=0.9,
     #                                            staircase=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
-    # optimizer = tf.train.AdamOptimizer()
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
@@ -216,7 +226,6 @@ def run_task_eager(args):
                 print('max_acc:{0:.2f}'.format(max_acc))
     # 输出训练时间
     compute_time_consumed(start_time)
-    # print('stop instance complete!!')
 
 
 def define_task_eager_flags():
@@ -227,11 +236,7 @@ def define_task_eager_flags():
     arg = argparse.ArgumentParser()
     arg.add_argument('--batch_size', type=int, default=16)
     arg.add_argument('--epochs', type=int, default=5)
-    arg.add_argument('--nb_layers', type=int, default=5)
-    arg.add_argument('--n_db', type=int, default=2)
-    arg.add_argument('--grow_rate', type=int, default=12)
-    arg.add_argument('--data_format', type=str, default='channels_last')
-    arg.add_argument('--output_dir', type=str, default='/home/ccyoung/')
+    arg.add_argument('--output_dir', type=str, default='/data')
     arg.add_argument('--lr', type=float, default=0.001)
     arg.add_argument('--log_interval', type=int, default=10)
     arg.add_argument('--alpha', type=float, default=0.2)
@@ -248,12 +253,10 @@ def main(args):
     # except:
     #     finish_instance()
     run_task_eager(args)
-    os.system('sh /data/stop.sh')
 
 
 def finish_instance():
-    os.system('sh /data/stop.sh')
-    print('finish_instance')
+    os.system('sh /data/stop_instance.sh')
 
 
 if __name__ == '__main__':

@@ -201,10 +201,9 @@ class DenseNet(tf.keras.Model):
         output = self.batchnorm1(output, training=training)
         output = self.pool1(tf.nn.relu(output))
 
-        for i in range(self.num_of_blocks-1):
+        for i in range(self.num_of_blocks - 1):
             output = self.dense_block[i](output, training=training)
             output = self.transition_blocks[i](output, training=training)
-
 
         if self.include_top:
             output = self.last_pool(output)

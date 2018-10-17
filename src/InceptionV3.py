@@ -220,7 +220,6 @@ def InceptionV3(input_shape, num_classes, data_format='channels_last'):
 
     x = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')(x)
     print(x.shape)
-    x = Flatten()(x)
     output = Dense(num_classes, activation='softmax',
                    kernel_initializer='he_uniform', name='predictions')(x)
 
@@ -238,11 +237,11 @@ def InceptionV3_small(input_shape, num_classes, data_format='channels_last'):
     print(x.shape)
     x = conv2DWithBN(x, 64, (3, 3), bn_axis=bn_axis, name='conv3', )
     print(x.shape)
-    x = MaxPooling2D(pool_size=(3, 3),
-                     strides=2,
-                     data_format=data_format,
-                     name='maxpool1')(x)
-    print(x.shape)
+    # x = MaxPooling2D(pool_size=(3, 3),
+    #                  strides=2,
+    #                  data_format=data_format,
+    #                  name='maxpool1')(x)
+    # print(x.shape)
     x = conv2DWithBN(x, 80, (3, 3), bn_axis=bn_axis, padding='valid', name='conv4', )
     print(x.shape)
     x = conv2DWithBN(x, 192, (3, 3), bn_axis=bn_axis, padding='valid', strides=2, name='conv5', )
@@ -271,8 +270,7 @@ def InceptionV3_small(input_shape, num_classes, data_format='channels_last'):
     x = inception_module_with_expanded_filters(x, [320, 384, (448, 384), 192], 'mixed10')
 
     x = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')(x)
-    print(x.shape)
-    x = Flatten()(x)
+    # x = Flatten()(x)
     output = Dense(num_classes, activation='softmax',
                    kernel_initializer='he_uniform', name='predictions')(x)
 
@@ -305,6 +303,6 @@ def describe_model(model):
 
 
 if __name__ == '__main__':
-    model = InceptionV3_small(input_shape=(100, 100, 3), num_classes=1000)
+    model = InceptionV3_small(input_shape=(64, 64, 2), num_classes=10)
 
     describe_model(model)

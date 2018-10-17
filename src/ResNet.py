@@ -105,9 +105,9 @@ def resNet(input_shape, nums_in_each_part, num_classes, data_format='channels_la
     :param data_format:
     :return:
     """
+    input = Input(input_shape)
     bn_axis = -1 if data_format == 'channel_last' else 1
 
-    input = Input(input_shape)
     x = Conv2D(64, (7, 7), strides=(2, 2), padding='same', name='conv1')(input)
     x = BatchNormalization(axis=bn_axis, name='bn_conv1')(x)
     x = Activation('relu')(x)
@@ -136,9 +136,7 @@ def resNet(input_shape, nums_in_each_part, num_classes, data_format='channels_la
     x = Flatten()(x)
     x = Dense(num_classes, activation='softmax')(x)
 
-    model = Model(input, x, name='resnet')
-    describe_model(model)
-    return model
+    return x
 
 
 def resNet_101(input_shape, num_classes, data_format='channels_last'):
@@ -202,6 +200,10 @@ def describe_model(model):
 
 
 if __name__ == '__main__':
-    model = resNet_152(input_shape=(224, 224, 3), num_classes=1000)
-
-    describe_model(model)
+    # model = resNet_152(input_shape=(224, 224, 3), num_classes=1000)
+    tf.enable_eager_execution()
+    input = Input((224, 224, 3))
+    output = resNet(input, nums_in_each_part=[3, 8, 36, 3], num_classes=10, data_format='channels_last')
+    model = Model(input, output, name='resnet')
+    print(tf.add_n(model.losses))
+    # describe_model(model)
