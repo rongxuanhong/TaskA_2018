@@ -6,7 +6,7 @@ from tensorflow.keras.regularizers import l2
 
 class Conv_block(tf.keras.Model):
     def __init__(self, stage, branch, nb_filter, data_format, bottleneck,
-                 dropout_rate=0.0, weight_decay=1e-4):
+                 dropout_rate=0.2, weight_decay=1e-4):
         super(Conv_block, self).__init__()
         self.bottleneck = bottleneck
         inter_filter = nb_filter * 4
@@ -47,11 +47,11 @@ class Conv_block(tf.keras.Model):
 class TransitionBlock(tf.keras.Model):
     def __init__(self, stage, nb_filter, data_format, dropout_rate=0.0, weight_decay=1e-4):
         super(TransitionBlock, self).__init__()
-        self.nb_filter = nb_filter
         axis = -1 if data_format == 'channels_last' else 1
         conv_name_base = 'conv' + str(stage) + '_blk'
         pool_name_base = 'pool' + str(stage)
-        self.conv1 = Conv2D(4 * nb_filter, 1, padding='same', use_bias=False, kernel_initializer='he_uniform',
+        ## 用于压缩的bottleneck
+        self.conv1 = Conv2D(nb_filter, 1, padding='same', use_bias=False, kernel_initializer='he_uniform',
                             kernel_regularizer=l2(weight_decay), name=conv_name_base + '_x1')
         self.batchnorm = BatchNormalization(axis=axis)
         self.avg_pool = AveragePooling2D(data_format=data_format, name=pool_name_base)
@@ -92,7 +92,7 @@ class DenseNet(tf.keras.Model):
     def __init__(self, growth_rate, num_of_blocks,
                  output_classes, num_layers, data_format='channels_last',
                  bottleneck=True, compression=0.5, weight_decay=1e-4,
-                 dropout_rate=0.0, ):
+                 dropout_rate=0.2, ):
         super(DenseNet, self).__init__()
         self.growth_rate = growth_rate
         self.num_of_blocks = num_of_blocks
@@ -106,7 +106,6 @@ class DenseNet(tf.keras.Model):
 
         self.conv1 = Conv2D(2 * self.growth_rate,
                             (3, 3),
-                            strides=2,
                             padding='same',
                             use_bias=False,
                             data_format=self.data_format,
@@ -148,11 +147,11 @@ class DenseNet(tf.keras.Model):
         output_list = list()
         for i in range(self.num_of_blocks):
             output, nb_filter = DenseBlock(i + 1, self.num_layers, nb_filter, self.growth_rate, self.data_format,
-                                           self.bottleneck, self.dropout_rate,
-                                           self.weight_decay)(output, training=training)
+                                           self.bottleneck, self.dropout_rate, self.weight_decay)(output,
+                                                                                                  training=training)
+            nb_filter = int(self.compression * nb_filter)
             output = TransitionBlock(i + 1, nb_filter, self.data_format, self.dropout_rate,
                                      self.weight_decay)(output, training=training)
-            nb_filter = int(self.compression * nb_filter)
             output_list.append((output, nb_filter))
 
         L1D = Conv2DTranspose(nb_filter, kernel_size=4, strides=4, use_bias=False,
@@ -357,7 +356,7 @@ def describe_model(model):
 
 if __name__ == '__main__':
     tf.enable_eager_execution()
-    model = DenseNet(16, 5, 10, 5, )
+    model = DenseNet(16, 5, 10, 5)
     rand_input = tf.random_uniform((3, 64, 64, 2))
     output = model(rand_input, training=False)
     loss = tf.add_n(model.losses)
