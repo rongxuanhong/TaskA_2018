@@ -9,6 +9,7 @@ class ConvBlockWithBN(tf.keras.Model):
     def __init__(self, filters, kernel_size, name, padding='same', strides=1, bn_axis=-1,
                  data_format='channels_last', dropout_rate=0.2):
         super(ConvBlockWithBN, self).__init__()
+        self.dropout_rate = dropout_rate
         self.conv = Conv2D(filters,
                            kernel_size=kernel_size,
                            strides=strides,
@@ -24,7 +25,8 @@ class ConvBlockWithBN(tf.keras.Model):
     def call(self, inputs, training=None, mask=None):
         output = self.conv(inputs)
         output = tf.nn.relu(self.batchnorm(output, training=training))
-        output = self.dropout(output, training)
+        if self.dropout_rate:
+            output = self.dropout(output, training)
         return output
 
 
