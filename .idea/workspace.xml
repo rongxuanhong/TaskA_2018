@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Inception3_tf_keras.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Inception3_tf_keras.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/inception_run_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/inception_run_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -71,11 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Inception3_tf_keras.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Inception3_tf_keras.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Inception3_tf_keras.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1615">
-              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+            <state relative-caret-position="-643">
+              <caret line="235" column="8" selection-start-line="235" selection-start-column="8" selection-end-line="235" selection-end-column="8" />
               <folding>
                 <element signature="e#0#157#0" expanded="true" />
               </folding>
@@ -86,8 +85,8 @@
       <file leaf-file-name="InceptionV3_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InceptionV3_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="140" column="59" lean-forward="true" selection-start-line="140" selection-start-column="59" selection-end-line="140" selection-end-column="59" />
+            <state relative-caret-position="421">
+              <caret line="176" column="21" selection-start-line="176" selection-start-column="21" selection-end-line="176" selection-end-column="21" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -95,11 +94,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="inception_run_server.sh" pinned="false" current-in-tab="false">
+      <file leaf-file-name="inception_run_server.sh" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/inception_run_server.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="38">
-              <caret line="2" column="57" selection-start-line="2" selection-start-column="57" selection-end-line="2" selection-end-column="57" />
+              <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -166,8 +165,8 @@
         <option value="$PROJECT_DIR$/src/ResNet.py" />
         <option value="$PROJECT_DIR$/src/InceptionV3.py" />
         <option value="$PROJECT_DIR$/src/Inception3_train.py" />
-        <option value="$PROJECT_DIR$/src/InceptionV3_train.py" />
         <option value="$PROJECT_DIR$/src/Inception3_tf_keras.py" />
+        <option value="$PROJECT_DIR$/src/InceptionV3_train.py" />
         <option value="$PROJECT_DIR$/src/inception_run_server.sh" />
       </list>
     </option>
@@ -763,10 +762,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/InceptionV3_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="140" column="59" lean-forward="true" selection-start-line="140" selection-start-column="59" selection-end-line="140" selection-end-column="59" />
+        <state relative-caret-position="421">
+          <caret line="176" column="21" selection-start-line="176" selection-start-column="21" selection-end-line="176" selection-end-column="21" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Inception3_tf_keras.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-643">
+          <caret line="235" column="8" selection-start-line="235" selection-start-column="8" selection-end-line="235" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#157#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -774,17 +783,7 @@
     <entry file="file://$PROJECT_DIR$/src/inception_run_server.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
-          <caret line="2" column="57" selection-start-line="2" selection-start-column="57" selection-end-line="2" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Inception3_tf_keras.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1615">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
-          <folding>
-            <element signature="e#0#157#0" expanded="true" />
-          </folding>
+          <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
         </state>
       </provider>
     </entry>
