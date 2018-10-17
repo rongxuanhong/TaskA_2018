@@ -7,7 +7,7 @@ from tensorflow.keras.regularizers import l2
 
 class ConvBlockWithBN(tf.keras.Model):
     def __init__(self, filters, kernel_size, name, padding='same', strides=1, bn_axis=-1,
-                 data_format='channels_last', dropout_rate=0.2):
+                 data_format='channels_last', dropout_rate=0.5):
         super(ConvBlockWithBN, self).__init__()
         self.dropout_rate = dropout_rate
         self.conv = Conv2D(filters,
@@ -16,6 +16,7 @@ class ConvBlockWithBN(tf.keras.Model):
                            padding=padding,
                            kernel_initializer='he_uniform',
                            data_format=data_format,
+                           kernel_regularizer=l2(1e-4),
                            name=name)
 
         self.batchnorm = BatchNormalization(axis=bn_axis, )
@@ -240,12 +241,12 @@ class InceptionV3(tf.keras.Model):
 
         self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1', dropout_rate=0)
         self.conv_bn2 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv2', dropout_rate=0)
-        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0)
+        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0.5)
 
         # self.max_pool1 = MaxPooling2D(pool_size=(3, 3), strides=2, data_format=data_format, name='maxpool1')
 
-        self.conv_bn4 = ConvBlockWithBN(80, (3, 3), padding='valid', name='conv4', dropout_rate=0)
-        self.conv_bn5 = ConvBlockWithBN(192, (3, 3), padding='valid', name='conv5', dropout_rate=0)
+        self.conv_bn4 = ConvBlockWithBN(80, (3, 3), padding='valid', name='conv4', dropout_rate=0.5)
+        self.conv_bn5 = ConvBlockWithBN(192, (3, 3), padding='valid', name='conv5', dropout_rate=0.5)
 
         self.max_pool2 = MaxPooling2D(pool_size=(3, 3), strides=2, data_format=data_format, name='maxpool2')
 
