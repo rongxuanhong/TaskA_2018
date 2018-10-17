@@ -1,5 +1,5 @@
 from tensorflow.keras.layers import BatchNormalization, \
-    Conv2D, MaxPooling2D, AveragePooling2D, Concatenate, Input, Dense, \
+    Conv2D, MaxPooling2D, AveragePooling2D, Concatenate, Dropout, Dense, \
     GlobalAveragePooling2D
 from utils.utils import *
 from tensorflow.keras.regularizers import l2
@@ -7,7 +7,7 @@ from tensorflow.keras.regularizers import l2
 
 class ConvBlockWithBN(tf.keras.Model):
     def __init__(self, filters, kernel_size, name, padding='same', strides=1, bn_axis=-1,
-                 data_format='channels_last', ):
+                 data_format='channels_last', dropout_rate=0.2):
         super(ConvBlockWithBN, self).__init__()
         self.conv = Conv2D(filters,
                            kernel_size=kernel_size,
@@ -18,10 +18,13 @@ class ConvBlockWithBN(tf.keras.Model):
                            name=name)
 
         self.batchnorm = BatchNormalization(axis=bn_axis, )
+        if dropout_rate:
+            self.dropout = Dropout(dropout_rate)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv(inputs)
         output = tf.nn.relu(self.batchnorm(output, training=training))
+        output = self.dropout(output, training)
         return output
 
 
@@ -233,14 +236,14 @@ class InceptionV3(tf.keras.Model):
     def __init__(self, num_classes, data_format='channels_last'):
         super(InceptionV3, self).__init__()
 
-        self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1', )
-        self.conv_bn2 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv2', )
-        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', )
+        self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1', dropout_rate=0)
+        self.conv_bn2 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv2', dropout_rate=0)
+        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0)
 
         # self.max_pool1 = MaxPooling2D(pool_size=(3, 3), strides=2, data_format=data_format, name='maxpool1')
 
-        self.conv_bn4 = ConvBlockWithBN(80, (3, 3), padding='valid', name='conv4', )
-        self.conv_bn5 = ConvBlockWithBN(192, (3, 3), padding='valid', name='conv5', )
+        self.conv_bn4 = ConvBlockWithBN(80, (3, 3), padding='valid', name='conv4', dropout_rate=0)
+        self.conv_bn5 = ConvBlockWithBN(192, (3, 3), padding='valid', name='conv5', dropout_rate=0)
 
         self.max_pool2 = MaxPooling2D(pool_size=(3, 3), strides=2, data_format=data_format, name='maxpool2')
 
@@ -297,5 +300,6 @@ class InceptionV3(tf.keras.Model):
 if __name__ == '__main__':
     # tf.enable_eager_execution()
     model = InceptionV3(num_classes=10)
+    tf.keras.applications.InceptionV3
     rand_input = tf.random_uniform((3, 64, 64, 2))
     output = model(rand_input, training=True)
