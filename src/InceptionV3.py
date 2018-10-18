@@ -9,6 +9,7 @@ def conv2DWithBN(x, filters, kernel_size, name, padding='same', strides=1, bn_ax
     x = Conv2D(filters,
                kernel_size=kernel_size,
                strides=strides,
+               use_bias=False,  # 新增
                padding=padding,
                kernel_initializer='he_uniform',
                data_format=data_format,
@@ -210,7 +211,7 @@ def InceptionV3(input_shape, num_classes, data_format='channels_last'):
 
     x = inception_module_with_factorization(x, [192, (128, 192), (128, 192), 128], 'mixed4')
     x = inception_module_with_factorization(x, [192, (160, 192), (160, 192), 192], 'mixed5')
-    x = inception_module_with_factorization(x, [192, (160, 192), (160, 192), 192], 'mixed6')
+    # x = inception_module_with_factorization(x, [192, (160, 192), (160, 192), 192], 'mixed6')
     x = inception_module_with_factorization(x, [192, (192, 192), (192, 192), 192], 'mixed7')
 
     x = inception_module_transition2(x, [(192, 320), 192], 'mixed8')
@@ -233,8 +234,8 @@ def InceptionV3_small(input_shape, num_classes, data_format='channels_last'):
 
     x = conv2DWithBN(input, 32, (3, 3), bn_axis=bn_axis, padding='valid', name='conv1', )
     print(x.shape)
-    x = conv2DWithBN(x, 32, (3, 3), bn_axis=bn_axis, padding='valid', name='conv2', )
-    print(x.shape)
+    # x = conv2DWithBN(x, 32, (3, 3), bn_axis=bn_axis, padding='valid', name='conv2', )
+    # print(x.shape)
     x = conv2DWithBN(x, 64, (3, 3), bn_axis=bn_axis, name='conv3', )
     print(x.shape)
     # x = MaxPooling2D(pool_size=(3, 3),
@@ -242,10 +243,10 @@ def InceptionV3_small(input_shape, num_classes, data_format='channels_last'):
     #                  data_format=data_format,
     #                  name='maxpool1')(x)
     # print(x.shape)
-    x = conv2DWithBN(x, 80, (3, 3), bn_axis=bn_axis, padding='valid', name='conv4', )
-    print(x.shape)
-    x = conv2DWithBN(x, 192, (3, 3), bn_axis=bn_axis, padding='valid', strides=2, name='conv5', )
-    print(x.shape)
+    # x = conv2DWithBN(x, 80, (3, 3), bn_axis=bn_axis, padding='valid', name='conv4', )
+    # print(x.shape)
+    # x = conv2DWithBN(x, 192, (3, 3), bn_axis=bn_axis, padding='valid', strides=2, name='conv5', )
+    # print(x.shape)
     x = MaxPooling2D(pool_size=(3, 3),
                      strides=2,
                      data_format=data_format,
@@ -304,5 +305,4 @@ def describe_model(model):
 
 if __name__ == '__main__':
     model = InceptionV3_small(input_shape=(64, 64, 2), num_classes=10)
-
     describe_model(model)
