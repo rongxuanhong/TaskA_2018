@@ -272,10 +272,10 @@ class InceptionV3(tf.keras.Model):
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv_bn1(inputs, training=training)
-        output = self.conv_bn2(output, training=training)
+        # output = self.conv_bn2(output, training=training)
         output = self.conv_bn3(output, training=training)
-        output = self.conv_bn4(output, training=training)
-        output = self.conv_bn5(output, training=training)
+        # output = self.conv_bn4(output, training=training)
+        # output = self.conv_bn5(output, training=training)
 
         output = self.max_pool2(output)
 
