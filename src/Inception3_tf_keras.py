@@ -25,7 +25,7 @@ class ConvBlockWithBN(tf.keras.Model):
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv(inputs)
-        output = tf.nn.relu(self.batchnorm(output))
+        output = tf.nn.relu(self.batchnorm(output,training))
         if self.dropout_rate:
             output = self.dropout(output, training)
         return output
@@ -268,6 +268,7 @@ class InceptionV3(tf.keras.Model):
 
         self.avg_pool = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')
         self.dense = Dense(num_classes, name='predictions')
+        self.dropout=Dropout(0.2)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv_bn1(inputs, training=training)
