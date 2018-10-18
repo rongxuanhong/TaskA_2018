@@ -1,13 +1,13 @@
 from tensorflow.keras.layers import BatchNormalization, \
     Conv2D, MaxPooling2D, AveragePooling2D, Concatenate, Dropout, Dense, \
-    GlobalAveragePooling2D
+    GlobalAveragePooling2D, GaussianNoise
 from utils.utils import *
 from tensorflow.keras.regularizers import l2
 
 
 class ConvBlockWithBN(tf.keras.Model):
     def __init__(self, filters, kernel_size, name, padding='same', strides=1, bn_axis=-1,
-                 data_format='channels_last', dropout_rate=0.2):
+                 data_format='channels_last', dropout_rate=0.5):
         super(ConvBlockWithBN, self).__init__()
         self.dropout_rate = dropout_rate
         self.conv = Conv2D(filters,
@@ -25,7 +25,7 @@ class ConvBlockWithBN(tf.keras.Model):
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv(inputs)
-        output = tf.nn.relu(self.batchnorm(output,training))
+        output = tf.nn.relu(self.batchnorm(output, training))
         if self.dropout_rate:
             output = self.dropout(output, training)
         return output
@@ -239,9 +239,9 @@ class InceptionV3(tf.keras.Model):
     def __init__(self, num_classes, data_format='channels_last'):
         super(InceptionV3, self).__init__()
 
-        self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1',)
+        self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1', )
         # self.conv_bn2 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv2', dropout_rate=0)
-        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0.2)
+        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0.3)
 
         # self.max_pool1 = MaxPooling2D(pool_size=(3, 3), strides=2, data_format=data_format, name='maxpool1')
 
@@ -267,8 +267,8 @@ class InceptionV3(tf.keras.Model):
         self.inception_with_expand_filters2 = InceptionWithExpandFilters([320, 384, (448, 384), 192], 'mixed10')
 
         self.avg_pool = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')
+        self.noise = GaussianNoise(0.3)
         self.dense = Dense(num_classes, name='predictions')
-        self.dropout=Dropout(0.2)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv_bn1(inputs, training=training)
@@ -295,8 +295,8 @@ class InceptionV3(tf.keras.Model):
         output = self.inception_with_expand_filters1(output, training=training)
         output = self.inception_with_expand_filters2(output, training=training)
 
+        output = self.noise(output, training=training)
         output = self.avg_pool(output)
-        output = self.dropout(output, training=training)
         output = self.dense(output)
 
         return output
