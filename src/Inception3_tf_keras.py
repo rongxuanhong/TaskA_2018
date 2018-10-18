@@ -239,9 +239,9 @@ class InceptionV3(tf.keras.Model):
     def __init__(self, num_classes, data_format='channels_last'):
         super(InceptionV3, self).__init__()
 
-        self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1', dropout_rate=0.3)
+        self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1',)
         # self.conv_bn2 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv2', dropout_rate=0)
-        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0.3)
+        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0.2)
 
         # self.max_pool1 = MaxPooling2D(pool_size=(3, 3), strides=2, data_format=data_format, name='maxpool1')
 

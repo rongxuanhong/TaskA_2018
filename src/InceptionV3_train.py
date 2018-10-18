@@ -84,7 +84,7 @@ def get_next_batch(path, num_examples):
     return feature, label
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, args):
+def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -117,6 +117,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, args):
             optimizer.apply_gradients(zip(grads, model.variables), global_step=step_counter)
 
         # 打印log
+        if batch % 50 == 0:
+            print('max_acc:{0:.2f}'.format(max_acc))
         if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
                                                                      compute_accuracy(logits, labels)))
@@ -212,7 +214,7 @@ def run_task_eager(args):
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args)
+            train(model, optimizer, train_ds, step_counter, total_batch, args, max_acc)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
