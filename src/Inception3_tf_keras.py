@@ -7,7 +7,7 @@ from tensorflow.keras.regularizers import l2
 
 class ConvBlockWithBN(tf.keras.Model):
     def __init__(self, filters, kernel_size, name, padding='same', strides=1, bn_axis=-1,
-                 data_format='channels_last', dropout_rate=0.5):
+                 data_format='channels_last', dropout_rate=0.2):
         super(ConvBlockWithBN, self).__init__()
         self.dropout_rate = dropout_rate
         self.conv = Conv2D(filters,
@@ -267,7 +267,6 @@ class InceptionV3(tf.keras.Model):
         self.inception_with_expand_filters2 = InceptionWithExpandFilters([320, 384, (448, 384), 192], 'mixed10')
 
         self.avg_pool = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')
-        self.dropout = Dropout(0.3)
         self.dense = Dense(num_classes, name='predictions')
 
     def call(self, inputs, training=None, mask=None):
