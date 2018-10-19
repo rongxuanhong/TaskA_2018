@@ -158,7 +158,7 @@ class DenseNet:
         if self.pool_initial:
             self.pool1 = MaxPool2D(pool_size=(3, 3),
                                    strides=(2, 2),
-                                   padding='same',
+                                   # padding='same',
                                    data_format=self.data_format)
             self.batchnorm1 = BatchNormalization(axis=axis)
         self.batchnorm2 = BatchNormalization(axis=axis)
@@ -217,14 +217,14 @@ class DenseNet:
 def main():
     import tensorflow as tf
     # tf.enable_eager_execution()
-    model = DenseNet(7, 24, 5, 10, 5,
-                     bottleneck=True, compression=0.5, weight_decay=1e-5, dropout_rate=0.2, pool_initial=True,
+    model = DenseNet(190, 24, 4, 10, 40,
+                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
                      include_top=True)
-    model = model.build(input_shape=(128, 94, 2))
+    model = model.build(input_shape=(64, 64, 2))
 
     # model=tf.keras.applications.DenseNet121(input_shape=(128,94,3))
 
-    describe_model(model)
+    model.summary()
     # print(tf.add_n(model.losses))
 
 

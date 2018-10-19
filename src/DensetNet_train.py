@@ -1,4 +1,4 @@
-from new_densenet import DenseNet
+from densenet2 import DenseNet
 import tensorflow.contrib as tfc
 import argparse
 from utils.utils import *
@@ -134,6 +134,7 @@ def test(model, dataset, args):
 
     for (audios, labels) in dataset:
         audios = tf.reshape(audios, (args.batch_size, 64, 64, 2))
+
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
         accuracy(
@@ -178,16 +179,16 @@ def run_task_eager(args):
     #                  nb_dense_block=args.n_db,
     #                  growth_rate=args.grow_rate)
 
-    # model = DenseNet(7, args.grow_rate,
-    #                  args.n_db, 10,
-    #                  args.nb_layers,
-    #                  dropout_rate=0.5, )
+    model = DenseNet(7, args.grow_rate,
+                     args.n_db, 10,
+                     args.nb_layers,
+                     dropout_rate=0.2, )
     # denset = DenseNet(input_shape=(64, 64, 2), n_classes=10, nb_layers=5,
     #                   nb_dense_block=5,
     #                   growth_rate=16,dropout_rate=0.5)
     # model = denset.build()
-    model = DenseNet(growth_rate=args.grow_rate, num_of_blocks=args.n_db, output_classes=10, num_layers=args.nb_layers,
-                     dropout_rate=0.2, weight_decay=1e-4)
+    # model = DenseNet(growth_rate=args.grow_rate, num_of_blocks=args.n_db, output_classes=10, num_layers=args.nb_layers,
+    #                  dropout_rate=0.2, weight_decay=1e-4)
     # describe_model(model)
 
     step_counter = tf.train.get_or_create_global_step()
@@ -232,7 +233,6 @@ def run_task_eager(args):
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
             # 测试
-            # if (i + 1) % 5 == 0:
             # 评估
             acc = test(model, test_ds, args)
             if acc > max_acc:  ## 保证保存的最后一个cpkt是acc最大的
@@ -255,7 +255,7 @@ def define_task_eager_flags():
     arg.add_argument('--n_db', type=int, default=2)
     arg.add_argument('--grow_rate', type=int, default=12)
     arg.add_argument('--data_format', type=str, default='channels_last')
-    arg.add_argument('--output_dir', type=str, default='/home/ccyoung/')
+    arg.add_argument('--output_dir', type=str, default='/data')
     arg.add_argument('--lr', type=float, default=0.001)
     arg.add_argument('--log_interval', type=int, default=10)
     arg.add_argument('--alpha', type=float, default=0.2)
@@ -272,6 +272,7 @@ def main(args):
     # except:
     #     finish_instance()
     run_task_eager(args)
+    finish_instance()
 
 
 def finish_instance():

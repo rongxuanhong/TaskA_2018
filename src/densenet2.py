@@ -19,7 +19,7 @@ class ConvBlock(tf.keras.Model):
                             padding='same',
                             use_bias=False,
                             data_format=data_format,
-                            kernel_initializer='he_normal',
+                            kernel_initializer='he_uniform',
                             kernel_regularizer=l2(weight_decay))
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis, )
@@ -32,7 +32,7 @@ class ConvBlock(tf.keras.Model):
                                 padding='same',
                                 use_bias=False,
                                 data_format=data_format,
-                                kernel_initializer='he_normal',
+                                kernel_initializer='he_uniform',
                                 kernel_regularizer=l2(weight_decay))
             self.batchnorm2 = BatchNormalization(axis=axis)
 
@@ -64,7 +64,7 @@ class TransitionBlock(tf.keras.Model):
                            padding='same',
                            use_bias=False,
                            data_format=data_format,
-                           kernel_initializer='he_normal',
+                           kernel_initializer='he_uniform',
                            kernel_regularizer=l2(weight_decay))
         self.avg_pool = AveragePooling2D(data_format=data_format)
         self.dropout = Dropout(dropout_rate)
@@ -102,7 +102,7 @@ class DenseNet(tf.keras.Model):
     def __init__(self, depth_of_model, growth_rate, num_of_blocks,
                  output_classes, num_layers_in_each_block, data_format='channels_last',
                  bottleneck=True, compression=0.5, weight_decay=1e-4,
-                 dropout_rate=0.0, pool_initial=True, include_top=True):
+                 dropout_rate=0.0, pool_initial=True):
         super(DenseNet, self).__init__()
         self.depth_of_model = depth_of_model  # valid when num_layers_in_each_block is integer
         self.growth_rate = growth_rate
@@ -115,7 +115,6 @@ class DenseNet(tf.keras.Model):
         self.weight_decay = weight_decay
         self.dropout_rate = dropout_rate
         self.pool_initial = pool_initial
-        self.include_top = include_top
 
         # 决定每个block的层数
         if isinstance(self.num_layers_in_each_block, list) or isinstance(
@@ -151,10 +150,10 @@ class DenseNet(tf.keras.Model):
         self.conv1 = Conv2D(self.num_filters,
                             init_filters,
                             strides=stride,
-                            padding='same',
+                            # padding='same', # 去掉
                             use_bias=False,
                             data_format=self.data_format,
-                            kernel_initializer='he_normal',
+                            kernel_initializer='he_uniform',
                             kernel_regularizer=l2(self.weight_decay))
 
         if self.pool_initial:
@@ -166,9 +165,8 @@ class DenseNet(tf.keras.Model):
         self.batchnorm2 = BatchNormalization(axis=axis, )
 
         # last pool and fc layer
-        if self.include_top:  # is need top layer
-            self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
-            self.classifier = Dense(self.output_classes)
+        self.last_pool = GlobalAveragePooling2D(data_format=self.data_format)
+        self.classifier = Dense(self.output_classes)
 
         # calculate the number of filters after each denseblock
         num_filters_after_each_block = [self.num_filters]
@@ -196,18 +194,21 @@ class DenseNet(tf.keras.Model):
     #     return output
     def call(self, x, training=True, mask=None):
         """ general modelling of DenseNet"""
-        output = self.conv1(x)
+        output = self.conv1(x)  # 64x44
 
-        output = self.batchnorm1(output, training=training)
-        output = self.pool1(tf.nn.relu(output))
+        if self.pool_initial:
+            output = self.batchnorm1(output, training=training)
+            output = self.pool1(tf.nn.relu(output))  # 32x32
 
         for i in range(self.num_of_blocks - 1):
             output = self.dense_block[i](output, training=training)
             output = self.transition_blocks[i](output, training=training)
 
-        if self.include_top:
-            output = self.last_pool(output)
-            output = self.classifier(output)
+        output = self.dense_block[self.num_of_blocks - 1](output, training=training)  # output of the last denseblock
+        output = self.batchnorm2(output)
+
+        output = self.last_pool(tf.nn.relu(output))
+        output = self.classifier(output)
 
         return output
 
