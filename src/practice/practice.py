@@ -10,8 +10,7 @@ def generate_spectrum():
         librosa.feature.melspectrogram(y_harmonic, sr=sr, n_fft=1920, hop_length=960, n_mels=64, fmax=24000))
     # mel_percussive = librosa.power_to_db(
     #     librosa.feature.melspectrogram(y_percussive, sr=sr, hop_length=1024, fmax=24000))
-    mel_harmonic = np.concatenate((mel_harmonic, mel_harmonic[:, -11:]),axis=-1)
-
+    mel_harmonic = np.concatenate((mel_harmonic, mel_harmonic[:, -11:]), axis=-1)
 
     print(mel_harmonic.shape)
     mel_harmonic = (mel_harmonic - np.mean(mel_harmonic)) / np.std(mel_harmonic)
@@ -112,4 +111,7 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    generate_spectrum()
+    # generate_spectrum()
+    import os
+
+    os.system('sh /data/stop_instance.sh')
