@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Add, Conv2DTranspose
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Add, Conv2DTranspose,SpatialDropout2D
 
 from tensorflow.keras.regularizers import l2
 
@@ -23,8 +23,8 @@ class ConvBlock2(tf.keras.Model):
                             kernel_regularizer=l2(weight_decay))
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis, )
-        self.dropout1 = Dropout(dropout_rate)
-        self.dropout2 = Dropout(dropout_rate)
+        self.dropout1 = SpatialDropout2D(dropout_rate,data_format=data_format)
+        self.dropout2 = SpatialDropout2D(dropout_rate,data_format=data_format)
 
         if self.bottleneck:
             self.conv1 = Conv2D(inter_filter,
@@ -113,7 +113,7 @@ class TransitionBlock(tf.keras.Model):
                            kernel_initializer='he_uniform',
                            kernel_regularizer=l2(weight_decay))
         self.avg_pool = AveragePooling2D(data_format=data_format)
-        self.dropout = Dropout(dropout_rate)
+        # self.dropout = Dropout(dropout_rate)
 
     def call(self, x, training=True, mask=None):
         #### 这里没有加 dropout ###
