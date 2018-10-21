@@ -84,7 +84,7 @@ def get_next_batch(path, num_examples):
     return feature, label
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc):
+def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc,current_epoch):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -119,6 +119,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc):
         # 打印log
         if batch % 50 == 0:
             print('max_acc:{0:.2f}'.format(max_acc))
+            print('epoch :', current_epoch)
         if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
                                                                      compute_accuracy(logits, labels)))
@@ -219,17 +220,17 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    # check_point.restore('/data/TaskA_2018/src/check_point/cpkt-2')  # 存在就恢复模型(可不使用)
+    check_point.restore('/data/Taska_2018/src/check_point/cpkt-7')  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(args.output_dir))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
-    max_acc = 0
+    max_acc = 0.58
     for i in range(args.epochs):  # 迭代的轮次
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args, max_acc)
+            train(model, optimizer, train_ds, step_counter, total_batch, args, max_acc,i+1)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
