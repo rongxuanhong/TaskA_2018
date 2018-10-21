@@ -84,7 +84,7 @@ def get_next_batch(path, num_examples):
     return feature, label
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc,current_epoch):
+def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, current_epoch):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -99,16 +99,16 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc,cu
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
                 audios = tf.reshape(audios, (args.batch_size, 64, 64, 2))
-                # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
-                logits = model(audios, training=True)
+                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
+                logits = model(mixed_audios, training=True)
 
                 # 计算损失
                 l2_loss = tf.add_n(model.losses)
-                loss_value = loss(logits, labels) + l2_loss
-                # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
+                # loss_value = loss(logits, labels) + l2_loss
+                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
-                # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
-                acc = compute_accuracy(logits, labels)
+                acc = compute_mix_accuracy(logits, label_a, label_b, lam)
+                # acc = compute_accuracy(logits, labels)
 
                 tfc.summary.scalar('loss', loss_value)
                 tfc.summary.scalar('accuracy', acc)
@@ -122,7 +122,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc,cu
             print('epoch :', current_epoch)
         if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
-                                                                     compute_accuracy(logits, labels)))
+                                                                     compute_mix_accuracy(logits, label_a, label_b,
+                                                                                          lam)))
 
 
 def test(model, dataset, args):
@@ -185,7 +186,7 @@ def run_task_eager(args):
     model = DenseNet(7, args.grow_rate,
                      args.n_db, 10,
                      args.nb_layers,
-                     dropout_rate=0.2, )
+                     dropout_rate=0.2, weight_decay=0)
     # denset = DenseNet(input_shape=(64, 64, 2), n_classes=10, nb_layers=5,
     #                   nb_dense_block=5,
     #                   growth_rate=16,dropout_rate=0.5)
@@ -197,8 +198,8 @@ def run_task_eager(args):
 
     # learning_rate = tf.train.piecewise_constant(step_counter, [15, 22],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01, ])
-    # optimizer = tf.train.AdamOptimizer()
-    optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.AdamOptimizer()
+    # optimizer = tf.train.MomentumOptimizer(args.lr, momentum=0.9, use_nesterov=True)
     # learing_rate2 = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs, decay_rate=0.9,
     #                                            staircase=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
@@ -220,7 +221,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore(os.path.join(args.output_dir, 'cpkt-11'))  # 存在就恢复模型(可不使用)
+    # check_point.restore(os.path.join(args.output_dir, 'cpkt-11'))  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(args.output_dir))
     # 7. 训练、评估
     # with tf.device(device):
@@ -230,7 +231,7 @@ def run_task_eager(args):
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args, max_acc,i+1)
+            train(model, optimizer, train_ds, step_counter, total_batch, args, max_acc, i + 1)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
