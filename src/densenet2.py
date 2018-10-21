@@ -5,8 +5,53 @@ from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D
 from tensorflow.keras.regularizers import l2
 
 
+class ConvBlock2(tf.keras.Model):
+    """dropout->bn->relu->-conv"""
+
+    def __init__(self, num_filters, data_format, bottleneck, weight_decay=1e-4
+                 , dropout_rate=0.):
+        super(ConvBlock2, self).__init__(name='conv_block')
+        self.bottleneck = bottleneck
+        axis = -1 if data_format == 'channels_last' else 1
+        inter_filter = num_filters * 4
+        self.conv2 = Conv2D(num_filters,
+                            (3, 3),
+                            padding='same',
+                            use_bias=False,
+                            data_format=data_format,
+                            kernel_initializer='he_uniform',
+                            kernel_regularizer=l2(weight_decay))
+        # 初始化本模块所需要的op
+        self.batchnorm1 = BatchNormalization(axis=axis, )
+        self.dropout1 = Dropout(dropout_rate)
+        # self.dropout2 = Dropout(dropout_rate)
+
+        if self.bottleneck:
+            self.conv1 = Conv2D(inter_filter,
+                                (1, 1),
+                                padding='same',
+                                use_bias=False,
+                                data_format=data_format,
+                                kernel_initializer='he_uniform',
+                                kernel_regularizer=l2(weight_decay))
+            self.batchnorm2 = BatchNormalization(axis=axis)
+
+    def call(self, x, training=True, mask=None):
+
+        output = self.dropout1(x, training=training)
+        output = self.batchnorm1(output, training=training)
+
+        if self.bottleneck:
+            output = self.conv1(tf.nn.relu(output))
+            # output = self.dropout1(output, training=training) #暂时去除
+            output = self.batchnorm2(output, training=training)
+
+        output = self.conv2(tf.nn.relu(output))
+        return output
+
+
 class ConvBlock(tf.keras.Model):
-    """bn->relu->-conv"""
+    """bn->relu->-conv->dropout"""
 
     def __init__(self, num_filters, data_format, bottleneck, weight_decay=1e-4
                  , dropout_rate=0.):
@@ -93,6 +138,29 @@ class DenseBlock(tf.keras.Model):
         # concate each convblock within denseblock to get output of denseblock
         for i in range(int(self.num_layers)):
             output = self.blocks[i](x, training=training)
+            x = tf.concat([x, output], axis=self.axis)
+
+        return x
+
+
+class DenseBlock2(tf.keras.Model):
+    def __init__(self, num_layers, growth_rate, data_format, bottleneck,
+                 weight_decay=1e-4, dropout_rate=0.):
+        super(DenseBlock2, self).__init__()
+        self.num_layers = num_layers
+        self.axis = -1 if data_format == 'channels_last' else 1
+        self.blocks = []  # save each convblock in each denseblock
+        self.dropout = Dropout(dropout_rate)
+        for _ in range(int(self.num_layers)):
+            self.blocks.append(ConvBlock(growth_rate, data_format, bottleneck, weight_decay,
+                                         dropout_rate))
+
+    def call(self, x, training=True, mask=None):
+        # concate each convblock within denseblock to get output of denseblock
+        x = self.dropout(x, training=training)  # pre-dropout
+        for i in range(int(self.num_layers)):
+            output = self.blocks[i](x, training=training)
+
             x = tf.concat([x, output], axis=self.axis)
 
         return x
@@ -217,6 +285,7 @@ def main():
     tf.enable_eager_execution()
     model = DenseNet(7, 16, 5, 10, 5)
     rand_input = tf.random_uniform((3, 64, 64, 2))
+    tf.keras.applications.DenseNet121
     output = model(rand_input, training=True)
     # print(tf.add_n(model.losses))
 
