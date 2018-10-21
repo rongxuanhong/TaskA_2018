@@ -24,7 +24,7 @@ class ConvBlock2(tf.keras.Model):
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis, )
         self.dropout1 = Dropout(dropout_rate)
-        # self.dropout2 = Dropout(dropout_rate)
+        self.dropout2 = Dropout(dropout_rate)
 
         if self.bottleneck:
             self.conv1 = Conv2D(inter_filter,
@@ -47,6 +47,7 @@ class ConvBlock2(tf.keras.Model):
             output = self.batchnorm2(output, training=training)
 
         output = self.conv2(tf.nn.relu(output))
+        output = self.dropout2(output, training=training)
         return output
 
 
@@ -157,7 +158,6 @@ class DenseBlock2(tf.keras.Model):
 
     def call(self, x, training=True, mask=None):
         # concate each convblock within denseblock to get output of denseblock
-        x = self.dropout(x, training=training)  # pre-dropout
         for i in range(int(self.num_layers)):
             output = self.blocks[i](x, training=training)
 
@@ -285,7 +285,6 @@ def main():
     tf.enable_eager_execution()
     model = DenseNet(7, 16, 5, 10, 5)
     rand_input = tf.random_uniform((3, 64, 64, 2))
-    tf.keras.applications.DenseNet121
     output = model(rand_input, training=True)
     # print(tf.add_n(model.losses))
 
