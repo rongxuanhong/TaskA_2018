@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Add, Conv2DTranspose,SpatialDropout2D
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Add, Conv2DTranspose, SpatialDropout2D
 
 from tensorflow.keras.regularizers import l2
 
@@ -23,8 +23,8 @@ class ConvBlock2(tf.keras.Model):
                             kernel_regularizer=l2(weight_decay))
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis, )
-        self.dropout1 = SpatialDropout2D(dropout_rate,data_format=data_format)
-        self.dropout2 = SpatialDropout2D(dropout_rate,data_format=data_format)
+        self.dropout1 = SpatialDropout2D(dropout_rate, data_format=data_format)
+        self.dropout2 = SpatialDropout2D(dropout_rate, data_format=data_format)
 
         if self.bottleneck:
             self.conv1 = Conv2D(inter_filter,
@@ -153,8 +153,8 @@ class DenseBlock2(tf.keras.Model):
         self.blocks = []  # save each convblock in each denseblock
         self.dropout = Dropout(dropout_rate)
         for _ in range(int(self.num_layers)):
-            self.blocks.append(ConvBlock(growth_rate, data_format, bottleneck, weight_decay,
-                                         dropout_rate))
+            self.blocks.append(ConvBlock2(growth_rate, data_format, bottleneck, weight_decay,
+                                          dropout_rate))
 
     def call(self, x, training=True, mask=None):
         # concate each convblock within denseblock to get output of denseblock

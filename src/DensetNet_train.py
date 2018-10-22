@@ -216,16 +216,16 @@ def run_task_eager(args):
     test_summary_writer = tfc.summary.create_file_writer(test_dir, flush_millis=10000, name='test')
 
     # 6. 创建或者恢复checkpoint
-    check_point_prefix = os.path.join(args.output_dir, 'cpkt')
+    check_point_prefix = os.path.join(args.output_dir, 'model1', 'cpkt')
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    # check_point.restore(os.path.join(args.output_dir, 'cpkt-11'))  # 存在就恢复模型(可不使用)
+    check_point.restore(os.path.join(args.output_dir, 'cpkt-1'))  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(args.output_dir))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
-    max_acc = 0.58
+    max_acc = 0
     for i in range(args.epochs):  # 迭代的轮次
         with summary_writer.as_default():
             # 训练
