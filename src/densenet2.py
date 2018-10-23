@@ -20,7 +20,7 @@ class ConvBlock2(tf.keras.Model):
                                      use_bias=False,
                                      data_format=data_format,
                                      depthwise_initializer='he_uniform',
-                                     pointwise_initializer='he_unifrom',
+                                     pointwise_initializer='he_uniform',
                                      depthwise_regularizer=l2(weight_decay),
                                      pointwise_regularizer=l2(weight_decay)
                                      )
@@ -231,7 +231,7 @@ class DenseNet(tf.keras.Model):
                                      use_bias=False,
                                      data_format=data_format,
                                      depthwise_initializer='he_uniform',
-                                     pointwise_initializer='he_unifrom',
+                                     pointwise_initializer='he_uniform',
                                      depthwise_regularizer=l2(weight_decay),
                                      pointwise_regularizer=l2(weight_decay)
                                      )
