@@ -15,7 +15,9 @@ def conv2DWithBN(x, filters, kernel_size, name, padding='same', strides=1, bn_ax
                data_format=data_format,
                name=name)(x)
     x = BatchNormalization(bn_axis, )(x)
-    return Activation('relu')(x)
+    x = Activation('relu')(x)
+    x = Dropout(0.5)(x)
+    return x
 
 
 def inception_module(input_tensor, filters, block, strides=1, data_format='channels_last'):
@@ -259,6 +261,7 @@ def InceptionV3_small(input_shape, num_classes, data_format='channels_last'):
     x = inception_module(x, [64, (48, 64), (64, 96), 64], 'mixed2')
 
     x = inception_module_transition1(x, [384, (64, 96)], 'mixed3')
+    x1 = GlobalAveragePooling2D()(x)
 
     x = inception_module_with_factorization(x, [192, (128, 192), (128, 192), 128], 'mixed4')
     x = inception_module_with_factorization(x, [192, (160, 192), (160, 192), 192], 'mixed5')
@@ -266,12 +269,18 @@ def InceptionV3_small(input_shape, num_classes, data_format='channels_last'):
     x = inception_module_with_factorization(x, [192, (192, 192), (192, 192), 192], 'mixed7')
 
     x = inception_module_transition2(x, [(192, 320), 192], 'mixed8')
+    x2 = GlobalAveragePooling2D()(x)
 
     x = inception_module_with_expanded_filters(x, [320, 384, (448, 384), 192], 'mixed9')
     x = inception_module_with_expanded_filters(x, [320, 384, (448, 384), 192], 'mixed10')
 
     x = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')(x)
+    print(x1.shape)
+    print(x2.shape)
+    print(x.shape)
+    x = Concatenate(axis=-1)([x1, x2, x])
     # x = Flatten()(x)
+    output = Dense(512, activation='relu', )(x)
     output = Dense(num_classes, activation='softmax',
                    kernel_initializer='he_uniform', name='predictions')(x)
 

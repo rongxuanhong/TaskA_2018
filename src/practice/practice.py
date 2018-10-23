@@ -7,7 +7,7 @@ def generate_spectrum():
     y, sr = librosa.load('../airport-barcelona-0-0-a.wav', sr=48000, duration=10.0)
     y_harmonic, y_percussive = librosa.effects.hpss(y)
     mel_harmonic = librosa.power_to_db(
-        librosa.feature.melspectrogram(y_harmonic, sr=sr, n_fft=1920, hop_length=960, n_mels=64, fmax=24000))
+        librosa.feature.melspectrogram(y_harmonic, sr=sr, n_fft=4096, hop_length=3072, n_mels=128, fmax=24000))
     # mel_percussive = librosa.power_to_db(
     #     librosa.feature.melspectrogram(y_percussive, sr=sr, hop_length=1024, fmax=24000))
     mel_harmonic = np.concatenate((mel_harmonic, mel_harmonic[:, -11:]), axis=-1)
@@ -111,7 +111,7 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    # generate_spectrum()
-    import os
-
-    os.system('sh /data/stop_instance.sh')
+    generate_spectrum()
+    # import os
+    #
+    # os.system('sh /data/stop_instance.sh')

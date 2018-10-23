@@ -84,7 +84,7 @@ def get_next_batch(path, num_examples):
     return feature, label
 
 
-def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc):
+def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, current_epoch):
     """
     在dataset上使用optimizer训练model，
     :param model:
@@ -103,8 +103,8 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc):
                 logits = model(audios, training=True)
 
                 # 计算损失
-                # l2_loss = tf.add_n(model.losses)
-                loss_value = loss(logits, labels)
+                l2_loss = tf.add_n(model.losses)
+                loss_value = loss(logits, labels) + l2_loss
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
@@ -119,6 +119,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc):
         # 打印log
         if batch % 50 == 0:
             print('max_acc:{0:.2f}'.format(max_acc))
+            print('epoch :', current_epoch)
         if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
                                                                      compute_accuracy(logits, labels)))
@@ -136,6 +137,7 @@ def test(model, dataset, args):
 
     for (audios, labels) in dataset:
         audios = tf.reshape(audios, (args.batch_size, 64, 64, 2))
+
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
         accuracy(
@@ -177,21 +179,23 @@ def run_task_eager(args):
 
     # 4.创建模型和优化器
     model = InceptionV3(num_classes=10)
+
     step_counter = tf.train.get_or_create_global_step()
 
-    # learning_rate = tf.train.piecewise_constant(step_counter, [15, 22],
-    #                                             [args.lr, args.lr * 0.1, args.lr * 0.01, ])
-    optimizer = tf.train.AdamOptimizer()
-    # optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
-    # learing_rate2 = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs, decay_rate=0.9,
+    learning_rate = tf.train.piecewise_constant(step_counter, [2, 4, 6],
+                                                [args.lr, args.lr * 0.1, args.lr * 0.01, args.lr * 0.001])
+    # optimizer = tf.train.AdamOptimizer()
+    # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=args.epochs,
+    #                                            decay_rate=0.9,
     #                                            staircase=True)
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
-        train_dir = os.path.join(args.output_dir, 'train')
-        test_dir = os.path.join(args.output_dir, 'test')
+        train_dir = os.path.join(args.output_dir, 'model2', 'train')
+        test_dir = os.path.join(args.output_dir, 'model2', 'test')
         tf.gfile.MakeDirs(args.output_dir)  # 创建所有文件
     else:
         train_dir = None
@@ -200,11 +204,11 @@ def run_task_eager(args):
     test_summary_writer = tfc.summary.create_file_writer(test_dir, flush_millis=10000, name='test')
 
     # 6. 创建或者恢复checkpoint
-    check_point_prefix = os.path.join(args.output_dir, 'cpkt')
+    check_point_prefix = os.path.join(args.output_dir, 'model2', 'cpkt')
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    # check_point.restore('/data/TaskA_2018/src/check_point/cpkt-20')  # 存在就恢复模型(可不使用)
+    # check_point.restore(os.path.join(args.output_dir, 'model2', 'cpkt-9'))  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(args.output_dir))
     # 7. 训练、评估
     # with tf.device(device):
@@ -214,18 +218,18 @@ def run_task_eager(args):
         with summary_writer.as_default():
             # 训练
             print('epochs:{0}/{1}'.format((i + 1), args.epochs))
-            train(model, optimizer, train_ds, step_counter, total_batch, args, max_acc)
+            train(model, optimizer, train_ds, step_counter, total_batch, args, max_acc, i + 1)
             # 验证
             # verify_model(validation_ds, model)
         with test_summary_writer.as_default():
             # 测试
-            # if (i + 1) % 5 == 0:
             # 评估
             acc = test(model, test_ds, args)
             if acc > max_acc:  ## 保证保存的最后一个cpkt是acc最大的
-                check_point.save(check_point_prefix)  # 保存检查点
+                #     check_point.save(check_point_prefix)  # 保存检查点
                 max_acc = acc
                 print('max_acc:{0:.2f}'.format(max_acc))
+            check_point.save(check_point_prefix)  # 保存检查点
     # 输出训练时间
     compute_time_consumed(start_time)
 
@@ -238,6 +242,10 @@ def define_task_eager_flags():
     arg = argparse.ArgumentParser()
     arg.add_argument('--batch_size', type=int, default=16)
     arg.add_argument('--epochs', type=int, default=5)
+    arg.add_argument('--nb_layers', type=int, default=5)
+    arg.add_argument('--n_db', type=int, default=2)
+    arg.add_argument('--grow_rate', type=int, default=12)
+    arg.add_argument('--data_format', type=str, default='channels_last')
     arg.add_argument('--output_dir', type=str, default='/data')
     arg.add_argument('--lr', type=float, default=0.001)
     arg.add_argument('--log_interval', type=int, default=10)
@@ -255,7 +263,7 @@ def main(args):
     # except:
     #     finish_instance()
     run_task_eager(args)
-    finish_instance()
+    # finish_instance()
 
 
 def finish_instance():

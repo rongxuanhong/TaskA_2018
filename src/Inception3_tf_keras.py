@@ -7,7 +7,7 @@ from tensorflow.keras.regularizers import l2
 
 class ConvBlockWithBN(tf.keras.Model):
     def __init__(self, filters, kernel_size, name, padding='same', strides=1, bn_axis=-1,
-                 data_format='channels_last', dropout_rate=0.3):
+                 data_format='channels_last', dropout_rate=0.5):
         super(ConvBlockWithBN, self).__init__()
         self.dropout_rate = dropout_rate
         self.conv = Conv2D(filters,
@@ -16,7 +16,7 @@ class ConvBlockWithBN(tf.keras.Model):
                            padding=padding,
                            kernel_initializer='he_uniform',
                            data_format=data_format,
-                           kernel_regularizer=l2(1e-4),
+                           kernel_regularizer=l2(4e-5),
                            name=name)
 
         self.batchnorm = BatchNormalization(axis=bn_axis, )
@@ -241,7 +241,7 @@ class InceptionV3(tf.keras.Model):
 
         self.conv_bn1 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv1', )
         # self.conv_bn2 = ConvBlockWithBN(32, (3, 3), padding='valid', name='conv2', dropout_rate=0)
-        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3', dropout_rate=0.3)
+        self.conv_bn3 = ConvBlockWithBN(64, (3, 3), name='conv3')
 
         # self.max_pool1 = MaxPooling2D(pool_size=(3, 3), strides=2, data_format=data_format, name='maxpool1')
 
@@ -266,9 +266,12 @@ class InceptionV3(tf.keras.Model):
         self.inception_with_expand_filters1 = InceptionWithExpandFilters([320, 384, (448, 384), 192], 'mixed9')
         self.inception_with_expand_filters2 = InceptionWithExpandFilters([320, 384, (448, 384), 192], 'mixed10')
 
-        self.avg_pool = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')
-        self.noise = GaussianNoise(0.3)
-        self.dense = Dense(num_classes, name='predictions')
+        self.avg_pool1 = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')
+        self.avg_pool2 = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')
+        self.avg_pool3 = GlobalAveragePooling2D(data_format=data_format, name='global_avg_pool')
+        self.dense1 = Dense(512, activation='relu')
+        self.dense2 = Dense(num_classes, name='predictions')
+        self.concate = Concatenate(axis=-1)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv_bn1(inputs, training=training)
@@ -284,6 +287,7 @@ class InceptionV3(tf.keras.Model):
         output = self.inception_module3(output, training=training)
 
         output = self.inception_transition1(output, training=training)
+        output1 = self.avg_pool1(output)
 
         output = self.inception_with_factorization1(output, training=training)
         output = self.inception_with_factorization2(output, training=training)
@@ -291,13 +295,15 @@ class InceptionV3(tf.keras.Model):
         output = self.inception_with_factorization4(output, training=training)
 
         output = self.inception_transition2(output, training=training)
+        output2 = self.avg_pool2(output)
 
         output = self.inception_with_expand_filters1(output, training=training)
         output = self.inception_with_expand_filters2(output, training=training)
 
-        output = self.noise(output, training=training)
-        output = self.avg_pool(output)
-        output = self.dense(output)
+        output = self.avg_pool3(output)
+        output = self.concate([output1, output2, output])
+        output = self.dense1(output)
+        output = self.dense2(output)
 
         return output
 
@@ -307,3 +313,4 @@ if __name__ == '__main__':
     model = InceptionV3(num_classes=10)
     rand_input = tf.random_uniform((3, 64, 64, 2))
     output = model(rand_input, training=True)
+    model.summary()
