@@ -215,15 +215,17 @@ class DenseNet:
 
 
 def main():
-    import tensorflow as tf
-    tf.enable_eager_execution()
-    # model = DenseNet(190, 24, 4, 10, 40,
-    #                  bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
-    #                  include_top=True)
-    # model = model.build(input_shape=(64, 64, 2))
-
-    model=tf.keras.applications.Xception(input_shape=(71,71,3))
-    model.summary()
+    # import tensorflow as tf
+    # tf.enable_eager_execution()
+    model = DenseNet(190, 32, 4, 10, [25,25,25,25],
+                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
+                     include_top=True)
+    model = model.build(input_shape=(64, 64, 2))
+    #
+    # model=tf.keras.applications.Xception(input_shape=(71,71,3))
+    from utils.utils import  describe_model
+    describe_model(model)
+    # model.summary()
 
 
 if __name__ == '__main__':

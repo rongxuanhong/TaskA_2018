@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DensetNet_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DensetNet_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/densenet_keras.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/densenet_keras.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -28,8 +29,8 @@
       <file leaf-file-name="densenet_keras.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/densenet_keras.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-684">
-              <caret line="33" column="62" selection-start-line="33" selection-start-column="52" selection-end-line="33" selection-end-column="62" />
+            <state relative-caret-position="381">
+              <caret line="219" column="50" selection-start-line="219" selection-start-column="37" selection-end-line="219" selection-end-column="50" />
               <folding>
                 <element signature="e#0#175#0" expanded="true" />
               </folding>
@@ -46,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DensetNet_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="571">
-              <caret line="180" column="28" selection-start-line="180" selection-start-column="28" selection-end-line="180" selection-end-column="28" />
+            <state relative-caret-position="400">
+              <caret line="186" column="38" lean-forward="true" selection-start-line="186" selection-start-column="38" selection-end-line="186" selection-end-column="38" />
               <folding>
                 <element signature="e#0#33#0" expanded="true" />
               </folding>
@@ -85,8 +86,8 @@
       <file leaf-file-name="InceptionV3_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/InceptionV3_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1007">
-              <caret line="180" column="39" lean-forward="true" selection-start-line="180" selection-start-column="39" selection-end-line="180" selection-end-column="39" />
+            <state relative-caret-position="266">
+              <caret line="141" column="38" lean-forward="true" selection-start-line="141" selection-start-column="38" selection-end-line="141" selection-end-column="38" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -94,11 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="run_tf_dense_net_server.sh" pinned="false" current-in-tab="true">
+      <file leaf-file-name="run_tf_dense_net_server.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="19">
-              <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
+              <caret line="1" column="68" selection-start-line="1" selection-start-column="66" selection-end-line="1" selection-end-column="68" />
             </state>
           </provider>
         </entry>
@@ -164,10 +165,10 @@
         <option value="$PROJECT_DIR$/src/inception_run_server.sh" />
         <option value="$PROJECT_DIR$/src/InceptionV3_train.py" />
         <option value="$PROJECT_DIR$/src/Inception3_tf_keras.py" />
-        <option value="$PROJECT_DIR$/src/densenet_keras.py" />
         <option value="$PROJECT_DIR$/src/densenet2.py" />
-        <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
         <option value="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" />
+        <option value="$PROJECT_DIR$/src/densenet_keras.py" />
+        <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
       </list>
     </option>
   </component>
@@ -261,7 +262,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.densenet2">
+  <component name="RunManager" selected="Python.densenet_keras">
     <configuration name="Inception3_train" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Task1_2018" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -361,8 +362,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.densenet2" />
         <item itemvalue="Python.densenet_keras" />
+        <item itemvalue="Python.densenet2" />
         <item itemvalue="Python.Inception3_train" />
         <item itemvalue="Python.InceptionV3" />
         <item itemvalue="Python.practice" />
@@ -392,7 +393,7 @@
       <window_info anchor="bottom" id="Find" order="1" weight="0.32829374" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32905483" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.16846652" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.14038877" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -749,32 +750,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/densenet_keras.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-684">
-          <caret line="33" column="62" selection-start-line="33" selection-start-column="52" selection-end-line="33" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#175#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InceptionV3.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="287" column="16" lean-forward="true" selection-start-line="287" selection-start-column="16" selection-end-line="287" selection-end-column="16" />
           <folding>
             <element signature="e#0#187#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Inception3_tf_keras.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="244" selection-start-line="244" selection-end-line="244" />
-          <folding>
-            <element signature="e#0#174#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -789,30 +770,50 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="68" selection-start-line="1" selection-start-column="66" selection-end-line="1" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/InceptionV3_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1007">
-          <caret line="180" column="39" lean-forward="true" selection-start-line="180" selection-start-column="39" selection-end-line="180" selection-end-column="39" />
+        <state relative-caret-position="266">
+          <caret line="141" column="38" lean-forward="true" selection-start-line="141" selection-start-column="38" selection-end-line="141" selection-end-column="38" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
+    <entry file="file://$PROJECT_DIR$/src/Inception3_tf_keras.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="571">
-          <caret line="180" column="28" selection-start-line="180" selection-start-column="28" selection-end-line="180" selection-end-column="28" />
+        <state relative-caret-position="62">
+          <caret line="244" selection-start-line="244" selection-end-line="244" />
           <folding>
-            <element signature="e#0#33#0" expanded="true" />
+            <element signature="e#0#174#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/run_tf_dense_net_server.sh">
+    <entry file="file://$PROJECT_DIR$/src/densenet_keras.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" column="42" selection-start-line="1" selection-start-column="42" selection-end-line="1" selection-end-column="42" />
+        <state relative-caret-position="381">
+          <caret line="219" column="50" selection-start-line="219" selection-start-column="37" selection-end-line="219" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#175#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DensetNet_train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="186" column="38" lean-forward="true" selection-start-line="186" selection-start-column="38" selection-end-line="186" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
