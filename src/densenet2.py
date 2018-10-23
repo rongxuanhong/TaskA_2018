@@ -299,9 +299,9 @@ def main():
     rand_input = tf.random_uniform((3, 64, 64, 2)) * 200
     output = model(rand_input, training=True)
     print(tf.add_n(model.losses))
-
+    #
     # from utils.utils import describe_model
-    model.summary()
+    # # model.summary()
     # describe_model(model)
 
 
