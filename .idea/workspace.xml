@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/Inception3_tf_keras.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Inception3_tf_keras.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/InceptionV3_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/InceptionV3_train.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
