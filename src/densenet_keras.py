@@ -216,16 +216,13 @@ class DenseNet:
 
 def main():
     import tensorflow as tf
-    # tf.enable_eager_execution()
-    model = DenseNet(190, 24, 4, 10, 40,
-                     bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
-                     include_top=True)
-    model = model.build(input_shape=(64, 64, 2))
+    tf.enable_eager_execution()
+    # model = DenseNet(190, 24, 4, 10, 40,
+    #                  bottleneck=True, compression=0.5, weight_decay=1e-4, dropout_rate=0.2, pool_initial=True,
+    #                  include_top=True)
+    # model = model.build(input_shape=(64, 64, 2))
 
-    # model=tf.keras.applications.DenseNet121(input_shape=(128,94,3))
-
-    model.summary()
-    # print(tf.add_n(model.losses))
+    model=tf.keras.applications.DenseNet121(input_shape=(224,224,3))
 
 
 if __name__ == '__main__':

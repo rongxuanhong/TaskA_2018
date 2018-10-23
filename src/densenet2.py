@@ -283,10 +283,10 @@ class DenseNet(tf.keras.Model):
 
 def main():
     tf.enable_eager_execution()
-    model = DenseNet(7, 16, 5, 10, 5)
-    rand_input = tf.random_uniform((3, 64, 64, 2))
+    model = DenseNet(7, 16, 5, 10, 5, dropout_rate=0.5)
+    rand_input = tf.random_uniform((3, 64, 64, 2)) * 200
     output = model(rand_input, training=True)
-    # print(tf.add_n(model.losses))
+    print(tf.add_n(model.losses))
 
     # from utils.utils import describe_model
     # describe_model(model)
