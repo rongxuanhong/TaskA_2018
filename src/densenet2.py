@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Add, Conv2DTranspose, SpatialDropout2D
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Concatenate, Add, SeparableConv2D, SpatialDropout2D
 
 from tensorflow.keras.regularizers import l2
 
@@ -14,13 +14,16 @@ class ConvBlock2(tf.keras.Model):
         self.bottleneck = bottleneck
         axis = -1 if data_format == 'channels_last' else 1
         inter_filter = num_filters * 4
-        self.conv2 = Conv2D(num_filters,
-                            (3, 3),
-                            padding='same',
-                            use_bias=False,
-                            data_format=data_format,
-                            kernel_initializer='he_uniform',
-                            kernel_regularizer=l2(weight_decay))
+        self.conv2 = SeparableConv2D(num_filters,
+                                     (3, 3),
+                                     padding='same',
+                                     use_bias=False,
+                                     data_format=data_format,
+                                     depthwise_initializer='he_uniform',
+                                     pointwise_initializer='he_unifrom',
+                                     depthwise_regularizer=l2(weight_decay),
+                                     pointwise_regularizer=l2(weight_decay)
+                                     )
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis, )
         self.dropout1 = SpatialDropout2D(dropout_rate, data_format=data_format)
@@ -34,7 +37,7 @@ class ConvBlock2(tf.keras.Model):
                                 data_format=data_format,
                                 kernel_initializer='he_uniform',
                                 kernel_regularizer=l2(weight_decay))
-            self.batchnorm2 = BatchNormalization(axis=axis)
+        self.batchnorm2 = BatchNormalization(axis=axis)
 
     def call(self, x, training=True, mask=None):
 
@@ -151,7 +154,6 @@ class DenseBlock2(tf.keras.Model):
         self.num_layers = num_layers
         self.axis = -1 if data_format == 'channels_last' else 1
         self.blocks = []  # save each convblock in each denseblock
-        self.dropout = Dropout(dropout_rate)
         for _ in range(int(self.num_layers)):
             self.blocks.append(ConvBlock2(growth_rate, data_format, bottleneck, weight_decay,
                                           dropout_rate))
@@ -215,14 +217,24 @@ class DenseNet(tf.keras.Model):
         self.num_filters = 2 * self.growth_rate
 
         # 定义第一个conv以及pool
-        self.conv1 = Conv2D(self.num_filters,
-                            init_filters,
-                            strides=stride,
-                            # padding='same', # 去掉
-                            use_bias=False,
-                            data_format=self.data_format,
-                            kernel_initializer='he_uniform',
-                            kernel_regularizer=l2(self.weight_decay))
+        # self.conv1 = Conv2D(self.num_filters,
+        #                     init_filters,
+        #                     strides=stride,
+        #                     # padding='same', # 去掉
+        #                     use_bias=False,
+        #                     data_format=self.data_format,
+        #                     kernel_initializer='he_uniform',
+        #                     kernel_regularizer=l2(self.weight_decay))
+        self.conv1 = SeparableConv2D(self.num_filters,
+                                     init_filters,
+                                     padding='same',
+                                     use_bias=False,
+                                     data_format=data_format,
+                                     depthwise_initializer='he_uniform',
+                                     pointwise_initializer='he_unifrom',
+                                     depthwise_regularizer=l2(weight_decay),
+                                     pointwise_regularizer=l2(weight_decay)
+                                     )
 
         if self.pool_initial:
             self.pool1 = MaxPool2D(pool_size=(3, 3),
@@ -247,11 +259,11 @@ class DenseNet(tf.keras.Model):
         self.dense_block = []
         self.transition_blocks = []
         for i in range(self.num_of_blocks):
-            self.dense_block.append(DenseBlock(self.num_layers_in_each_block[i],
-                                               self.growth_rate,
-                                               self.data_format,
-                                               self.weight_decay,
-                                               self.dropout_rate))
+            self.dense_block.append(DenseBlock2(self.num_layers_in_each_block[i],
+                                                self.growth_rate,
+                                                self.data_format,
+                                                self.weight_decay,
+                                                self.dropout_rate))
             if i + 1 < self.num_of_blocks:
                 self.transition_blocks.append(TransitionBlock(num_filters_after_each_block[i],
                                                               self.data_format,
@@ -289,6 +301,7 @@ def main():
     print(tf.add_n(model.losses))
 
     # from utils.utils import describe_model
+    model.summary()
     # describe_model(model)
 
 

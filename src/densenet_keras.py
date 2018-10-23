@@ -1,8 +1,7 @@
 from keras.layers import BatchNormalization, Conv2D, AveragePooling2D, \
-    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Input, Activation, Concatenate, Conv2DTranspose
+    Dense, Dropout, MaxPool2D, GlobalAveragePooling2D, Input, Activation, Concatenate, SeparableConv2D
 
 from keras.regularizers import l2
-from utils.utils import describe_model
 from keras.models import Model
 
 
@@ -19,8 +18,9 @@ class ConvBlock:
                             padding='same',
                             use_bias=False,
                             data_format=data_format,
-                            kernel_initializer='he_uniform',
-                            kernel_regularizer=l2(weight_decay))
+                            # kernel_initializer='he_uniform',
+                            # kernel_regularizer=l2(weight_decay)
+                                     )
         # 初始化本模块所需要的op
         self.batchnorm1 = BatchNormalization(axis=axis)
         self.dropout = Dropout(dropout_rate)
@@ -222,7 +222,8 @@ def main():
     #                  include_top=True)
     # model = model.build(input_shape=(64, 64, 2))
 
-    model=tf.keras.applications.DenseNet121(input_shape=(224,224,3))
+    model=tf.keras.applications.Xception(input_shape=(71,71,3))
+    model.summary()
 
 
 if __name__ == '__main__':
