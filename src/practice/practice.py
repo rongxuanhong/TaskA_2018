@@ -118,7 +118,7 @@ if __name__ == '__main__':
     #
     # os.system('sh /data/stop_instance.sh')
     boundaries = []
-    learning_rate = 0.001
+    learning_rate = 0.01
     learning_rates = [learning_rate]
     decay_rate = 0.5
     for i in range(9):

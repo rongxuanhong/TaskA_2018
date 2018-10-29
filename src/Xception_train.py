@@ -108,6 +108,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
+                print('l2_loss:', l2_loss)
                 acc = compute_accuracy(logits, labels)
 
                 tfc.summary.scalar('loss', loss_value)
@@ -178,7 +179,7 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    model = Xception(num_classes=10, weight_decay=1e-4)
+    model = Xception(num_classes=10, weight_decay=1e-5)
 
     step_counter = tf.train.get_or_create_global_step()
 
@@ -196,7 +197,7 @@ def run_task_eager(args):
     # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.5,
     #                                            staircase=False)
-    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.RMSPropOptimizer(learning_rate, momentum=0.9)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
