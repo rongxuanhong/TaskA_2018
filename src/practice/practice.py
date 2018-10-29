@@ -111,7 +111,20 @@ def main():
 
 if __name__ == '__main__':
     # main()
-    generate_spectrum()
+    # generate_spectrum()
     # import os
     #
     # os.system('sh /data/stop_instance.sh')
+    boundaries = []
+    learning_rate = 0.001
+    learning_rates = [learning_rate]
+    decay_rate = 0.90
+    for i in range(9):
+        if (i + 1) % 2 == 0:
+            boundaries.append(2)
+            learning_rate *= decay_rate
+            learning_rates.append(learning_rate)
+    for i in boundaries:
+        print(i)
+    for i in learning_rates:
+        print(i)

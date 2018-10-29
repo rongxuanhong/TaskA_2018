@@ -159,7 +159,7 @@ class Xception(tf.keras.Model):
         super(Xception, self).__init__()
         self.num_classes = num_classes
         self.conv_block1 = Conv2DBlock(filters=32, strides=2, block_index=1, weight_decay=weight_decay)
-        self.conv_block2 = Conv2DBlock(filters=32, strides=1, block_index=2, weight_decay=weight_decay)
+        self.conv_block2 = Conv2DBlock(filters=64, strides=1, block_index=2, weight_decay=weight_decay)
 
         self.sep_conv_block3 = SeparableConv2DBlock1(filters=(128, 128), block_index=3, weight_decay=weight_decay,
                                                      just_one_relu=True)
@@ -187,7 +187,7 @@ class Xception(tf.keras.Model):
         self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
         self.fcn1 = Dense(512, kernel_initializer='he_uniform')
         self.dense = Dense(self.num_classes)
-        self.dropout = Dropout(0.5)
+        # self.dropout = Dropout(0.5)
         self.concate = Concatenate(axis=-1)
 
     def call(self, inputs, training=None, mask=None):
@@ -214,7 +214,7 @@ class Xception(tf.keras.Model):
 
         output = self.avg_pool3(output)
         output = self.concate([pool1, pool2, output])
-        output = self.dropout(output, training=training)
+        # output = self.dropout(output, training=training)
         output = self.fcn1(output)
         output = self.dense(output)
 
@@ -223,8 +223,8 @@ class Xception(tf.keras.Model):
 
 if __name__ == '__main__':
     ## 由于输入尺寸较小 ，因此去掉了前面的几个池化层
-    # model = Xception(num_classes=1000)
-    # input = tf.random_normal((3, 64, 64, 2))
-    # model(input)
-    model = tf.keras.applications.Xception(input_shape=(229, 229, 3))
+    model = Xception(num_classes=1000)
+    input = tf.random_normal((3, 64, 64, 2))
+    model(input)
+    # model = tf.keras.applications.Xception(input_shape=(229, 229, 3))
     model.summary()
