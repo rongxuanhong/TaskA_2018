@@ -119,6 +119,45 @@ class DataSet:
 
         return mel_spec
 
+    def extract_feature5(self, path):
+        """
+        :return:
+        """
+        audio, sr = librosa.core.load(path, sr=48000, duration=10.0)  # mono
+
+        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=128,
+                                             fmax=24000)
+        mel = librosa.power_to_db(mel)
+
+        mel = (mel - np.mean(mel)) / np.std(mel)
+
+        return mel
+
+    def generate_TFRecord(self, dataset, tfrecord_path):
+        """
+        use with extract_feature1
+        :param dataset:
+        :param tfrecord_path:
+        :return:
+        """
+
+        writer = tf.python_io.TFRecordWriter(tfrecord_path)
+        for row in tqdm(dataset.itertuples(), total=len(dataset)):
+            # path = os.path.join('/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/',
+            #                     row.file)
+            path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
+            # 必须先转成float16，否则librosa无法处理
+
+            mel_spec = self.extract_feature5(path)
+
+            label = self.label_encoder.transform([row.scene])[0]
+            label = keras.utils.to_categorical(label, self.n_scenes)
+
+            example = self.encapsulate_example(mel_spec.reshape(-1), label)
+            writer.write(example.SerializeToString())
+
+        writer.close()
+
     def generate_non_overlap_TFRecord(self, dataset, tfrecord_path):
         """
         use with extract_feature1
@@ -278,10 +317,13 @@ def main():
 
     task = DataSet()
     task.load_dataset()
-    task.generate_overlap_TFRecord(task.train, os.path.join(path_prefix, 'train4.tfrecords'))
-    task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test4.tfrecords'))
+    # task.generate_overlap_TFRecord(task.train, os.path.join(path_prefix, 'train4.tfrecords'))
+    # task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test4.tfrecords'))
+    # os.system('sh /data/stop_instance.sh')
+    # task.extract_feature5('../airport-barcelona-0-0-a.wav')
+    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train5.tfrecords'))
+    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test5.tfrecords'))
     compute_time_consumed(start_time)
-    os.system('sh /data/stop_instance.sh')
 
 
 if __name__ == '__main__':
