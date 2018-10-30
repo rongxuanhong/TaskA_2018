@@ -131,7 +131,7 @@ class DataSet:
 
         mel = (mel - np.mean(mel)) / np.std(mel)
 
-        return mel
+        return mel[...,None]
 
     def generate_TFRecord(self, dataset, tfrecord_path):
         """
@@ -320,7 +320,8 @@ def main():
     # task.generate_overlap_TFRecord(task.train, os.path.join(path_prefix, 'train4.tfrecords'))
     # task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test4.tfrecords'))
     # os.system('sh /data/stop_instance.sh')
-    # task.extract_feature5('../airport-barcelona-0-0-a.wav')
+    # mel=task.extract_feature5('../airport-barcelona-0-0-a.wav')
+    # print(mel.shape)
     task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train5.tfrecords'))
     task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test5.tfrecords'))
     compute_time_consumed(start_time)
