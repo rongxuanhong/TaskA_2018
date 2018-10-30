@@ -64,26 +64,6 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
-def get_next_batch(path, num_examples):
-    """
-    取出每一批数据
-    :param path: TFRecord格式的数据地址
-    :param num_examples: 样本总数
-    :return:
-    """
-    filename_queue = tf.train.string_input_producer([path], num_epochs=None)
-    reader = tf.TFRecordReader()
-    _, serialized_train_example = reader.read(filename_queue)
-    features, labels = parse_example(serialized_train_example)
-
-    min_after_dequeue = int(num_examples * 0.4)
-    feature, label = tf.train.shuffle_batch([features, labels],
-                                            batch_size=args.batch_size,
-                                            capacity=min_after_dequeue + 3 * args.batch_size,  # 默认设置
-                                            min_after_dequeue=min_after_dequeue)
-    return feature, label
-
-
 def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, current_epoch):
     """
     在dataset上使用optimizer训练model，
@@ -98,7 +78,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 64, 64, 2))
+                audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
 
@@ -137,7 +117,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 64, 64, 2))
+        audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
 
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
@@ -164,16 +144,16 @@ def run_task_eager(args):
 
     # 3.加载数据
     batch_size = args.batch_size
-    total_batch = 91830 // batch_size
+    total_batch = 6122 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train4.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test4.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train5.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test5.tfrecords')
 
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(92000).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(6200).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
@@ -193,18 +173,18 @@ def run_task_eager(args):
     #         learning_rate *= decay_rate
     #         learning_rates.append(learning_rate)
     # learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
-    # optimizer = tf.train.AdamOptimizer()
+    optimizer = tf.train.AdamOptimizer()
     # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.5,
     #                                            staircase=False)
-    optimizer = tf.train.RMSPropOptimizer(0.001, momentum=0.9)
+    # optimizer = tf.train.RMSPropOptimizer(0.001, momentum=0.9)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
-        train_dir = os.path.join(args.output_dir, 'model2', 'train')
-        test_dir = os.path.join(args.output_dir, 'model2', 'test')
+        train_dir = os.path.join(args.output_dir, 'model3', 'train')
+        test_dir = os.path.join(args.output_dir, 'model3', 'test')
         tf.gfile.MakeDirs(args.output_dir)  # 创建所有文件
     else:
         train_dir = None
@@ -213,7 +193,7 @@ def run_task_eager(args):
     test_summary_writer = tfc.summary.create_file_writer(test_dir, flush_millis=10000, name='test')
 
     # 6. 创建或者恢复checkpoint
-    check_point_prefix = os.path.join(args.output_dir, 'model2', 'cpkt')
+    check_point_prefix = os.path.join(args.output_dir, 'model3', 'cpkt')
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)

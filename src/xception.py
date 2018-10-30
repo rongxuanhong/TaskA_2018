@@ -185,7 +185,7 @@ class Xception(tf.keras.Model):
         self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
         self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
         self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
-        self.fcn1 = Dense(512, kernel_initializer='he_uniform',activation='relu')
+        self.fcn1 = Dense(512, kernel_initializer='he_uniform',)
         self.dense = Dense(self.num_classes,name='prediction')
         # self.dropout = Dropout(0.5)
         self.concate = Concatenate(axis=-1)
@@ -223,8 +223,8 @@ class Xception(tf.keras.Model):
 
 if __name__ == '__main__':
     ## 由于输入尺寸较小 ，因此去掉了前面的几个池化层
-    model = Xception(num_classes=1000)
-    input = tf.random_normal((3, 64, 64, 2))
+    model = Xception(num_classes=10)
+    input = tf.random_normal((3, 128, 157, 1))
     model(input)
     # model = tf.keras.applications.Xception(input_shape=(229, 229, 3))
     model.summary()
