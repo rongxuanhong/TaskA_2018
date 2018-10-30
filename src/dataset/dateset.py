@@ -125,7 +125,7 @@ class DataSet:
         """
         audio, sr = librosa.core.load(path, sr=48000, duration=10.0)  # mono
 
-        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=128,
+        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=64,
                                              fmax=24000)
         mel = librosa.power_to_db(mel)
 
@@ -322,8 +322,8 @@ def main():
     # os.system('sh /data/stop_instance.sh')
     # mel=task.extract_feature5('../airport-barcelona-0-0-a.wav')
     # print(mel.shape)
-    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train5.tfrecords'))
-    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test5.tfrecords'))
+    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train6.tfrecords'))
+    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test6.tfrecords'))
     compute_time_consumed(start_time)
 
 
