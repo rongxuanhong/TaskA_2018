@@ -197,7 +197,7 @@ def run_task_eager(args):
     # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.5,
     #                                            staircase=False)
-    optimizer = tf.train.MomentumOptimizer(0.0001, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(0.01, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
@@ -217,7 +217,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore(os.path.join(args.output_dir, 'model2', 'cpkt-6'))  # 存在就恢复模型(可不使用)
+    # check_point.restore(os.path.join(args.output_dir, 'model2', 'cpkt-6'))  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model2')))
     # 7. 训练、评估
     # with tf.device(device):
