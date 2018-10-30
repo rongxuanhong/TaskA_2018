@@ -222,7 +222,7 @@ def run_task_eager(args):
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
-    max_acc = 0.44
+    max_acc = 0
     for i in range(args.epochs):  # 迭代的轮次
         with summary_writer.as_default():
             # 训练
