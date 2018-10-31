@@ -13,7 +13,7 @@ class Conv2DBlock(tf.keras.Model):
         self.conv = Conv2D(filters,
                            kernel_size=(3, 3),
                            strides=strides,
-                           # kernel_regularizer=l2(weight_decay),
+                           kernel_regularizer=l2(weight_decay),
                            kernel_initializer='he_uniform',
                            use_bias=False,
                            name=conv_name)
@@ -42,8 +42,8 @@ class SeparableConv2DBlock1(tf.keras.Model):
         self.sepconv1 = SeparableConv2D(filters[0],
                                         kernel_size=(3, 3),
                                         use_bias=False,
-                                        # depthwise_regularizer=l2(weight_decay),
-                                        # pointwise_regularizer=l2(weight_decay),
+                                        depthwise_regularizer=l2(weight_decay),
+                                        pointwise_regularizer=l2(weight_decay),
                                         depthwise_initializer='he_uniform',
                                         pointwise_initializer='he_uniform',
                                         padding='same',
@@ -52,8 +52,8 @@ class SeparableConv2DBlock1(tf.keras.Model):
                                         kernel_size=(3, 3),
                                         use_bias=False,
                                         padding='same',
-                                        # depthwise_regularizer=l2(weight_decay),
-                                        # pointwise_regularizer=l2(weight_decay),
+                                        depthwise_regularizer=l2(weight_decay),
+                                        pointwise_regularizer=l2(weight_decay),
                                         depthwise_initializer='he_uniform',
                                         pointwise_initializer='he_uniform',
                                         name=sepconv_name_base + '2')
@@ -111,8 +111,8 @@ class SeparableConv2DBlock2(tf.keras.Model):
                                         kernel_size=(3, 3),
                                         use_bias=False,
                                         padding='same',
-                                        # depthwise_regularizer=l2(weight_decay),
-                                        # pointwise_regularizer=l2(weight_decay),
+                                        depthwise_regularizer=l2(weight_decay),
+                                        pointwise_regularizer=l2(weight_decay),
                                         depthwise_initializer='he_uniform',
                                         pointwise_initializer='he_uniform',
                                         name=sepconv_name_base + '1')
@@ -120,16 +120,16 @@ class SeparableConv2DBlock2(tf.keras.Model):
                                         kernel_size=(3, 3),
                                         use_bias=False,
                                         padding='same',
-                                        # depthwise_regularizer=l2(weight_decay),
-                                        # pointwise_regularizer=l2(weight_decay),
+                                        depthwise_regularizer=l2(weight_decay),
+                                        pointwise_regularizer=l2(weight_decay),
                                         depthwise_initializer='he_uniform',
                                         pointwise_initializer='he_uniform',
                                         name=sepconv_name_base + '2')
         self.sepconv3 = SeparableConv2D(filters,
                                         kernel_size=(3, 3),
                                         use_bias=False,
-                                        # depthwise_regularizer=l2(weight_decay),
-                                        # pointwise_regularizer=l2(weight_decay),
+                                        depthwise_regularizer=l2(weight_decay),
+                                        pointwise_regularizer=l2(weight_decay),
                                         depthwise_initializer='he_uniform',
                                         pointwise_initializer='he_uniform',
                                         padding='same',
@@ -224,7 +224,7 @@ class Xception(tf.keras.Model):
 if __name__ == '__main__':
     ## 由于输入尺寸较小 ，因此去掉了前面的几个池化层
     model = Xception(num_classes=10)
-    input = tf.random_normal((3, 128, 157, 1))
+    input = tf.random_normal((3, 64, 157, 1))
     model(input)
     # model = tf.keras.applications.Xception(input_shape=(229, 229, 3))
     model.summary()
