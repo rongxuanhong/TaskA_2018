@@ -78,7 +78,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 64, 157, 1))
+                audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
 
@@ -117,7 +117,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 64, 157, 1))
+        audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
 
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
@@ -147,8 +147,8 @@ def run_task_eager(args):
     total_batch = 6122 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train6.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test6.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train5.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test5.tfrecords')
 
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
@@ -163,21 +163,21 @@ def run_task_eager(args):
 
     step_counter = tf.train.get_or_create_global_step()
 
-    # boundaries = []
-    # learning_rate = args.lr
-    # learning_rates = [learning_rate]
-    # decay_rate = 0.5
-    # for i in range(args.epochs - 1):
-    #     if (i + 1) % 2 == 0:
-    #         boundaries.append(2)
-    #         learning_rate *= decay_rate
-    #         learning_rates.append(learning_rate)
-    # learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
+    boundaries = []
+    learning_rate = args.lr
+    learning_rates = [learning_rate]
+    decay_rate = 0.5
+    for i in range(args.epochs - 1):
+        if (i + 1) % 2 == 0:
+            boundaries.append(2)
+            learning_rate *= decay_rate
+            learning_rates.append(learning_rate)
+    learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
     # optimizer = tf.train.AdamOptimizer()
     # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.5,
     #                                            staircase=False)
-    optimizer = tf.train.MomentumOptimizer(0.0001, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
@@ -198,7 +198,7 @@ def run_task_eager(args):
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
     # check_point.restore(os.path.join(args.output_dir, 'model2', 'cpkt-6'))  # 存在就恢复模型(可不使用)
-    check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
+    # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()

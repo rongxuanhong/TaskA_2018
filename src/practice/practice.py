@@ -121,9 +121,9 @@ if __name__ == '__main__':
     learning_rate = 0.01
     learning_rates = [learning_rate]
     decay_rate = 0.5
-    for i in range(9):
+    for i in range(19):
         if (i + 1) % 2 == 0:
-            boundaries.append(2)
+            boundaries.append(4)
             learning_rate *= decay_rate
             learning_rates.append(learning_rate)
     for i in boundaries:
