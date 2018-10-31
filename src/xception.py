@@ -185,7 +185,7 @@ class Xception(tf.keras.Model):
         self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
         self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
         self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
-        self.fcn1 = Dense(512, kernel_initializer='he_uniform',)
+        # self.fcn1 = Dense(512, kernel_initializer='he_uniform',)
         self.dense = Dense(self.num_classes,name='prediction')
         # self.dropout = Dropout(0.5)
         self.concate = Concatenate(axis=-1)
@@ -215,7 +215,7 @@ class Xception(tf.keras.Model):
         output = self.avg_pool3(output)
         output = self.concate([pool1, pool2, output])
         # output = self.dropout(output, training=training)
-        output = self.fcn1(output)
+        # output = self.fcn1(output)
         logits = self.dense(output)
 
         return logits
