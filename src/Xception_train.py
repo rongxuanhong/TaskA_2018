@@ -84,7 +84,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
 
                 # 计算损失
                 l2_loss = tf.add_n(model.losses)
-                loss_value = loss(logits, labels)+l2_loss
+                loss_value = loss(logits, labels) + l2_loss
                 # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
@@ -173,11 +173,11 @@ def run_task_eager(args):
     #         learning_rate *= decay_rate
     #         learning_rates.append(learning_rate)
     # learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
-    optimizer = tf.train.AdamOptimizer()
+    # optimizer = tf.train.AdamOptimizer()
     # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.5,
     #                                            staircase=False)
-    # optimizer = tf.train.RMSPropOptimizer(0.001, momentum=0.9)
+    optimizer = tf.train.MomentumOptimizer(0.001, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
@@ -198,7 +198,7 @@ def run_task_eager(args):
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
     # check_point.restore(os.path.join(args.output_dir, 'model2', 'cpkt-6'))  # 存在就恢复模型(可不使用)
-    # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model2')))
+    check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
