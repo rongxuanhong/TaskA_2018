@@ -44,7 +44,7 @@ class SeparableConv2DBlock1(tf.keras.Model):
                                         use_bias=False,
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        ddepthwise_initializer=initializer,
+                                        depthwise_initializer=initializer,
                                         pointwise_initializer=initializer,
                                         padding='same',
                                         name=sepconv_name_base + '1')
