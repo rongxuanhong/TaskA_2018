@@ -147,8 +147,8 @@ def run_task_eager(args):
     total_batch = 6122 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train6.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test6.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train5.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test5.tfrecords')
 
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
@@ -159,7 +159,7 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    model = Xception(num_classes=10, weight_decay=1e-4)
+    model = Xception(num_classes=10, weight_decay=1e-4, initializer='he_uniform')
 
     step_counter = tf.train.get_or_create_global_step()
 
@@ -174,7 +174,7 @@ def run_task_eager(args):
             learning_rates.append(learning_rate)
 
     learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
-    optimizer = tf.train.RMSPropOptimizer(0.001, momentum=0.9)
+    optimizer = tf.train.AdamOptimizer()
     # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.5,
     #                                            staircase=False)

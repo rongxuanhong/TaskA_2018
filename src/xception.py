@@ -71,7 +71,7 @@ class SeparableConv2DBlock1(tf.keras.Model):
             self.conv = Conv2D(filters[1],
                                kernel_size=(1, 1),
                                strides=strides,
-                               kernel_initializer='he_uniform',
+                               kernel_initializer=initializer,
                                padding='same',
                                name=conv_name_base + "1x1")
 
@@ -193,9 +193,9 @@ class Xception(tf.keras.Model):
         self.sep_conv_block15 = SeparableConv2DBlock1(filters=(1536, 2048), block_index=15, has_residual=False,
                                                       pool=False, weight_decay=weight_decay, initializer=initializer)
 
-        self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
-        self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
-        self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
+        # self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
+        # self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
+        # self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
         self.fcn1 = Dense(512, kernel_initializer=initializer, )
         self.dense = Dense(self.num_classes, name='prediction')
         self.dropout = Dropout(0.5)
@@ -218,13 +218,13 @@ class Xception(tf.keras.Model):
         output = self.sep_conv_block2_12(output)
         output = self.sep_conv_block2_13(output)
 
-        pool1 = self.avg_pool1(output)
+        # pool1 = self.avg_pool1(output)
         output = self.sep_conv_block14(output)
-        pool2 = self.avg_pool2(output)
+        # pool2 = self.avg_pool2(output)
         output = self.sep_conv_block15(output)
 
-        output = self.avg_pool3(output)
-        output = self.concate([pool1, pool2, output])
+        # output = self.avg_pool3(output)
+        # output = self.concate([pool1, pool2, output])
         output = self.dropout(output, training=training)
         output = self.fcn1(output)
         logits = self.dense(output)
