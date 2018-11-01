@@ -6,7 +6,7 @@ from tensorflow.keras.regularizers import l2
 
 
 class Conv2DBlock(tf.keras.Model):
-    def __init__(self, filters, strides, block_index, weight_decay):
+    def __init__(self, filters, strides, block_index, weight_decay, initializer='glorot_uniform'):
         super(Conv2DBlock, self).__init__()
         conv_name = "block" + str(block_index) + "_conv"
         bn_name = "block" + str(block_index) + "_bn"
@@ -14,7 +14,7 @@ class Conv2DBlock(tf.keras.Model):
                            kernel_size=(3, 3),
                            strides=strides,
                            kernel_regularizer=l2(weight_decay),
-                           kernel_initializer='he_uniform',
+                           kernel_initializer=initializer,
                            use_bias=False,
                            name=conv_name)
 
@@ -28,7 +28,7 @@ class Conv2DBlock(tf.keras.Model):
 
 class SeparableConv2DBlock1(tf.keras.Model):
     def __init__(self, filters, block_index, weight_decay, relu_before_conv=False, pool=True,
-                 has_residual=True, just_one_relu=False):
+                 has_residual=True, just_one_relu=False, initializer='glorot_uniform'):
         super(SeparableConv2DBlock1, self).__init__()
         self.relu_before_conv = relu_before_conv
         self.has_residual = has_residual
@@ -44,8 +44,8 @@ class SeparableConv2DBlock1(tf.keras.Model):
                                         use_bias=False,
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_uniform',
-                                        pointwise_initializer='he_uniform',
+                                        ddepthwise_initializer=initializer,
+                                        pointwise_initializer=initializer,
                                         padding='same',
                                         name=sepconv_name_base + '1')
         self.sepconv2 = SeparableConv2D(filters[1],
@@ -54,8 +54,8 @@ class SeparableConv2DBlock1(tf.keras.Model):
                                         padding='same',
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_uniform',
-                                        pointwise_initializer='he_uniform',
+                                        depthwise_initializer=initializer,
+                                        pointwise_initializer=initializer,
                                         name=sepconv_name_base + '2')
         self.batchnorm1 = BatchNormalization(name=bn_name_base + '1')
         self.batchnorm2 = BatchNormalization(name=bn_name_base + '2')
@@ -104,7 +104,7 @@ class SeparableConv2DBlock1(tf.keras.Model):
 
 
 class SeparableConv2DBlock2(tf.keras.Model):
-    def __init__(self, filters, block_index, weight_decay):
+    def __init__(self, filters, block_index, weight_decay, initializer='glorot_uniform'):
         super(SeparableConv2DBlock2, self).__init__()
         sepconv_name_base = "block" + str(block_index) + "_sepconv"
         bn_name_base = "block" + str(block_index) + "_bn"
@@ -114,8 +114,8 @@ class SeparableConv2DBlock2(tf.keras.Model):
                                         padding='same',
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_uniform',
-                                        pointwise_initializer='he_uniform',
+                                        depthwise_initializer=initializer,
+                                        pointwise_initializer=initializer,
                                         name=sepconv_name_base + '1')
         self.sepconv2 = SeparableConv2D(filters,
                                         kernel_size=(3, 3),
@@ -123,16 +123,16 @@ class SeparableConv2DBlock2(tf.keras.Model):
                                         padding='same',
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_uniform',
-                                        pointwise_initializer='he_uniform',
+                                        depthwise_initializer=initializer,
+                                        pointwise_initializer=initializer,
                                         name=sepconv_name_base + '2')
         self.sepconv3 = SeparableConv2D(filters,
                                         kernel_size=(3, 3),
                                         use_bias=False,
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_uniform',
-                                        pointwise_initializer='he_uniform',
+                                        depthwise_initializer=initializer,
+                                        pointwise_initializer=initializer,
                                         padding='same',
                                         name=sepconv_name_base + '3')
         self.batchnorm1 = BatchNormalization(name=bn_name_base + '1')
@@ -156,37 +156,47 @@ class SeparableConv2DBlock2(tf.keras.Model):
 
 
 class Xception(tf.keras.Model):
-    def __init__(self, num_classes, weight_decay=1e-4, ):
+    def __init__(self, num_classes, weight_decay=1e-4, initializer='glorot_uniform'):
         super(Xception, self).__init__()
         self.num_classes = num_classes
-        self.conv_block1 = Conv2DBlock(filters=32, strides=2, block_index=1, weight_decay=weight_decay)
-        self.conv_block2 = Conv2DBlock(filters=64, strides=1, block_index=2, weight_decay=weight_decay)
+        self.conv_block1 = Conv2DBlock(filters=32, strides=2, block_index=1, weight_decay=weight_decay,
+                                       initializer=initializer)
+        self.conv_block2 = Conv2DBlock(filters=64, strides=1, block_index=2, weight_decay=weight_decay,
+                                       initializer=initializer)
 
         self.sep_conv_block3 = SeparableConv2DBlock1(filters=(128, 128), block_index=3, weight_decay=weight_decay,
-                                                     just_one_relu=True)
+                                                     just_one_relu=True, initializer=initializer)
         self.sep_conv_block4 = SeparableConv2DBlock1(filters=(256, 256), block_index=4, relu_before_conv=True,
-                                                     weight_decay=weight_decay, pool=True)
+                                                     weight_decay=weight_decay, pool=True, initializer=initializer)
         self.sep_conv_block5 = SeparableConv2DBlock1(filters=(728, 728), block_index=5, relu_before_conv=True,
-                                                     weight_decay=weight_decay, pool=True)
+                                                     weight_decay=weight_decay, pool=True, initializer=initializer)
 
-        self.sep_conv_block2_6 = SeparableConv2DBlock2(filters=728, block_index=6, weight_decay=weight_decay)
-        self.sep_conv_block2_7 = SeparableConv2DBlock2(filters=728, block_index=7, weight_decay=weight_decay)
-        self.sep_conv_block2_8 = SeparableConv2DBlock2(filters=728, block_index=8, weight_decay=weight_decay)
-        self.sep_conv_block2_9 = SeparableConv2DBlock2(filters=728, block_index=9, weight_decay=weight_decay)
-        self.sep_conv_block2_10 = SeparableConv2DBlock2(filters=728, block_index=10, weight_decay=weight_decay)
-        self.sep_conv_block2_11 = SeparableConv2DBlock2(filters=728, block_index=11, weight_decay=weight_decay)
-        self.sep_conv_block2_12 = SeparableConv2DBlock2(filters=728, block_index=12, weight_decay=weight_decay)
-        self.sep_conv_block2_13 = SeparableConv2DBlock2(filters=728, block_index=13, weight_decay=weight_decay)
+        self.sep_conv_block2_6 = SeparableConv2DBlock2(filters=728, block_index=6, weight_decay=weight_decay,
+                                                       initializer=initializer)
+        self.sep_conv_block2_7 = SeparableConv2DBlock2(filters=728, block_index=7, weight_decay=weight_decay,
+                                                       initializer=initializer)
+        self.sep_conv_block2_8 = SeparableConv2DBlock2(filters=728, block_index=8, weight_decay=weight_decay,
+                                                       initializer=initializer)
+        self.sep_conv_block2_9 = SeparableConv2DBlock2(filters=728, block_index=9, weight_decay=weight_decay,
+                                                       initializer=initializer)
+        self.sep_conv_block2_10 = SeparableConv2DBlock2(filters=728, block_index=10, weight_decay=weight_decay,
+                                                        initializer=initializer)
+        self.sep_conv_block2_11 = SeparableConv2DBlock2(filters=728, block_index=11, weight_decay=weight_decay,
+                                                        initializer=initializer)
+        self.sep_conv_block2_12 = SeparableConv2DBlock2(filters=728, block_index=12, weight_decay=weight_decay,
+                                                        initializer=initializer)
+        self.sep_conv_block2_13 = SeparableConv2DBlock2(filters=728, block_index=13, weight_decay=weight_decay,
+                                                        initializer=initializer)
 
         self.sep_conv_block14 = SeparableConv2DBlock1(filters=(728, 1024), block_index=14, relu_before_conv=True,
-                                                      weight_decay=weight_decay)
+                                                      weight_decay=weight_decay, initializer=initializer)
         self.sep_conv_block15 = SeparableConv2DBlock1(filters=(1536, 2048), block_index=15, has_residual=False,
-                                                      pool=False, weight_decay=weight_decay)
+                                                      pool=False, weight_decay=weight_decay, initializer=initializer)
 
         self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
         self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
         self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
-        self.fcn1 = Dense(512, kernel_initializer='he_uniform', )
+        self.fcn1 = Dense(512, kernel_initializer=initializer, )
         self.dense = Dense(self.num_classes, name='prediction')
         self.dropout = Dropout(0.5)
         self.concate = Concatenate(axis=-1)
