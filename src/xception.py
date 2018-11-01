@@ -156,7 +156,7 @@ class SeparableConv2DBlock2(tf.keras.Model):
 
 
 class Xception(tf.keras.Model):
-    def __init__(self, num_classes, weight_decay=1e-4, initializer='glorot_uniform'):
+    def __init__(self, num_classes, weight_decay=1e-4, initializer='he_uniform'):
         super(Xception, self).__init__()
         self.num_classes = num_classes
         self.conv_block1 = Conv2DBlock(filters=32, strides=2, block_index=1, weight_decay=weight_decay,
