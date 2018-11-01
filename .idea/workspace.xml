@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/xception.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/xception.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Xception_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Xception_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dataset/dateset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dataset/dateset.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="xception.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="xception.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/xception.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="202" lean-forward="true" selection-start-line="202" selection-end-line="202" />
+            <state relative-caret-position="304">
+              <caret line="229" column="35" lean-forward="true" selection-start-line="229" selection-start-column="35" selection-end-line="229" selection-end-column="35" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -25,11 +26,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Xception_train.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Xception_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Xception_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="171" column="32" lean-forward="true" selection-start-line="171" selection-start-column="32" selection-end-line="171" selection-end-column="32" />
+            <state relative-caret-position="323">
+              <caret line="172" column="39" lean-forward="true" selection-start-line="172" selection-start-column="39" selection-end-line="172" selection-end-column="39" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -118,11 +119,11 @@
         <option value="$PROJECT_DIR$/src/run_tf_dense_net_server.sh" />
         <option value="$PROJECT_DIR$/src/densenet_keras.py" />
         <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
-        <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
         <option value="$PROJECT_DIR$/src/practice/practice.py" />
         <option value="$PROJECT_DIR$/src/xception_run_server.sh" />
-        <option value="$PROJECT_DIR$/src/Xception_train.py" />
         <option value="$PROJECT_DIR$/src/xception.py" />
+        <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
+        <option value="$PROJECT_DIR$/src/Xception_train.py" />
       </list>
     </option>
   </component>
@@ -156,6 +157,12 @@
               <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="dataset" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
@@ -208,7 +215,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.xception">
+  <component name="RunManager" selected="Python.dateset">
     <configuration name="dateset" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Task1_2018" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -308,9 +315,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.dateset" />
         <item itemvalue="Python.xception" />
         <item itemvalue="Python.practice" />
-        <item itemvalue="Python.dateset" />
         <item itemvalue="Python.densenet_keras" />
         <item itemvalue="Python.densenet2" />
       </list>
@@ -368,20 +375,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/keras/layers/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="115" column="35" selection-start-line="115" selection-start-column="27" selection-end-line="115" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/contrib/learn/python/learn/datasets/mnist.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4142">
-          <caret line="231" column="4" selection-start-line="231" selection-start-column="4" selection-end-line="231" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/rrr.py" />
     <entry file="file://$PROJECT_DIR$/src/ResNet.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -670,13 +663,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9">
-          <caret line="138" column="23" lean-forward="true" selection-start-line="138" selection-start-column="23" selection-end-line="138" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/applications/xception.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1957">
@@ -705,22 +691,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Xception_train.py">
+    <entry file="file://$PROJECT_DIR$/evaluation/fold1_train.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="171" column="32" lean-forward="true" selection-start-line="171" selection-start-column="32" selection-end-line="171" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-2508" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/dask/dataframe/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="1953" column="8" selection-start-line="1953" selection-start-column="8" selection-end-line="1953" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="585">
+          <caret line="332" column="23" lean-forward="true" selection-start-line="332" selection-start-column="23" selection-end-line="332" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/xception.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="202" lean-forward="true" selection-start-line="202" selection-end-line="202" />
+        <state relative-caret-position="304">
+          <caret line="229" column="35" lean-forward="true" selection-start-line="229" selection-start-column="35" selection-end-line="229" selection-end-column="35" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Xception_train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="172" column="39" lean-forward="true" selection-start-line="172" selection-start-column="39" selection-end-line="172" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>

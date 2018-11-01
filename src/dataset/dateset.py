@@ -131,7 +131,7 @@ class DataSet:
 
         mel = (mel - np.mean(mel)) / np.std(mel)
 
-        return mel[...,None]
+        return mel[..., None]
 
     def generate_TFRecord(self, dataset, tfrecord_path):
         """
@@ -308,6 +308,20 @@ def compute_time_consumed(start_time):
     print("本次训练共耗时 {0} 时 {1} 分 {2} 秒".format(hour, minute, second))
 
 
+def generate_small_data():
+    """
+    分层抽样
+    :return:
+    """
+    path_prefix = '/data/TFRecord'
+    task = DataSet()
+    task.load_dataset()
+    data = task.train
+    result = data.groupby('scene', group_keys=False).apply(lambda x: x.sample(frac=0.2))
+    print(len(result))
+    task.generate_TFRecord(result, os.path.join(path_prefix, 'small_data.tfrecords'))
+
+
 def main():
     # path_prefix = '/home/ccyoung/DCase/Task1_2018/evaluation'
     path_prefix = '/data/TFRecord'
@@ -328,4 +342,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    generate_small_data()
