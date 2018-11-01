@@ -13,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="xception.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="xception.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/xception.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="217" column="46" lean-forward="true" selection-start-line="217" selection-start-column="46" selection-end-line="217" selection-end-column="46" />
+            <state relative-caret-position="905">
+              <caret line="190" column="35" lean-forward="true" selection-start-line="190" selection-start-column="35" selection-end-line="190" selection-end-column="35" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -25,11 +25,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Xception_train.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Xception_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Xception_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="86" column="59" lean-forward="true" selection-start-line="86" selection-start-column="59" selection-end-line="86" selection-end-column="59" />
+            <state relative-caret-position="392">
+              <caret line="180" column="37" selection-start-line="180" selection-start-column="37" selection-end-line="180" selection-end-column="37" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -119,9 +119,9 @@
         <option value="$PROJECT_DIR$/src/densenet_keras.py" />
         <option value="$PROJECT_DIR$/src/DensetNet_train.py" />
         <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
-        <option value="$PROJECT_DIR$/src/xception.py" />
         <option value="$PROJECT_DIR$/src/xception_run_server.sh" />
         <option value="$PROJECT_DIR$/src/practice/practice.py" />
+        <option value="$PROJECT_DIR$/src/xception.py" />
         <option value="$PROJECT_DIR$/src/Xception_train.py" />
       </list>
     </option>
@@ -337,7 +337,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32829374" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2537797" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31317493" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32829374" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -700,13 +700,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/practice/practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="124" column="22" selection-start-line="124" selection-start-column="22" selection-end-line="124" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/xception_run_server.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -714,22 +707,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Xception_train.py">
+    <entry file="file://$PROJECT_DIR$/src/xception.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="86" column="59" lean-forward="true" selection-start-line="86" selection-start-column="59" selection-end-line="86" selection-end-column="59" />
+        <state relative-caret-position="905">
+          <caret line="190" column="35" lean-forward="true" selection-start-line="190" selection-start-column="35" selection-end-line="190" selection-end-column="35" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/xception.py">
+    <entry file="file://$PROJECT_DIR$/src/practice/practice.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="217" column="46" lean-forward="true" selection-start-line="217" selection-start-column="46" selection-end-line="217" selection-end-column="46" />
+        <state relative-caret-position="371">
+          <caret line="124" column="22" selection-start-line="124" selection-start-column="22" selection-end-line="124" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Xception_train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="180" column="37" selection-start-line="180" selection-start-column="37" selection-end-line="180" selection-end-column="37" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
