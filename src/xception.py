@@ -6,7 +6,7 @@ from tensorflow.keras.regularizers import l2
 
 
 class Conv2DBlock(tf.keras.Model):
-    def __init__(self, filters, strides, block_index, weight_decay,initializer='glorot_uniform'):
+    def __init__(self, filters, strides, block_index, weight_decay,initializer='he_uniform'):
         super(Conv2DBlock, self).__init__()
         conv_name = "block" + str(block_index) + "_conv"
         bn_name = "block" + str(block_index) + "_bn"
@@ -28,7 +28,7 @@ class Conv2DBlock(tf.keras.Model):
 
 class SeparableConv2DBlock1(tf.keras.Model):
     def __init__(self, filters, block_index, weight_decay, relu_before_conv=False, pool=True,
-                 has_residual=True, just_one_relu=False,initializer='glorot_uniform'):
+                 has_residual=True, just_one_relu=False,initializer='he_uniform'):
         super(SeparableConv2DBlock1, self).__init__()
         self.relu_before_conv = relu_before_conv
         self.has_residual = has_residual
@@ -104,7 +104,7 @@ class SeparableConv2DBlock1(tf.keras.Model):
 
 
 class SeparableConv2DBlock2(tf.keras.Model):
-    def __init__(self, filters, block_index, weight_decay,initializer='glorot_uniform'):
+    def __init__(self, filters, block_index, weight_decay,initializer='he_uniform'):
         super(SeparableConv2DBlock2, self).__init__()
         sepconv_name_base = "block" + str(block_index) + "_sepconv"
         bn_name_base = "block" + str(block_index) + "_bn"
@@ -187,7 +187,7 @@ class Xception(tf.keras.Model):
         self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
         self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
         self.fcn1 = Dense(512,)
-        self.dense = Dense(self.num_classes, name='prediction')
+        self.dense = Dense(self.num_classes, name='prediction',kernel_initializer='he_uniform',kernel_regularizer=l2(weight_decay))
         self.dropout = Dropout(0.5)
         self.concate = Concatenate(axis=-1)
 
