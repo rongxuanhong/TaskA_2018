@@ -208,7 +208,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.practice">
+  <component name="RunManager" selected="Python.xception">
     <configuration name="dateset" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Task1_2018" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -308,8 +308,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.practice" />
         <item itemvalue="Python.xception" />
+        <item itemvalue="Python.practice" />
         <item itemvalue="Python.dateset" />
         <item itemvalue="Python.densenet_keras" />
         <item itemvalue="Python.densenet2" />

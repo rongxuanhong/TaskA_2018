@@ -14,7 +14,7 @@ class Conv2DBlock(tf.keras.Model):
                            kernel_size=(3, 3),
                            strides=strides,
                            kernel_regularizer=l2(weight_decay),
-                           kernel_initializer='he_normal',
+                           kernel_initializer='he_uniform',
                            use_bias=False,
                            name=conv_name)
 
@@ -44,8 +44,8 @@ class SeparableConv2DBlock1(tf.keras.Model):
                                         use_bias=False,
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_normal',
-                                        pointwise_initializer='he_normal',
+                                        depthwise_initializer='he_uniform',
+                                        pointwise_initializer='he_uniform',
                                         padding='same',
                                         name=sepconv_name_base + '1')
         self.sepconv2 = SeparableConv2D(filters[1],
@@ -54,8 +54,8 @@ class SeparableConv2DBlock1(tf.keras.Model):
                                         padding='same',
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_normal',
-                                        pointwise_initializer='he_normal',
+                                        depthwise_initializer='he_uniform',
+                                        pointwise_initializer='he_uniform',
                                         name=sepconv_name_base + '2')
         self.batchnorm1 = BatchNormalization(name=bn_name_base + '1')
         self.batchnorm2 = BatchNormalization(name=bn_name_base + '2')
@@ -71,7 +71,7 @@ class SeparableConv2DBlock1(tf.keras.Model):
             self.conv = Conv2D(filters[1],
                                kernel_size=(1, 1),
                                strides=strides,
-                               kernel_initializer='he_normal',
+                               kernel_initializer='he_uniform',
                                padding='same',
                                name=conv_name_base + "1x1")
 
@@ -114,8 +114,8 @@ class SeparableConv2DBlock2(tf.keras.Model):
                                         padding='same',
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_normal',
-                                        pointwise_initializer='he_normal',
+                                        depthwise_initializer='he_uniform',
+                                        pointwise_initializer='he_uniform',
                                         name=sepconv_name_base + '1')
         self.sepconv2 = SeparableConv2D(filters,
                                         kernel_size=(3, 3),
@@ -123,16 +123,16 @@ class SeparableConv2DBlock2(tf.keras.Model):
                                         padding='same',
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_normal',
-                                        pointwise_initializer='he_normal',
+                                        depthwise_initializer='he_uniform',
+                                        pointwise_initializer='he_uniform',
                                         name=sepconv_name_base + '2')
         self.sepconv3 = SeparableConv2D(filters,
                                         kernel_size=(3, 3),
                                         use_bias=False,
                                         depthwise_regularizer=l2(weight_decay),
                                         pointwise_regularizer=l2(weight_decay),
-                                        depthwise_initializer='he_normal',
-                                        pointwise_initializer='he_normal',
+                                        depthwise_initializer='he_uniform',
+                                        pointwise_initializer='he_uniform',
                                         padding='same',
                                         name=sepconv_name_base + '3')
         self.batchnorm1 = BatchNormalization(name=bn_name_base + '1')
@@ -186,7 +186,7 @@ class Xception(tf.keras.Model):
         self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
         self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
         self.avg_pool3 = GlobalAveragePooling2D(name='avg_pool3')
-        self.fcn1 = Dense(512, kernel_initializer='he_normal', )
+        self.fcn1 = Dense(512, kernel_initializer='he_uniform', )
         self.dense = Dense(self.num_classes, name='prediction')
         self.dropout = Dropout(0.5)
         self.concate = Concatenate(axis=-1)
@@ -218,7 +218,6 @@ class Xception(tf.keras.Model):
         output = self.dropout(output, training=training)
         output = self.fcn1(output)
         logits = self.dense(output)
-
         return logits
 
 
