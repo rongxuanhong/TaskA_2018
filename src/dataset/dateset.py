@@ -148,6 +148,21 @@ class DataSet:
 
         return mel[..., None]
 
+    def extract_feature7(self, path):
+        """
+        :return:
+        """
+        audio, sr = librosa.core.load(path, sr=48000, duration=10.0)  # mono
+
+        audio = add_gaussian_noise(audio)
+        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=128,
+                                             fmax=24000)
+        mel = librosa.power_to_db(mel)
+
+        mel = (mel - np.mean(mel)) / np.std(mel)
+
+        return mel[..., None]
+
     def generate_TFRecord(self, dataset, tfrecord_path):
         """
         use with extract_feature1
@@ -165,14 +180,17 @@ class DataSet:
 
             mel_spec1 = self.extract_feature5(path)
             mel_spec2 = self.extract_feature6(path)
+            mel_spec3 = self.extract_feature7(path)
 
             label = self.label_encoder.transform([row.scene])[0]
             label = keras.utils.to_categorical(label, self.n_scenes)
 
             example1 = self.encapsulate_example(mel_spec1.reshape(-1), label)
             example2 = self.encapsulate_example(mel_spec2.reshape(-1), label)
+            example3 = self.encapsulate_example(mel_spec3.reshape(-1), label)
             writer.write(example1.SerializeToString())
             writer.write(example2.SerializeToString())
+            writer.write(example3.SerializeToString())
 
         writer.close()
 
@@ -339,6 +357,7 @@ def generate_small_data():
     print(len(result))
     task.generate_TFRecord(result, os.path.join(path_prefix, 'small_data.tfrecords'))
 
+
 def random_shifting(y):
     """
     随机移动 onset
@@ -352,6 +371,19 @@ def random_shifting(y):
     else:
         y_shift = np.pad(y, (0, -start), mode='constant')[0:y.shape[0]]  # 信号左移
     return y_shift
+
+
+def add_gaussian_noise(y):
+    """
+    添加分布噪声,如高斯噪声
+    :param y:
+    :return:
+    """
+    noise_amap = 0.005 * np.random.uniform() * np.amax(y)
+    y_noise = y + noise_amap.astype(np.float32) * np.random.normal(size=len(y))
+    return y_noise
+
+
 def main():
     # path_prefix = '/home/ccyoung/DCase/Task1_2018/evaluation'
     path_prefix = '/data/TFRecord'
@@ -366,7 +398,7 @@ def main():
     # os.system('sh /data/stop_instance.sh')
     # mel=task.extract_feature5('../airport-barcelona-0-0-a.wav')
     # print(mel.shape)
-    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train7.tfrecords'))
+    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train8.tfrecords'))
     # task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test6.tfrecords'))
     compute_time_consumed(start_time)
 
