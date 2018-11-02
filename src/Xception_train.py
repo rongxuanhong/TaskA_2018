@@ -146,7 +146,7 @@ def run_task_eager(args):
     total_batch = 12244 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train7.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train8.tfrecords')
     test_path = os.path.join('/data/TFRecord', 'test5.tfrecords')
 
     # else:
