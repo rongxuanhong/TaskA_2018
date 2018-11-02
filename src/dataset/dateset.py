@@ -7,7 +7,6 @@ import tensorflow as tf
 import os
 import numpy as np
 from datetime import datetime
-from utils.audio_augmentaton_utils import *
 
 
 # DATA_PATH = '/home/ccyoung/DCase/development_data/'
@@ -340,7 +339,19 @@ def generate_small_data():
     print(len(result))
     task.generate_TFRecord(result, os.path.join(path_prefix, 'small_data.tfrecords'))
 
-
+def random_shifting(y):
+    """
+    随机移动 onset
+    :param y:
+    :return:
+    """
+    timeshift_fac = 0.2 * 2 * (np.random.uniform() - 0.5)  # up to 20% of length
+    start = int(y.shape[0] * timeshift_fac)
+    if (start > 0):
+        y_shift = np.pad(y, (start, 0), mode='constant')[0:y.shape[0]]  # 信号右移(数组前面填充start个0，再取前y.shape[0]个采样点)
+    else:
+        y_shift = np.pad(y, (0, -start), mode='constant')[0:y.shape[0]]  # 信号左移
+    return y_shift
 def main():
     # path_prefix = '/home/ccyoung/DCase/Task1_2018/evaluation'
     path_prefix = '/data/TFRecord'
