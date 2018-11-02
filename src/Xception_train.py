@@ -129,7 +129,7 @@ def test(model, dataset, args):
         tfc.summary.scalar('test_loss', avg_loss.result())
         tfc.summary.scalar('test_acc', accuracy.result())
 
-    return 100*accuracy.result()
+    return 100 * accuracy.result()
 
 
 def run_task_eager(args):
@@ -143,16 +143,16 @@ def run_task_eager(args):
 
     # 3.加载数据
     batch_size = args.batch_size
-    total_batch = 6122 // batch_size
+    total_batch = 12244 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train5.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train7.tfrecords')
     test_path = os.path.join('/data/TFRecord', 'test5.tfrecords')
 
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(6200).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
