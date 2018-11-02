@@ -126,20 +126,22 @@ class DataSet:
         """
         audio, sr = librosa.core.load(path, sr=48000, duration=10.0)  # mono
 
-        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=64,
+        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=128,
                                              fmax=24000)
         mel = librosa.power_to_db(mel)
 
         mel = (mel - np.mean(mel)) / np.std(mel)
 
         return mel[..., None]
+
     def extract_feature6(self, path):
         """
         :return:
         """
         audio, sr = librosa.core.load(path, sr=48000, duration=10.0)  # mono
 
-        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=64,
+        audio = random_shifting(audio)
+        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=128,
                                              fmax=24000)
         mel = librosa.power_to_db(mel)
 
@@ -162,13 +164,16 @@ class DataSet:
             path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
             # 必须先转成float16，否则librosa无法处理
 
-            mel_spec = self.extract_feature5(path)
+            mel_spec1 = self.extract_feature5(path)
+            mel_spec2 = self.extract_feature6(path)
 
             label = self.label_encoder.transform([row.scene])[0]
             label = keras.utils.to_categorical(label, self.n_scenes)
 
-            example = self.encapsulate_example(mel_spec.reshape(-1), label)
-            writer.write(example.SerializeToString())
+            example1 = self.encapsulate_example(mel_spec1.reshape(-1), label)
+            example2 = self.encapsulate_example(mel_spec2.reshape(-1), label)
+            writer.write(example1.SerializeToString())
+            writer.write(example2.SerializeToString())
 
         writer.close()
 
@@ -350,11 +355,11 @@ def main():
     # os.system('sh /data/stop_instance.sh')
     # mel=task.extract_feature5('../airport-barcelona-0-0-a.wav')
     # print(mel.shape)
-    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train6.tfrecords'))
-    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test6.tfrecords'))
+    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train7.tfrecords'))
+    # task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test6.tfrecords'))
     compute_time_consumed(start_time)
 
 
 if __name__ == '__main__':
-    # main()
-    generate_small_data()
+    main()
+    # generate_small_data()

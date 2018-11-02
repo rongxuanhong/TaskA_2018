@@ -130,3 +130,6 @@ if __name__ == '__main__':
         print(i)
     for i in learning_rates:
         print(i)
+
+    a=np.random.uniform() - 0.5
+    print(a)

@@ -1,6 +1,7 @@
 import librosa
 import numpy as np
 
+
 # y, sr = librosa.load('../airport-barcelona-0-0-a.wav', sr=48000, duration=10.0)
 
 

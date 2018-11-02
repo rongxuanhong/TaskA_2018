@@ -76,7 +76,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
     """
     for batch, (audios, labels) in enumerate(dataset):  # 遍历一次数据集
         with tfc.summary.record_summaries_every_n_global_steps(
-                20, global_step=step_counter):
+                10, global_step=step_counter):
             with tf.GradientTape() as tape:
                 audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
@@ -90,22 +90,6 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
                 # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
                 # print('l2_loss:', l2_loss)
                 acc = compute_accuracy(logits, labels)
-
-                tfc.summary.scalar('loss', loss_value)
-                tfc.summary.scalar('accuracy', acc)
-            # 梯度求解
-            grads = tape.gradient(loss_value, model.variables)
-            optimizer.apply_gradients(zip(grads, model.variables), global_step=step_counter)
-
-            with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
-                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
-                logits = model(audios, training=True)
-
-                # 计算损失
-                l2_loss = tf.add_n(model.losses)
-                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
-                acc = compute_mix_accuracy(logits, label_a, label_b, lam)
 
                 tfc.summary.scalar('loss', loss_value)
                 tfc.summary.scalar('accuracy', acc)
