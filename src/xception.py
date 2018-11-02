@@ -210,9 +210,9 @@ class Xception(tf.keras.Model):
         output = self.sep_conv_block5(output)
 
         output = self.sep_conv_block2_6(output)
-        output = self.sep_conv_block2_7(output)
-        output = self.sep_conv_block2_8(output)
-        output = self.sep_conv_block2_9(output)
+        # output = self.sep_conv_block2_7(output)
+        # output = self.sep_conv_block2_8(output)
+        # output = self.sep_conv_block2_9(output)
         # output = self.sep_conv_block2_10(output)
         # output = self.sep_conv_block2_11(output)
         # output = self.sep_conv_block2_12(output)
