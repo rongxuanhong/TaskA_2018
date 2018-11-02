@@ -145,7 +145,7 @@ def test(model, dataset, args):
         tfc.summary.scalar('test_loss', avg_loss.result())
         tfc.summary.scalar('test_acc', accuracy.result())
 
-    return accuracy.result()
+    return 100*accuracy.result()
 
 
 def run_task_eager(args):
