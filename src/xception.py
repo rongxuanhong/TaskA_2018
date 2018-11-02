@@ -179,14 +179,14 @@ class Xception(tf.keras.Model):
                                                        initializer=initializer)
         self.sep_conv_block2_9 = SeparableConv2DBlock2(filters=728, block_index=9, weight_decay=weight_decay,
                                                        initializer=initializer)
-        self.sep_conv_block2_10 = SeparableConv2DBlock2(filters=728, block_index=10, weight_decay=weight_decay,
-                                                        initializer=initializer)
-        self.sep_conv_block2_11 = SeparableConv2DBlock2(filters=728, block_index=11, weight_decay=weight_decay,
-                                                        initializer=initializer)
-        self.sep_conv_block2_12 = SeparableConv2DBlock2(filters=728, block_index=12, weight_decay=weight_decay,
-                                                        initializer=initializer)
-        self.sep_conv_block2_13 = SeparableConv2DBlock2(filters=728, block_index=13, weight_decay=weight_decay,
-                                                        initializer=initializer)
+        # self.sep_conv_block2_10 = SeparableConv2DBlock2(filters=728, block_index=10, weight_decay=weight_decay,
+        #                                                 initializer=initializer)
+        # self.sep_conv_block2_11 = SeparableConv2DBlock2(filters=728, block_index=11, weight_decay=weight_decay,
+        #                                                 initializer=initializer)
+        # self.sep_conv_block2_12 = SeparableConv2DBlock2(filters=728, block_index=12, weight_decay=weight_decay,
+        #                                                 initializer=initializer)
+        # self.sep_conv_block2_13 = SeparableConv2DBlock2(filters=728, block_index=13, weight_decay=weight_decay,
+        #                                                 initializer=initializer)
 
         self.sep_conv_block14 = SeparableConv2DBlock1(filters=(728, 1024), block_index=14, relu_before_conv=True,
                                                       weight_decay=weight_decay, initializer=initializer)
@@ -213,10 +213,10 @@ class Xception(tf.keras.Model):
         output = self.sep_conv_block2_7(output)
         output = self.sep_conv_block2_8(output)
         output = self.sep_conv_block2_9(output)
-        output = self.sep_conv_block2_10(output)
-        output = self.sep_conv_block2_11(output)
-        output = self.sep_conv_block2_12(output)
-        output = self.sep_conv_block2_13(output)
+        # output = self.sep_conv_block2_10(output)
+        # output = self.sep_conv_block2_11(output)
+        # output = self.sep_conv_block2_12(output)
+        # output = self.sep_conv_block2_13(output)
 
         # pool1 = self.avg_pool1(output)
         output = self.sep_conv_block14(output)
