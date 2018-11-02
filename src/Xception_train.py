@@ -76,7 +76,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
     """
     for batch, (audios, labels) in enumerate(dataset):  # 遍历一次数据集
         with tfc.summary.record_summaries_every_n_global_steps(
-                10, global_step=step_counter):
+                20, global_step=step_counter):
             with tf.GradientTape() as tape:
                 audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
                 # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
@@ -97,13 +97,28 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
             grads = tape.gradient(loss_value, model.variables)
             optimizer.apply_gradients(zip(grads, model.variables), global_step=step_counter)
 
+            with tf.GradientTape() as tape:
+                audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
+                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
+                logits = model(audios, training=True)
+
+                # 计算损失
+                l2_loss = tf.add_n(model.losses)
+                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
+                acc = compute_mix_accuracy(logits, label_a, label_b, lam)
+
+                tfc.summary.scalar('loss', loss_value)
+                tfc.summary.scalar('accuracy', acc)
+            # 梯度求解
+            grads = tape.gradient(loss_value, model.variables)
+            optimizer.apply_gradients(zip(grads, model.variables), global_step=step_counter)
+
         # 打印log
         if batch % 50 == 0:
             print('max_acc:{0:.2f}'.format(max_acc))
             print('epoch :', current_epoch)
         if args.log_interval and batch % args.log_interval == 0:
-            print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
-                                                                     compute_accuracy(logits, labels)))
+            print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value, acc))
 
 
 def test(model, dataset, args):

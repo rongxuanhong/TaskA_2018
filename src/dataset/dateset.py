@@ -7,6 +7,7 @@ import tensorflow as tf
 import os
 import numpy as np
 from datetime import datetime
+from utils.audio_augmentaton_utils import *
 
 
 # DATA_PATH = '/home/ccyoung/DCase/development_data/'
@@ -120,6 +121,19 @@ class DataSet:
         return mel_spec
 
     def extract_feature5(self, path):
+        """
+        :return:
+        """
+        audio, sr = librosa.core.load(path, sr=48000, duration=10.0)  # mono
+
+        mel = librosa.feature.melspectrogram(audio, sr=sr, n_fft=4096, hop_length=3072, n_mels=64,
+                                             fmax=24000)
+        mel = librosa.power_to_db(mel)
+
+        mel = (mel - np.mean(mel)) / np.std(mel)
+
+        return mel[..., None]
+    def extract_feature6(self, path):
         """
         :return:
         """
