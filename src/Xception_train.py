@@ -79,17 +79,17 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
                 audios = tf.reshape(audios, (args.batch_size, 128, 157, 1))
-                mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
+                # mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
 
                 # 计算损失
                 l2_loss = tf.add_n(model.losses)
-                # loss_value = loss(logits, labels) + l2_loss
-                loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
+                loss_value = loss(logits, labels) + l2_loss
+                # loss_value = lam * loss(logits, label_a) + (1 - lam) * loss(logits, label_b) + l2_loss
                 # 每10步记录日志
-                acc = compute_mix_accuracy(logits, label_a, label_b, lam)
+                # acc = compute_mix_accuracy(logits, label_a, label_b, lam)
                 # print('l2_loss:', l2_loss)
-                # acc = compute_accuracy(logits, labels)
+                acc = compute_accuracy(logits, labels)
 
                 tfc.summary.scalar('loss', loss_value)
                 tfc.summary.scalar('accuracy', acc)
@@ -103,8 +103,7 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
             print('epoch :', current_epoch)
         if args.log_interval and batch % args.log_interval == 0:
             print('Step：{0:2d}/{1}  loss:{2:.6f} acc:{3:.2f}'.format(batch, total_batch, loss_value,
-                                                                     compute_mix_accuracy(logits, label_a, label_b,
-                                                                                          lam)))
+                                                                     compute_accuracy(logits, labels)))
 
 
 def test(model, dataset, args):
@@ -160,7 +159,7 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    model = Xception(num_classes=10, weight_decay=1e-5, initializer='he_uniform')
+    model = Xception(num_classes=10, weight_decay=1e-4, initializer='he_uniform')
 
     step_counter = tf.train.get_or_create_global_step()
 
