@@ -143,7 +143,7 @@ def run_task_eager(args):
 
     # 3.加载数据
     batch_size = args.batch_size
-    total_batch = 18455 // batch_size
+    total_batch = 12244 // batch_size
 
     # if  args.local:
     train_path = os.path.join('/data/TFRecord', 'train7.tfrecords')
@@ -152,7 +152,7 @@ def run_task_eager(args):
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(19000).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
