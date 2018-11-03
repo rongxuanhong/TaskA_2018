@@ -158,7 +158,7 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    model = Xception(num_classes=10, weight_decay=1e-5, initializer='he_uniform')
+    model = Xception(num_classes=10, weight_decay=1e-4, initializer='he_uniform')
 
     step_counter = tf.train.get_or_create_global_step()
 
