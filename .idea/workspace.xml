@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/Xception_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Xception_train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/xception_run_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/xception_run_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,7 +25,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Xception_train.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Xception_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Xception_train.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="511">
@@ -80,11 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="xception_run_server.sh" pinned="false" current-in-tab="false">
+      <file leaf-file-name="xception_run_server.sh" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/xception_run_server.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="38">
-              <caret line="2" column="113" selection-start-line="2" selection-start-column="113" selection-end-line="2" selection-end-column="113" />
+              <caret line="2" column="115" selection-start-line="2" selection-start-column="115" selection-end-line="2" selection-end-column="115" />
             </state>
           </provider>
         </entry>
@@ -156,8 +155,8 @@
         <option value="$PROJECT_DIR$/src/utils/audio_augmentaton_utils.py" />
         <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
         <option value="$PROJECT_DIR$/src/xception.py" />
-        <option value="$PROJECT_DIR$/src/xception_run_server.sh" />
         <option value="$PROJECT_DIR$/src/Xception_train.py" />
+        <option value="$PROJECT_DIR$/src/xception_run_server.sh" />
       </list>
     </option>
   </component>
@@ -749,13 +748,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/xception_run_server.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="113" selection-start-line="2" selection-start-column="113" selection-end-line="2" selection-end-column="113" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/xception.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="366">
@@ -773,6 +765,13 @@
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/xception_run_server.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="115" selection-start-line="2" selection-start-column="115" selection-end-line="2" selection-end-column="115" />
         </state>
       </provider>
     </entry>
