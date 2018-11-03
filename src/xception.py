@@ -28,16 +28,18 @@ class Conv2DBlock(tf.keras.Model):
 
 class SeparableConv2DBlock1(tf.keras.Model):
     def __init__(self, filters, block_index, weight_decay, relu_before_conv=False, pool=True,
-                 has_residual=True, just_one_relu=False, initializer='glorot_uniform'):
+                 has_residual=True, just_one_relu=False, initializer='glorot_uniform', dropout_rate=0.0):
         super(SeparableConv2DBlock1, self).__init__()
         self.relu_before_conv = relu_before_conv
         self.has_residual = has_residual
         self.just_one_relu = just_one_relu
+        self.dropout_rate = dropout_rate
         self.pool = pool
         assert len(filters) == 2
         sepconv_name_base = "block" + str(block_index) + "_sepconv"
         conv_name_base = "block" + str(block_index) + "_conv"
         bn_name_base = "block" + str(block_index) + "_bn"
+        dropout_name_base = "block" + str(block_index) + "_dropout"
         pool_name_base = "block" + str(block_index) + "_pool"
         self.sepconv1 = SeparableConv2D(filters[0],
                                         kernel_size=(3, 3),
@@ -59,6 +61,8 @@ class SeparableConv2DBlock1(tf.keras.Model):
                                         name=sepconv_name_base + '2')
         self.batchnorm1 = BatchNormalization(name=bn_name_base + '1')
         self.batchnorm2 = BatchNormalization(name=bn_name_base + '2')
+        self.dropout1 = Dropout(name=dropout_name_base + '1', rate=dropout_rate)
+        self.dropout2 = Dropout(name=dropout_name_base + '2', rate=dropout_rate)
         strides = 2
 
         if self.pool:
@@ -81,8 +85,13 @@ class SeparableConv2DBlock1(tf.keras.Model):
             output = self.sepconv1(tf.nn.relu(inputs))
             output = self.batchnorm1(output)
 
+            if self.dropout_rate:
+                output = self.dropout1(output, training)
+
             output = self.sepconv2(tf.nn.relu(output))
             output = self.batchnorm2(output)
+            if self.dropout_rate:
+                output = self.dropout2(output, training)
 
         else:  ## relu在后的有可能只有一次relu
             output = self.sepconv1(inputs)
@@ -165,11 +174,13 @@ class Xception(tf.keras.Model):
                                        initializer=initializer)
 
         self.sep_conv_block3 = SeparableConv2DBlock1(filters=(128, 128), block_index=3, weight_decay=weight_decay,
-                                                     just_one_relu=True, initializer=initializer)
+                                                     just_one_relu=True, initializer=initializer, dropout_rate=0.2)
         self.sep_conv_block4 = SeparableConv2DBlock1(filters=(256, 256), block_index=4, relu_before_conv=True,
-                                                     weight_decay=weight_decay, pool=True, initializer=initializer)
+                                                     weight_decay=weight_decay, pool=True, initializer=initializer,
+                                                     dropout_rate=0.2)
         self.sep_conv_block5 = SeparableConv2DBlock1(filters=(728, 728), block_index=5, relu_before_conv=True,
-                                                     weight_decay=weight_decay, pool=True, initializer=initializer)
+                                                     weight_decay=weight_decay, pool=True, initializer=initializer,
+                                                     dropout_rate=0.2)
 
         self.sep_conv_block2_6 = SeparableConv2DBlock2(filters=728, block_index=6, weight_decay=weight_decay,
                                                        initializer=initializer)
@@ -189,9 +200,11 @@ class Xception(tf.keras.Model):
         #                                                 initializer=initializer)
 
         self.sep_conv_block14 = SeparableConv2DBlock1(filters=(728, 1024), block_index=14, relu_before_conv=True,
-                                                      weight_decay=weight_decay, initializer=initializer)
+                                                      weight_decay=weight_decay, initializer=initializer,
+                                                      dropout_rate=0.2)
         self.sep_conv_block15 = SeparableConv2DBlock1(filters=(1536, 2048), block_index=15, has_residual=False,
-                                                      pool=False, weight_decay=weight_decay, initializer=initializer)
+                                                      pool=False, weight_decay=weight_decay, initializer=initializer,
+                                                      dropout_rate=0.2)
 
         # self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
         # self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
