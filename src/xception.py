@@ -174,13 +174,13 @@ class Xception(tf.keras.Model):
                                        initializer=initializer)
 
         self.sep_conv_block3 = SeparableConv2DBlock1(filters=(128, 128), block_index=3, weight_decay=weight_decay,
-                                                     just_one_relu=True, initializer=initializer, dropout_rate=0.2)
+                                                     just_one_relu=True, initializer=initializer, dropout_rate=0.0)
         self.sep_conv_block4 = SeparableConv2DBlock1(filters=(256, 256), block_index=4, relu_before_conv=True,
                                                      weight_decay=weight_decay, pool=True, initializer=initializer,
-                                                     dropout_rate=0.2)
+                                                     dropout_rate=0.0)
         self.sep_conv_block5 = SeparableConv2DBlock1(filters=(728, 728), block_index=5, relu_before_conv=True,
                                                      weight_decay=weight_decay, pool=True, initializer=initializer,
-                                                     dropout_rate=0.2)
+                                                     dropout_rate=0.0)
 
         self.sep_conv_block2_6 = SeparableConv2DBlock2(filters=728, block_index=6, weight_decay=weight_decay,
                                                        initializer=initializer)
@@ -201,10 +201,10 @@ class Xception(tf.keras.Model):
 
         self.sep_conv_block14 = SeparableConv2DBlock1(filters=(728, 1024), block_index=14, relu_before_conv=True,
                                                       weight_decay=weight_decay, initializer=initializer,
-                                                      dropout_rate=0.2)
+                                                      dropout_rate=0.0)
         self.sep_conv_block15 = SeparableConv2DBlock1(filters=(1536, 2048), block_index=15, has_residual=False,
                                                       pool=False, weight_decay=weight_decay, initializer=initializer,
-                                                      dropout_rate=0.2)
+                                                      dropout_rate=0.0)
 
         # self.avg_pool1 = GlobalAveragePooling2D(name='avg_pool1')
         # self.avg_pool2 = GlobalAveragePooling2D(name='avg_pool2')
