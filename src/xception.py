@@ -250,4 +250,5 @@ if __name__ == '__main__':
     input = tf.random_normal((3, 64, 157, 1))
     model(input)
     # model = tf.keras.applications.Xception(input_shape=(229, 229, 3))
+    model = tf.keras.applications.VGG19(input_shape=(229, 229, 3))
     model.summary()
