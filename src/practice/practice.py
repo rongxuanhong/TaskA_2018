@@ -117,19 +117,22 @@ if __name__ == '__main__':
     # import os
     #
     # os.system('sh /data/stop_instance.sh')
-    boundaries = []
-    learning_rate = 0.01
-    learning_rates = [learning_rate]
-    decay_rate = 0.5
-    for i in range(19):
-        if (i + 1) % 2 == 0:
-            boundaries.append(4)
-            learning_rate *= decay_rate
-            learning_rates.append(learning_rate)
-    for i in boundaries:
-        print(i)
-    for i in learning_rates:
-        print(i)
+    # boundaries = []
+    # learning_rate = 0.01
+    # learning_rates = [learning_rate]
+    # decay_rate = 0.5
+    # for i in range(19):
+    #     if (i + 1) % 2 == 0:
+    #         boundaries.append(4)
+    #         learning_rate *= decay_rate
+    #         learning_rates.append(learning_rate)
+    # for i in boundaries:
+    #     print(i)
+    # for i in learning_rates:
+    #     print(i)
+    #
+    # a=np.random.uniform() - 0.5
+    # print(a)
+    import os
 
-    a=np.random.uniform() - 0.5
-    print(a)
+    os.system('sh /data/stop_instance')

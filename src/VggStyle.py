@@ -201,7 +201,7 @@ class VGGStyle(tf.keras.Model):
 
 def main():
     model = VGGStyle(num_classes=10)
-    input = tf.random_uniform((3, 128, 157, 1))
+    input = tf.random_uniform((3, 256, 128, 3))
     model(input, training=True)
     model.summary()
 

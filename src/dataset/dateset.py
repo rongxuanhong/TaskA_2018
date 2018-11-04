@@ -163,27 +163,43 @@ class DataSet:
 
         return mel[..., None]
 
-    def extract_feature8(self, path):
+    def extract_feature8(self, path, augment=True):
         """
         :return:
         """
         y, sr = librosa.core.load(path, duration=10.0, mono=False)  # mono
 
-        D = np.abs(librosa.stft(y[1], n_fft=2048, hop_length=512)) ** 2
-        print(D)
-        D = librosa.core.perceptual_weighting(D, frequencies=librosa.fft_frequencies())
+        y_list = [y]
+        if augment:
+            for pitch in [-2.0, -1.0, 1.0, 2.0]:
+                y1 = librosa.effects.pitch_shift(y[0], sr, n_steps=pitch, )
+                y2 = librosa.effects.pitch_shift(y[1], sr, n_steps=pitch, )
+                y_list.append(np.stack([y1, y2]))
 
-        print(D)
-        mel = librosa.feature.melspectrogram(S=D)
-        mel = librosa.power_to_db(mel)
+        mel_list = []
 
-        mel = (mel - np.mean(mel)) / np.std(mel)
-        print(mel.shape)
-        print(mel)
+        for y in y_list:
+            power = np.abs(librosa.stft(y[0], n_fft=2048, hop_length=512)) ** 2  # 1025,431
+            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
+            mel = librosa.feature.melspectrogram(S=power, n_mels=256)
+            mel1 = (mel - np.mean(mel)) / np.std(mel)
 
-        return mel[..., None]
+            power = np.abs(librosa.stft(y[1], n_fft=2048, hop_length=512)) ** 2  # 1025,431
+            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
+            mel = librosa.feature.melspectrogram(S=power, n_mels=256)
+            mel2 = (mel - np.mean(mel)) / np.std(mel)
 
-    def generate_TFRecord(self, dataset, tfrecord_path):
+            power = np.abs(librosa.stft(y[0] - y[1], n_fft=2048, hop_length=512)) ** 2  # 1025,431
+            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
+            mel = librosa.feature.melspectrogram(S=power, n_mels=256)
+            mel3 = (mel - np.mean(mel)) / np.std(mel)
+
+            mel = np.stack([mel1, mel2, mel3], axis=-1)
+            mel_list.append(mel)
+
+        return mel_list
+
+    def generate_TFRecord(self, dataset, tfrecord_path, augment=True):
         """
         use with extract_feature1
         :param dataset:
@@ -198,19 +214,13 @@ class DataSet:
             path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
             # 必须先转成float16，否则librosa无法处理
 
-            mel_spec1 = self.extract_feature5(path)
-            mel_spec2 = self.extract_feature6(path)
-            mel_spec3 = self.extract_feature7(path)
-
             label = self.label_encoder.transform([row.scene])[0]
             label = keras.utils.to_categorical(label, self.n_scenes)
 
-            example1 = self.encapsulate_example(mel_spec1.reshape(-1), label)
-            example2 = self.encapsulate_example(mel_spec2.reshape(-1), label)
-            example3 = self.encapsulate_example(mel_spec3.reshape(-1), label)
-            writer.write(example1.SerializeToString())
-            writer.write(example2.SerializeToString())
-            writer.write(example3.SerializeToString())
+            mel_spec_list = self.extract_feature8(path, augment)
+            for mel_spec in mel_spec_list:
+                example = self.encapsulate_example(mel_spec.reshape(-1), label)
+                writer.write(example.SerializeToString())
 
         writer.close()
 
@@ -416,13 +426,19 @@ def main():
     # task.generate_overlap_TFRecord(task.train, os.path.join(path_prefix, 'train4.tfrecords'))
     # task.generate_non_overlap_TFRecord(task.test, os.path.join(path_prefix, 'test4.tfrecords'))
     # os.system('sh /data/stop_instance.sh')
-    mel=task.extract_feature8('../airport-barcelona-0-0-a.wav')
+    # mel = task.extract_feature8('../airport-barcelona-0-0-a.wav')
     # print(mel.shape)
-    # task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train8.tfrecords'))
-    # task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test6.tfrecords'))
-    # compute_time_consumed(start_time)
+    # task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train9.tfrecords'))
+    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test9.tfrecords'), augment=False)
+    compute_time_consumed(start_time)
 
 
 if __name__ == '__main__':
     main()
     # generate_small_data()
+    # y, sr = librosa.load(librosa.util.example_audio_file())
+    # CQT = librosa.cqt(y, sr=sr, fmin=librosa.note_to_hz('A1'))
+    # freqs = librosa.cqt_frequencies(CQT.shape[0], fmin=librosa.note_to_hz('A1'))
+    # print(freqs)
+    # perceptual_CQT = librosa.perceptual_weighting(CQT ** 2, freqs, ref=np.max)
+    # print(perceptual_CQT)

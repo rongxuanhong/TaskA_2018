@@ -143,22 +143,22 @@ def run_task_eager(args):
 
     # 3.加载数据
     batch_size = args.batch_size
-    total_batch = 12244 // batch_size
+    total_batch = 30610 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train7.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test5.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train9.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test9.tfrecords')
 
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(30610).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    model = VGGStyle(num_classes=10, weight_decay=1e-4, initializer='he_uniform')
+    model = VGGStyle(num_classes=10, weight_decay=0, initializer='he_uniform')
 
     step_counter = tf.train.get_or_create_global_step()
 
