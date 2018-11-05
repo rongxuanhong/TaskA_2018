@@ -171,7 +171,7 @@ class DataSet:
 
         y_list = [y]
         if augment:
-            for pitch in [-2.0, -1.0, 1.0, 2.0]:
+            for pitch in [-2.0]:
                 y1 = librosa.effects.pitch_shift(y[0], sr, n_steps=pitch, )
                 y2 = librosa.effects.pitch_shift(y[1], sr, n_steps=pitch, )
                 y_list.append(np.stack([y1, y2]))
@@ -181,20 +181,22 @@ class DataSet:
         for y in y_list:
             power = np.abs(librosa.stft(y[0], n_fft=2048, hop_length=512)) ** 2  # 1025,431
             power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
-            mel = librosa.feature.melspectrogram(S=power, n_mels=256)
+            mel = librosa.feature.melspectrogram(S=power, n_mels=128)
             mel1 = (mel - np.mean(mel)) / np.std(mel)
 
             power = np.abs(librosa.stft(y[1], n_fft=2048, hop_length=512)) ** 2  # 1025,431
             power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
-            mel = librosa.feature.melspectrogram(S=power, n_mels=256)
+            mel = librosa.feature.melspectrogram(S=power, n_mels=128)
             mel2 = (mel - np.mean(mel)) / np.std(mel)
 
-            power = np.abs(librosa.stft(y[0] - y[1], n_fft=2048, hop_length=512)) ** 2  # 1025,431
-            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
-            mel = librosa.feature.melspectrogram(S=power, n_mels=256)
-            mel3 = (mel - np.mean(mel)) / np.std(mel)
+            # power = np.abs(librosa.stft(y[0] - y[1], n_fft=2048, hop_length=512)) ** 2  # 1025,431
+            # power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
+            # mel = librosa.feature.melspectrogram(S=power, n_mels=256)
+            # mel3 = (mel - np.mean(mel)) / np.std(mel)
 
-            mel = np.stack([mel1, mel2, mel3], axis=-1)
+            indexs=np.random.choice(mel1.shape[1],128)
+            mel = np.stack([mel1[:,indexs], mel2[:,indexs]], axis=-1)
+            # print(mel.shape)
             mel_list.append(mel)
 
         return mel_list
