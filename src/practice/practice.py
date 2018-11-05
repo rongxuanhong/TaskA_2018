@@ -133,6 +133,4 @@ if __name__ == '__main__':
     #
     # a=np.random.uniform() - 0.5
     # print(a)
-    import os
-
-    os.system('sh /data/stop_instance')
+    audios = np.random.choice(431, 128)
