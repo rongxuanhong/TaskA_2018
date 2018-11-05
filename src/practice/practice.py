@@ -114,7 +114,8 @@ def main():
 if __name__ == '__main__':
     # main()
     # generate_spectrum()
-    # import os
+    import os
+
     #
     # os.system('sh /data/stop_instance.sh')
     # boundaries = []
@@ -134,3 +135,4 @@ if __name__ == '__main__':
     # a=np.random.uniform() - 0.5
     # print(a)
     audios = np.random.choice(431, 128)
+    os.system('sh /data/stop.sh')
