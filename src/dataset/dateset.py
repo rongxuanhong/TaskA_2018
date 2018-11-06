@@ -433,7 +433,7 @@ def main():
     task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train10.tfrecords'))
     task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test10.tfrecords'), augment=False)
     compute_time_consumed(start_time)
-    os.system('sh /data/stop.sh')
+    # os.system('sh /data/stop.sh')
 
 
 if __name__ == '__main__':

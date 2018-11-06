@@ -120,7 +120,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 128, 128, 2))
+        audios = tf.reshape(audios, (args.batch_size, 128, 431, 2))
 
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
@@ -150,8 +150,8 @@ def run_task_eager(args):
     total_batch = 12244 // batch_size
 
     # if  args.local:
-    train_path = os.path.join('/data/TFRecord', 'train9.tfrecords')
-    test_path = os.path.join('/data/TFRecord', 'test9.tfrecords')
+    train_path = os.path.join('/data/TFRecord', 'train10.tfrecords')
+    test_path = os.path.join('/data/TFRecord', 'test10.tfrecords')
 
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
@@ -255,7 +255,7 @@ def main(args):
 
 
 def finish_instance():
-    os.system('sh /data/stop_instance.sh')
+    os.system('sh /data/stop.sh')
 
 
 if __name__ == '__main__':

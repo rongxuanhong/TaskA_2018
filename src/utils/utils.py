@@ -67,7 +67,7 @@ def compute_time_consumed(start_time):
 
 def finish_instance():
     import os
-    os.system('sh /data/stop_instance.sh')
+    os.system('sh /data/stop.sh')
 
 
 def mix_data(x, y, batch_size, alpha=1.0):
