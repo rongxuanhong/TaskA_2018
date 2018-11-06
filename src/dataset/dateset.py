@@ -167,7 +167,7 @@ class DataSet:
         """
         :return:
         """
-        y, sr = librosa.core.load(path, duration=10.0, mono=False)  # mono
+        y, sr = librosa.core.load(path, sr=48000, duration=10.0, mono=False)  # mono
 
         y_list = [y]
         if augment:
@@ -179,13 +179,13 @@ class DataSet:
         mel_list = []
 
         for y in y_list:
-            power = np.abs(librosa.stft(y[0], n_fft=2048, hop_length=512)) ** 2  # 1025,431
-            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
+            power = np.abs(librosa.stft(y[0], n_fft=4096, hop_length=3072)) ** 2  # 1025,431
+            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies(sr=48000, n_fft=4096))
             mel = librosa.feature.melspectrogram(S=power, n_mels=128)
             mel1 = (mel - np.mean(mel)) / np.std(mel)
 
-            power = np.abs(librosa.stft(y[1], n_fft=2048, hop_length=512)) ** 2  # 1025,431
-            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies())
+            power = np.abs(librosa.stft(y[1], n_fft=4096, hop_length=3072)) ** 2  # 1025,431
+            power = librosa.core.perceptual_weighting(power, frequencies=librosa.fft_frequencies(sr=48000, n_fft=4096))
             mel = librosa.feature.melspectrogram(S=power, n_mels=128)
             mel2 = (mel - np.mean(mel)) / np.std(mel)
 
@@ -430,10 +430,10 @@ def main():
     # os.system('sh /data/stop_instance.sh')
     # mel = task.extract_feature8('../airport-barcelona-0-0-a.wav')
     # print(mel.shape)
-    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train10.tfrecords'))
-    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test10.tfrecords'), augment=False)
+    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train11.tfrecords'))
+    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test11.tfrecords'), augment=False)
     compute_time_consumed(start_time)
-    # os.system('sh /data/stop.sh')
+    os.system('sh /data/stop.sh')
 
 
 if __name__ == '__main__':
