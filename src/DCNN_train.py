@@ -78,11 +78,11 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 256, 431, 3))
-                audios = audios.numpy()
-                indexs = np.random.choice(431, 128)
-                audios = audios[:, indexs, :]
-                audios = tf.convert_to_tensor(audios)
+                audios = tf.reshape(audios, (args.batch_size, 128, 128, 2))
+                # audios = audios.numpy()
+                # indexs = np.random.choice(431, 128)
+                # audios = audios[:, indexs, :]
+                # audios = tf.convert_to_tensor(audios)
                 mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
                 logits = model(audios, training=True)
 
@@ -120,7 +120,7 @@ def test(model, dataset, args):
     accuracy = tfc.eager.metrics.Accuracy('accuracy', dtype=tf.float32)
 
     for (audios, labels) in dataset:
-        audios = tf.reshape(audios, (args.batch_size, 256, 431, 3))
+        audios = tf.reshape(audios, (args.batch_size, 128, 128, 2))
 
         logits = model(audios, training=False)
         avg_loss(loss(logits, labels))
@@ -147,7 +147,7 @@ def run_task_eager(args):
 
     # 3.加载数据
     batch_size = args.batch_size
-    total_batch = 30610 // batch_size
+    total_batch = 12244 // batch_size
 
     # if  args.local:
     train_path = os.path.join('/data/TFRecord', 'train9.tfrecords')
@@ -156,7 +156,7 @@ def run_task_eager(args):
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(30610).apply(
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
         tf.contrib.data.batch_and_drop_remainder(batch_size))
