@@ -78,13 +78,13 @@ def train(model, optimizer, dataset, step_counter, total_batch, args, max_acc, c
         with tfc.summary.record_summaries_every_n_global_steps(
                 10, global_step=step_counter):
             with tf.GradientTape() as tape:
-                audios = tf.reshape(audios, (args.batch_size, 128, 128, 2))
-                # audios = audios.numpy()
-                # indexs = np.random.choice(431, 128)
-                # audios = audios[:, indexs, :]
-                # audios = tf.convert_to_tensor(audios)
+                audios = tf.reshape(audios, (args.batch_size, 128, 431, 2))
+                audios = audios.numpy()
+                indexs = np.random.choice(431, 128)
+                audios = audios[:, indexs, :]
+                audios = tf.convert_to_tensor(audios)
                 mixed_audios, label_a, label_b, lam = mix_data(audios, labels, args.batch_size, args.alpha)
-                logits = model(audios, training=True)
+                logits = model(mixed_audios, training=True)
 
                 # 计算损失
                 l2_loss = tf.add_n(model.losses)

@@ -194,8 +194,8 @@ class DataSet:
             # mel = librosa.feature.melspectrogram(S=power, n_mels=256)
             # mel3 = (mel - np.mean(mel)) / np.std(mel)
 
-            indexs=np.random.choice(mel1.shape[1],128)
-            mel = np.stack([mel1[:,indexs], mel2[:,indexs]], axis=-1)
+            # indexs=np.random.choice(mel1.shape[1],128)
+            mel = np.stack([mel1, mel2], axis=-1)
             # print(mel.shape)
             mel_list.append(mel)
 
@@ -430,8 +430,8 @@ def main():
     # os.system('sh /data/stop_instance.sh')
     # mel = task.extract_feature8('../airport-barcelona-0-0-a.wav')
     # print(mel.shape)
-    # task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train9.tfrecords'))
-    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test9.tfrecords'), augment=False)
+    task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train10.tfrecords'))
+    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test10.tfrecords'), augment=False)
     compute_time_consumed(start_time)
     os.system('sh /data/stop.sh')
 
