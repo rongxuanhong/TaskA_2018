@@ -177,6 +177,9 @@ def run_task_eager(args):
     #         learning_rates.append(learning_rate)
 
     # learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
+    # learning_rate = tf.train.polynomial_decay(0.01, step_counter,
+    #                                           decay_steps, 0,
+    #                                           power=0.5)
     optimizer = tf.train.AdamOptimizer()
     # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.5,
@@ -202,7 +205,7 @@ def run_task_eager(args):
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
     # check_point.restore(os.path.join(args.output_dir, 'model3', 'cpkt-13'))  # 存在就恢复模型(可不使用)
-    check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
+    # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
