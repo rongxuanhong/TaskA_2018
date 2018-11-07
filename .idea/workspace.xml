@@ -23,11 +23,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
-              <caret line="176" column="50" lean-forward="true" selection-start-line="176" selection-start-column="50" selection-end-line="176" selection-end-column="50" />
+            <state relative-caret-position="460">
+              <caret line="164" column="17" selection-start-line="164" selection-start-column="17" selection-end-line="164" selection-end-column="17" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -38,17 +38,26 @@
       <file leaf-file-name="densenet2.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/densenet2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="281" selection-start-line="281" selection-end-line="281" />
+            <state relative-caret-position="251">
+              <caret line="227" column="31" lean-forward="true" selection-start-line="227" selection-start-column="31" selection-end-line="227" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="convolutional.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/layers/convolutional.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="634">
+              <caret line="1522" column="52" selection-start-line="1522" selection-start-column="38" selection-end-line="1522" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="10" column="41" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
+            <state relative-caret-position="2596">
+              <caret line="166" column="47" lean-forward="true" selection-start-line="166" selection-start-column="47" selection-end-line="166" selection-end-column="47" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -140,8 +149,8 @@
         <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
         <option value="$PROJECT_DIR$/src/practice/practice.py" />
         <option value="$PROJECT_DIR$/src/dcnn_run_server.sh" />
-        <option value="$PROJECT_DIR$/src/VggStyle.py" />
         <option value="$PROJECT_DIR$/src/DCNN_train.py" />
+        <option value="$PROJECT_DIR$/src/VggStyle.py" />
       </list>
     </option>
   </component>
@@ -721,29 +730,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/layers/convolutional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="445" column="49" selection-start-line="445" selection-start-column="35" selection-end-line="445" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
           <caret line="162" selection-start-line="162" selection-end-line="162" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="41" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -757,17 +749,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/densenet2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="281" selection-start-line="281" selection-end-line="281" />
+        <state relative-caret-position="251">
+          <caret line="227" column="31" lean-forward="true" selection-start-line="227" selection-start-column="31" selection-end-line="227" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/layers/convolutional.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="634">
+          <caret line="1522" column="52" selection-start-line="1522" selection-start-column="38" selection-end-line="1522" selection-end-column="52" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="176" column="50" lean-forward="true" selection-start-line="176" selection-start-column="50" selection-end-line="176" selection-end-column="50" />
+        <state relative-caret-position="460">
+          <caret line="164" column="17" selection-start-line="164" selection-start-column="17" selection-end-line="164" selection-end-column="17" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2596">
+          <caret line="166" column="47" lean-forward="true" selection-start-line="166" selection-start-column="47" selection-end-line="166" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>

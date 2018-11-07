@@ -184,17 +184,17 @@ class VGGStyle(tf.keras.Model):
 
         output = self.conv1(output)
         output = tf.nn.relu(self.batchnorm1(output))
-        output = self.dropout1(output,training=training)
+        output = self.dropout1(output, training=training)
         # print(output.shape)
 
         output = self.conv2(output)
         output = tf.nn.relu(self.batchnorm2(output))
-        output = self.dropout2(output,training=training)
+        output = self.dropout2(output, training=training)
         # print(output.shape)
 
         output = self.conv3(output)
         output = self.batchnorm3(output)
-        output = self.avgpool(self.noise(output,training=training))
+        output = self.avgpool(self.noise(output, training=training))
         # print(output.shape)
         return output
 
