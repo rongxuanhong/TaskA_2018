@@ -90,12 +90,12 @@ def main():
                 learning_rate=0.001, global_step=num_epoch, decay_steps=1, decay_rate=0.9, staircase=True)
             # 标准指数型衰减
             learing_rate2 = tf.train.exponential_decay(
-                learning_rate=0.001, global_step=num_epoch, decay_steps=2, decay_rate=0.5, staircase=False)
+                learning_rate=0.001, global_step=num_epoch, decay_steps=2, decay_rate=0.9, staircase=True)
 
             learning_rate = tf.train.polynomial_decay(0.001, num_epoch, 50, end_learning_rate=0, power=1.0)
 
             lr1 = sess.run([learing_rate1])
-            lr2 = sess.run([learning_rate])
+            lr2 = sess.run([learing_rate2])
             print(lr2)
             y.append(lr1)
             z.append(lr2)
