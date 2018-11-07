@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/DCNN_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DCNN_train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/VggStyle.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/VggStyle.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,11 +22,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="549">
-              <caret line="195" column="9" lean-forward="true" selection-start-line="195" selection-start-column="9" selection-end-line="195" selection-end-column="9" />
+            <state relative-caret-position="350">
+              <caret line="161" column="61" lean-forward="true" selection-start-line="161" selection-start-column="61" selection-end-line="161" selection-end-column="61" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -44,11 +43,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1640">
-              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+            <state relative-caret-position="141">
+              <caret line="187" column="29" lean-forward="true" selection-start-line="187" selection-start-column="29" selection-end-line="187" selection-end-column="29" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -68,8 +67,8 @@
       <file leaf-file-name="dateset.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4110">
-              <caret line="196" column="56" lean-forward="true" selection-start-line="196" selection-start-column="56" selection-end-line="196" selection-end-column="56" />
+            <state relative-caret-position="496">
+              <caret line="179" lean-forward="true" selection-start-line="179" selection-end-line="179" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -712,12 +711,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
+    <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4110">
-          <caret line="196" column="56" lean-forward="true" selection-start-line="196" selection-start-column="56" selection-end-line="196" selection-end-column="56" />
+        <state relative-caret-position="141">
+          <caret line="187" column="29" lean-forward="true" selection-start-line="187" selection-start-column="29" selection-end-line="187" selection-end-column="29" />
           <folding>
-            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -729,22 +728,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
+    <entry file="file://$PROJECT_DIR$/src/dataset/dateset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="549">
-          <caret line="195" column="9" lean-forward="true" selection-start-line="195" selection-start-column="9" selection-end-line="195" selection-end-column="9" />
+        <state relative-caret-position="496">
+          <caret line="179" lean-forward="true" selection-start-line="179" selection-end-line="179" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
+    <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1640">
-          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+        <state relative-caret-position="350">
+          <caret line="161" column="61" lean-forward="true" selection-start-line="161" selection-start-column="61" selection-end-line="161" selection-end-column="61" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
