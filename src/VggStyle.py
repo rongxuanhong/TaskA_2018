@@ -8,15 +8,15 @@ from tensorflow.keras.regularizers import l2
 class ConvBlock1(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock1, self).__init__()
-        self.conv1 = Conv2D(kernel_size=5,
-                            filters=42,
+        self.conv1 = Conv2D(kernel_size=3,
+                            filters=32,
                             padding='same',
                             use_bias=False,
                             strides=2,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv2 = Conv2D(kernel_size=3,
-                            filters=42,
+                            filters=32,
                             strides=1,
                             padding='same',
                             use_bias=False,
@@ -46,13 +46,13 @@ class ConvBlock2(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock2, self).__init__()
         self.conv1 = Conv2D(kernel_size=3,
-                            filters=84,
+                            filters=64,
                             padding='same',
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv2 = Conv2D(kernel_size=3,
-                            filters=84,
+                            filters=64,
                             padding='same',
                             use_bias=False,
                             kernel_initializer=initializer,
@@ -81,28 +81,28 @@ class ConvBlock3(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock3, self).__init__()
         self.conv1 = Conv2D(kernel_size=3,
-                            filters=168,
+                            filters=128,
                             padding='same',
                             use_bias=False,
                             strides=1,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv2 = Conv2D(kernel_size=3,
-                            filters=168,
+                            filters=128,
                             strides=1,
                             padding='same',
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv3 = Conv2D(kernel_size=3,
-                            filters=168,
+                            filters=128,
                             strides=1,
                             padding='same',
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv4 = Conv2D(kernel_size=3,
-                            filters=168,
+                            filters=128,
                             strides=1,
                             padding='same',
                             use_bias=False,
@@ -150,14 +150,14 @@ class VGGStyle(tf.keras.Model):
         self.convblock3 = ConvBlock3(initializer, weight_decay)
 
         self.conv1 = Conv2D(kernel_size=3,
-                            filters=336,
+                            filters=256,
                             strides=1,
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
 
         self.conv2 = Conv2D(kernel_size=1,
-                            filters=336,
+                            filters=256,
                             strides=1,
                             use_bias=False,
                             kernel_initializer=initializer,
@@ -187,12 +187,12 @@ class VGGStyle(tf.keras.Model):
         # print(output.shape)
 
         output = self.conv1(output)
-        output = tf.nn.elu(self.batchnorm1(output))
+        output = tf.nn.relu(self.batchnorm1(output))
         output = self.dropout1(output, training=training)
         # print(output.shape)
 
         output = self.conv2(output)
-        output = tf.nn.elu(self.batchnorm2(output))
+        output = tf.nn.relu(self.batchnorm2(output))
         output = self.dropout2(output, training=training)
         # print(output.shape)
 
