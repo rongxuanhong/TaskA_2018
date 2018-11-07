@@ -8,7 +8,7 @@ from tensorflow.keras.regularizers import l2
 class ConvBlock1(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock1, self).__init__()
-        self.conv1 = Conv2D(kernel_size=5,
+        self.conv1 = Conv2D(kernel_size=3,
                             filters=42,
                             padding='same',
                             use_bias=False,
@@ -110,9 +110,9 @@ class ConvBlock3(tf.keras.Model):
         self.batchnorm2 = BatchNormalization(axis=-1)
         self.batchnorm3 = BatchNormalization(axis=-1)
         self.batchnorm4 = BatchNormalization(axis=-1)
-        self.dropout1 = Dropout(0.3)
-        self.dropout2 = Dropout(0.3)
-        self.dropout3 = Dropout(0.3)
+        self.dropout1 = Dropout(0.5)
+        self.dropout2 = Dropout(0.5)
+        self.dropout3 = Dropout(0.5)
         self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
@@ -166,8 +166,8 @@ class VGGStyle(tf.keras.Model):
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
-        self.dropout1 = Dropout(0.3)
-        self.dropout2 = Dropout(0.3)
+        self.dropout1 = Dropout(0.5)
+        self.dropout2 = Dropout(0.5)
         self.batchnorm1 = BatchNormalization(axis=-1)
         self.batchnorm2 = BatchNormalization(axis=-1)
         self.batchnorm3 = BatchNormalization(axis=-1)
