@@ -27,7 +27,8 @@ class ConvBlock1(tf.keras.Model):
         self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
-        self.noise = GaussianNoise(1.00)
+        # self.noise = GaussianNoise(1.00)
+        self.dropout = Dropout(0.2)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -37,7 +38,7 @@ class ConvBlock1(tf.keras.Model):
         output = tf.nn.relu(self.batchnorm2(output))
 
         output = self.maxpool(output)
-        output = self.noise(output, training=training)
+        output = self.dropout(output, training=training)
         return output
 
 
@@ -61,7 +62,8 @@ class ConvBlock2(tf.keras.Model):
         self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
-        self.noise = GaussianNoise(0.75)
+        # self.noise = GaussianNoise(0.75)
+        self.dropout = Dropout(0.2)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -71,7 +73,7 @@ class ConvBlock2(tf.keras.Model):
         output = tf.nn.relu(self.batchnorm2(output))
 
         output = self.maxpool(output)
-        output = self.noise(output, training=training)
+        output = self.dropout(output, training=training)
         return output
 
 
@@ -116,7 +118,8 @@ class ConvBlock3(tf.keras.Model):
         self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
-        self.noise = GaussianNoise(0.75)
+        # self.noise = GaussianNoise(0.75)
+        self.dropout = Dropout(0.2)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -135,7 +138,7 @@ class ConvBlock3(tf.keras.Model):
         output = tf.nn.relu(self.batchnorm4(output))
 
         output = self.maxpool(output)
-        output = self.noise(output, training=training)
+        output = self.dropout(output, training=training)
         return output
 
 
@@ -166,12 +169,13 @@ class VGGStyle(tf.keras.Model):
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
-        self.dropout1 = Dropout(0.5)
-        self.dropout2 = Dropout(0.5)
+        self.dropout1 = Dropout(0.3)
+        self.dropout2 = Dropout(0.3)
+        self.dropout3 = Dropout(0.3)
         self.batchnorm1 = BatchNormalization(axis=-1)
         self.batchnorm2 = BatchNormalization(axis=-1)
         self.batchnorm3 = BatchNormalization(axis=-1)
-        self.noise = GaussianNoise(0.3)
+        # self.noise = GaussianNoise(0.3)
         self.avgpool = GlobalAveragePooling2D()
 
     def call(self, inputs, training=None, mask=None):
@@ -194,14 +198,14 @@ class VGGStyle(tf.keras.Model):
 
         output = self.conv3(output)
         output = self.batchnorm3(output)
-        output = self.avgpool(self.noise(output, training=training))
+        output = self.avgpool(self.dropout3(output, training=training))
         # print(output.shape)
         return output
 
 
 def main():
     model = VGGStyle(num_classes=10)
-    input = tf.random_uniform((3, 128, 128, 3))
+    input = tf.random_uniform((3, 128, 157, 2))
     model(input, training=True)
     model.summary()
 
