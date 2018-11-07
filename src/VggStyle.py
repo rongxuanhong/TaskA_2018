@@ -110,9 +110,9 @@ class ConvBlock3(tf.keras.Model):
         self.batchnorm2 = BatchNormalization(axis=-1)
         self.batchnorm3 = BatchNormalization(axis=-1)
         self.batchnorm4 = BatchNormalization(axis=-1)
-        self.dropout1 = Dropout(0.5)
-        self.dropout2 = Dropout(0.5)
-        self.dropout3 = Dropout(0.5)
+        self.dropout1 = Dropout(0.3)
+        self.dropout2 = Dropout(0.3)
+        self.dropout3 = Dropout(0.3)
         self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
