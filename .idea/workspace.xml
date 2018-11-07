@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/DCNN_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DCNN_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VggStyle.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/VggStyle.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/practice/practice.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/practice/practice.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/check_point/model3/test/events.out.tfevents.1541567143.ccyounghrx.v2" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,14 +24,23 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2246">
-              <caret line="255" column="21" lean-forward="true" selection-start-line="255" selection-start-column="21" selection-end-line="255" selection-end-column="21" />
+            <state relative-caret-position="897">
+              <caret line="181" column="34" selection-start-line="181" selection-start-column="34" selection-end-line="181" selection-end-column="34" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="momentum.py" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/momentum.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="343">
+              <caret line="42" column="50" lean-forward="true" selection-start-line="42" selection-start-column="50" selection-end-line="42" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -45,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
+            <state relative-caret-position="380">
+              <caret line="197" lean-forward="true" selection-start-line="197" selection-end-line="197" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -363,11 +372,11 @@
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14028384" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14028384" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32829374" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33585313" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.12958963" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32829374" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -479,13 +488,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="81" selection-start-line="81" selection-end-line="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/momentum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="514">
-          <caret line="49" column="9" lean-forward="true" selection-start-line="49" selection-start-column="9" selection-end-line="49" selection-end-column="9" />
         </state>
       </provider>
     </entry>
@@ -732,16 +734,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="187" lean-forward="true" selection-start-line="187" selection-end-line="187" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/dcnn_run_server.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
@@ -763,12 +755,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/momentum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="343">
+          <caret line="42" column="50" lean-forward="true" selection-start-line="42" selection-start-column="50" selection-end-line="42" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2246">
-          <caret line="255" column="21" lean-forward="true" selection-start-line="255" selection-start-column="21" selection-end-line="255" selection-end-column="21" />
+        <state relative-caret-position="897">
+          <caret line="181" column="34" selection-start-line="181" selection-start-column="34" selection-end-line="181" selection-end-column="34" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="197" lean-forward="true" selection-start-line="197" selection-end-line="197" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>

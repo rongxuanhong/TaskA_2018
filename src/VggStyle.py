@@ -8,7 +8,7 @@ from tensorflow.keras.regularizers import l2
 class ConvBlock1(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock1, self).__init__()
-        self.conv1 = Conv2D(kernel_size=3,
+        self.conv1 = Conv2D(kernel_size=5,
                             filters=42,
                             padding='same',
                             use_bias=False,
@@ -28,7 +28,7 @@ class ConvBlock1(tf.keras.Model):
                                  strides=2,
                                  padding='same')
         # self.noise = GaussianNoise(1.00)
-        self.dropout = Dropout(0.2)
+        self.dropout = Dropout(0.3)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -63,7 +63,7 @@ class ConvBlock2(tf.keras.Model):
                                  strides=2,
                                  padding='same')
         # self.noise = GaussianNoise(0.75)
-        self.dropout = Dropout(0.2)
+        self.dropout = Dropout(0.3)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -119,7 +119,7 @@ class ConvBlock3(tf.keras.Model):
                                  strides=2,
                                  padding='same')
         # self.noise = GaussianNoise(0.75)
-        self.dropout = Dropout(0.2)
+        self.dropout = Dropout(0.3)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -187,12 +187,12 @@ class VGGStyle(tf.keras.Model):
         # print(output.shape)
 
         output = self.conv1(output)
-        output = tf.nn.relu(self.batchnorm1(output))
+        output = tf.nn.elu(self.batchnorm1(output))
         output = self.dropout1(output, training=training)
         # print(output.shape)
 
         output = self.conv2(output)
-        output = tf.nn.relu(self.batchnorm2(output))
+        output = tf.nn.elu(self.batchnorm2(output))
         output = self.dropout2(output, training=training)
         # print(output.shape)
 
