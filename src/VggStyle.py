@@ -166,8 +166,8 @@ class VGGStyle(tf.keras.Model):
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
-        self.dropout1 = Dropout(0.5)
-        self.dropout2 = Dropout(0.5)
+        self.dropout1 = Dropout(0.3)
+        self.dropout2 = Dropout(0.3)
         self.batchnorm1 = BatchNormalization(axis=-1)
         self.batchnorm2 = BatchNormalization(axis=-1)
         self.batchnorm3 = BatchNormalization(axis=-1)
