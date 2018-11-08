@@ -75,10 +75,8 @@ def train_inputs(train_path, batch_size):
 
 def to_generator(inputs):
     audios, labels = inputs
-    print(audios.shape)
-    print(labels.shape)
     while True:
-        yield audios, labels
+        yield audios.numpy(), labels.numpy()
 
 
 def test_inputs(test_path, batch_size):
