@@ -74,9 +74,9 @@ def train_inputs(train_path, batch_size):
 
 
 def to_generator(inputs):
-    sess = K.get_session()
+    audios, labels = inputs
     while True:
-        yield sess.run(inputs)
+        yield audios.numpy(), labels.numpy()
 
 
 def test_inputs(test_path, batch_size):
