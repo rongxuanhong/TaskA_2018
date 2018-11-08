@@ -12,7 +12,7 @@ class MonitorCallBack(tf.keras.callbacks.Callback):
         # dummy_x = tf.zeros((1, 128, 157, 2))
         # self.model._set_inputs(dummy_x, training=False)
         print('on_epoch_end')
-        scores = self.model.evaluate_generator(generator=self.test_generator, steps=5036 // self.args.batch_size)
+        scores = self.model.evaluate_generator(generator=self.test_generator, steps=5036 // self.args.batch_size,verbose=1)
         print("Final test loss:{0:.6f} accuracy:{1:.2f}".format(scores[0], scores[1]))
 
     def on_train_end(self, logs=None):
