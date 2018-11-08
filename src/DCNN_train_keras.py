@@ -70,12 +70,12 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
 def train_inputs(train_path, batch_size):
     iterator = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).batch(
         batch_size).repeat().make_one_shot_iterator()
-    return iterator.get_next()
+    return iterator
 
 
 def to_generator(inputs):
     while True:
-        audios, labels = inputs
+        audios, labels = inputs.get_next()
         yield audios.numpy(), labels.numpy()
 
 
