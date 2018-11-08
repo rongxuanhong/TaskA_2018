@@ -6,6 +6,7 @@ import os
 import tensorflow as tf
 from keras import backend as K
 from callbacks.monitor_callback import MonitorCallBack
+from tensorflow.contrib.eager.python import tfe
 
 
 def parse_example(example):
@@ -68,14 +69,13 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
 
 
 def train_inputs(train_path, batch_size):
-    iterator = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).batch(
-        batch_size).repeat().make_one_shot_iterator()
-    return iterator
+    dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(
+        batch_size).make_one_shot_iterator()
+    return dataset
 
 
-def to_generator(inputs):
-    while True:
-        audios, labels = inputs.get_next()
+def to_generator(dataset):
+    for audios, labels in tfe.Iterator(dataset):
         yield audios.numpy(), labels.numpy()
 
 
