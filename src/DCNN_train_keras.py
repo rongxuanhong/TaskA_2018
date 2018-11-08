@@ -40,7 +40,7 @@ def mix_up_loss(y_true, y_pred):
     pass
 
 
-def compute_accuracy(logits, labels):
+def compute_accuracy(labels, logits):
     """
     计算准确度
     :param logits:
@@ -75,8 +75,10 @@ def train_inputs(train_path, batch_size):
 
 def to_generator(inputs):
     audios, labels = inputs
+    print(audios.shape)
+    print(labels.shape)
     while True:
-        yield audios.numpy(), labels.numpy()
+        yield audios, labels
 
 
 def test_inputs(test_path, batch_size):
@@ -109,13 +111,13 @@ def run_task_eager(args):
     # 4.创建模型和优化器
     model = VGGStyle(num_classes=10, weight_decay=0, initializer='he_uniform')
 
-    dummy_x = tf.zeros((1, 128, 157, 2))
+    dummy_x = tf.zeros((100, 128, 157, 2))
     model._set_inputs(dummy_x, training=True)
     print("Number of variables in the model :", len(model.variables))
     model.summary()
 
     model.compile(optimizer=tf.train.AdamOptimizer(0.001), loss='categorical_crossentropy',
-                  metrics=['accuracy'])
+                  metrics=['accuracy', compute_accuracy])
 
     test_generator = to_generator(test_inputs(test_path, args.batch_size))
 
