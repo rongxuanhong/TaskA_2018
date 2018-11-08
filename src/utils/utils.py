@@ -81,3 +81,17 @@ def mix_data(x, y, batch_size, alpha=1.0):
     mixed_x = tf.convert_to_tensor(lam * x + (1 - lam) * x[index, ...])
     y_a, y_b = tf.convert_to_tensor(y), tf.convert_to_tensor(y[index, :])
     return mixed_x, y_a, y_b, lam
+
+
+def mix_data_generator(x, y, batch_size, alpha=0.2):
+    """ mixup data augmentation"""
+    lam = np.random.beta(alpha, alpha, batch_size)
+    x = x.numpy()
+    y = y.numpy()
+    epochs = int(x) // batch_size
+    for _ in epochs:
+        index = np.random.permutation(batch_size)
+
+        mixed_x = tf.convert_to_tensor(lam * x + (1 - lam) * x[index, ...])
+        mixed_y = tf.convert_to_tensor(lam * y + (1 - lam) * y[index, ...])
+        yield mixed_x, mixed_y

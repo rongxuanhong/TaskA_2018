@@ -8,15 +8,15 @@ from tensorflow.keras.regularizers import l2
 class ConvBlock1(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock1, self).__init__()
-        self.conv1 = Conv2D(kernel_size=3,
-                            filters=64,
+        self.conv1 = Conv2D(kernel_size=5,
+                            filters=42,
                             padding='same',
                             use_bias=False,
                             strides=2,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv2 = Conv2D(kernel_size=3,
-                            filters=64,
+                            filters=42,
                             strides=1,
                             padding='same',
                             use_bias=False,
@@ -27,8 +27,8 @@ class ConvBlock1(tf.keras.Model):
         self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
-        # self.noise = GaussianNoise(1.00)
-        self.dropout = Dropout(0.5)
+        self.noise = GaussianNoise(1.00)
+        # self.dropout = Dropout(0.3)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -38,7 +38,7 @@ class ConvBlock1(tf.keras.Model):
         output = tf.nn.relu(self.batchnorm2(output))
 
         output = self.maxpool(output)
-        output = self.dropout(output, training=training)
+        output = self.noise(output, training=training)
         return output
 
 
@@ -46,24 +46,24 @@ class ConvBlock2(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock2, self).__init__()
         self.conv1 = Conv2D(kernel_size=3,
-                            filters=128,
+                            filters=84,
                             padding='same',
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv2 = Conv2D(kernel_size=3,
-                            filters=128,
+                            filters=84,
                             padding='same',
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.batchnorm1 = BatchNormalization(axis=-1)
         self.batchnorm2 = BatchNormalization(axis=-1)
-        self.maxpool = MaxPool2D(pool_size=3,
+        self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
-        # self.noise = GaussianNoise(0.75)
-        self.dropout = Dropout(0.5)
+        self.noise = GaussianNoise(0.75)
+        # self.dropout = Dropout(0.3)
 
     def call(self, inputs, training=None, mask=None):
         output = self.conv1(inputs)
@@ -73,7 +73,7 @@ class ConvBlock2(tf.keras.Model):
         output = tf.nn.relu(self.batchnorm2(output))
 
         output = self.maxpool(output)
-        output = self.dropout(output, training=training)
+        output = self.noise(output, training=training)
         return output
 
 
@@ -81,44 +81,44 @@ class ConvBlock3(tf.keras.Model):
     def __init__(self, initializer='he_uniform', weight_decay=1e-5):
         super(ConvBlock3, self).__init__()
         self.conv1 = Conv2D(kernel_size=3,
-                            filters=256,
+                            filters=168,
                             padding='same',
                             use_bias=False,
                             strides=1,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
         self.conv2 = Conv2D(kernel_size=3,
-                            filters=256,
+                            filters=168,
                             strides=1,
                             padding='same',
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
-        # self.conv3 = Conv2D(kernel_size=3,
-        #                     filters=168,
-        #                     strides=1,
-        #                     padding='same',
-        #                     use_bias=False,
-        #                     kernel_initializer=initializer,
-        #                     kernel_regularizer=l2(weight_decay))
-        # self.conv4 = Conv2D(kernel_size=3,
-        #                     filters=168,
-        #                     strides=1,
-        #                     padding='same',
-        #                     use_bias=False,
-        #                     kernel_initializer=initializer,
-        #                     kernel_regularizer=l2(weight_decay))
+        self.conv3 = Conv2D(kernel_size=3,
+                            filters=168,
+                            strides=1,
+                            padding='same',
+                            use_bias=False,
+                            kernel_initializer=initializer,
+                            kernel_regularizer=l2(weight_decay))
+        self.conv4 = Conv2D(kernel_size=3,
+                            filters=168,
+                            strides=1,
+                            padding='same',
+                            use_bias=False,
+                            kernel_initializer=initializer,
+                            kernel_regularizer=l2(weight_decay))
         self.batchnorm1 = BatchNormalization(axis=-1)
         self.batchnorm2 = BatchNormalization(axis=-1)
-        # self.batchnorm3 = BatchNormalization(axis=-1)
-        # self.batchnorm4 = BatchNormalization(axis=-1)
-        self.dropout1 = Dropout(0.5)
-        self.dropout2 = Dropout(0.5)
-        # self.dropout3 = Dropout(0.3)
-        self.maxpool = MaxPool2D(pool_size=3,
+        self.batchnorm3 = BatchNormalization(axis=-1)
+        self.batchnorm4 = BatchNormalization(axis=-1)
+        self.dropout1 = Dropout(0.3)
+        self.dropout2 = Dropout(0.3)
+        self.dropout3 = Dropout(0.3)
+        self.maxpool = MaxPool2D(pool_size=2,
                                  strides=2,
                                  padding='same')
-        # self.noise = GaussianNoise(0.75)
+        self.noise = GaussianNoise(0.75)
         # self.dropout = Dropout(0.3)
 
     def call(self, inputs, training=None, mask=None):
@@ -130,15 +130,15 @@ class ConvBlock3(tf.keras.Model):
         output = tf.nn.relu(self.batchnorm2(output))
         output = self.dropout2(output, training)
 
-        # output = self.conv3(output)
-        # output = tf.nn.relu(self.batchnorm3(output))
-        # output = self.dropout3(output, training)
-        #
-        # output = self.conv4(output)
-        # output = tf.nn.relu(self.batchnorm4(output))
+        output = self.conv3(output)
+        output = tf.nn.relu(self.batchnorm3(output))
+        output = self.dropout3(output, training)
+
+        output = self.conv4(output)
+        output = tf.nn.relu(self.batchnorm4(output))
 
         output = self.maxpool(output)
-        # output = self.dropout(output, training=training)
+        output = self.noise(output, training=training)
         return output
 
 
@@ -150,14 +150,14 @@ class VGGStyle(tf.keras.Model):
         self.convblock3 = ConvBlock3(initializer, weight_decay)
 
         self.conv1 = Conv2D(kernel_size=3,
-                            filters=512,
+                            filters=336,
                             strides=1,
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
 
         self.conv2 = Conv2D(kernel_size=1,
-                            filters=512,
+                            filters=336,
                             strides=1,
                             use_bias=False,
                             kernel_initializer=initializer,
@@ -169,13 +169,12 @@ class VGGStyle(tf.keras.Model):
                             use_bias=False,
                             kernel_initializer=initializer,
                             kernel_regularizer=l2(weight_decay))
-        self.dropout1 = Dropout(0.3)
-        self.dropout2 = Dropout(0.3)
-        self.dropout3 = Dropout(0.3)
+        self.dropout1 = Dropout(0.5)
+        self.dropout2 = Dropout(0.5)
         self.batchnorm1 = BatchNormalization(axis=-1)
         self.batchnorm2 = BatchNormalization(axis=-1)
         self.batchnorm3 = BatchNormalization(axis=-1)
-        # self.noise = GaussianNoise(0.3)
+        self.noise = GaussianNoise(0.3)
         self.avgpool = GlobalAveragePooling2D()
 
     def call(self, inputs, training=None, mask=None):
@@ -198,8 +197,12 @@ class VGGStyle(tf.keras.Model):
 
         output = self.conv3(output)
         output = self.batchnorm3(output)
-        output = self.avgpool(self.dropout3(output, training=training))
+        output = self.avgpool(self.noise(output, training=training))
+
         # print(output.shape)
+        # softmax op does not exist on the gpu, so always use cpu
+        with tf.device('/cpu:0'):
+            output = tf.nn.softmax(output)  ## kera训练需要额外添加
         return output
 
 

@@ -114,7 +114,10 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    np.random.seed(0)
+    lam = np.random.beta(0.2, 0.2,10)
+    print(lam)
     # generate_spectrum()
     # import os
     #
