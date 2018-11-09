@@ -69,16 +69,17 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
 
 
 def train_inputs(train_path, batch_size):
+    train_path = tf.placeholder(tf.string, shape=[None])
     dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(
         batch_size).make_one_shot_iterator()
-    return dataset.get_next()
+    return dataset
 
 
-def to_generator(inputs):
-    g=tf.get_default_graph()
-    with tf.Session(graph=g) as sess:
+def to_generator(iterator, train_path):
+    with tf.Session() as sess:
+        sess.run(iterator.initializer, feed_dict={train_path: train_path})
         while True:
-            audios, labels = sess.run(inputs)
+            audios, labels = sess.run(iterator.get_next())
             yield audios, labels
 
 
@@ -119,8 +120,8 @@ def run_task_eager(args):
     model.compile(optimizer=tf.train.AdamOptimizer(0.001), loss='categorical_crossentropy',
                   metrics=['accuracy', compute_accuracy])
 
-    train_generator = to_generator(train_inputs(train_path, args.batch_size))
-    test_generator = to_generator(test_inputs(test_path, args.batch_size))
+    train_generator = to_generator(train_inputs(train_path, args.batch_size),train_path)
+    test_generator = to_generator(test_inputs(test_path, args.batch_size),test_path)
 
     model.fit_generator(generator=train_generator,
                         steps_per_epoch=total_batch,
