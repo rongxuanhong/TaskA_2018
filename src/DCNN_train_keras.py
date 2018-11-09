@@ -68,24 +68,28 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
-def train_inputs(train_path, batch_size):
-    train_path = tf.placeholder(tf.string, shape=[None])
+def train_inputs(train_path, batch_size, sess):
     dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(
         batch_size).make_one_shot_iterator()
-    return dataset
+    return dataset.get_next(), sess
 
 
-def to_generator(iterator, train_path):
-    with tf.Session() as sess:
-        sess.run(iterator.initializer, feed_dict={train_path: train_path})
-        while True:
-            audios, labels = sess.run(iterator.get_next())
-            yield audios, labels
+def to_generator(input):
+    element, sess = input
+    while True:
+        audios, labels = sess.run([element])
+        yield audios, labels
+    # count = 0
+    # for audios, labels in tfe.Iterator(dataset):
+    #     count += 1
+    #     print(audios.shape)
+    #     print(count)
+    #     yield audios.numpy(), labels.numpy()
 
 
 def test_inputs(test_path, batch_size):
-    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).repeat().batch(batch_size).make_one_shot_iterator()
-    return dataset.get_next()
+    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).repeat().batch(batch_size)
+    return dataset
 
 
 def run_task_eager(args):
@@ -100,6 +104,8 @@ def run_task_eager(args):
     np.random.seed(0)
 
     start_time = datetime.now()
+
+    sess = K.get_session()
 
     # 3.加载数据
     batch_size = args.batch_size
@@ -120,10 +126,9 @@ def run_task_eager(args):
     model.compile(optimizer=tf.train.AdamOptimizer(0.001), loss='categorical_crossentropy',
                   metrics=['accuracy', compute_accuracy])
 
-    train_generator = to_generator(train_inputs(train_path, args.batch_size),train_path)
-    test_generator = to_generator(test_inputs(test_path, args.batch_size),test_path)
+    test_generator = to_generator(test_inputs(test_path, args.batch_size))
 
-    model.fit_generator(generator=train_generator,
+    model.fit_generator(generator=to_generator(train_inputs(train_path, args.batch_size, sess)),
                         steps_per_epoch=total_batch,
                         callbacks=[MonitorCallBack(model, test_generator=test_generator, args=args)],
                         epochs=args.epochs, )
