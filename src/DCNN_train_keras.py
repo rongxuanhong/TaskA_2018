@@ -69,20 +69,21 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
 
 
 def train_inputs(train_path, batch_size):
-    dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(
-        batch_size)
+    dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(batch_size)
     return dataset
 
 
 def to_generator(dataset):
+    count=0
     for audios, labels in tfe.Iterator(dataset):
+        count+=1
         print(audios.shape)
+        print(count)
         yield audios.numpy(), labels.numpy()
 
 
 def test_inputs(test_path, batch_size):
-    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).batch(
-        batch_size).repeat()
+    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).repeat().batch(batch_size)
     return dataset
 
 
