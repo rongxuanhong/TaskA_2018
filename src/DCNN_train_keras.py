@@ -22,7 +22,7 @@ def parse_example(example):
     parsed = tf.parse_single_example(example, keys_to_features)
     audios = tf.sparse_tensor_to_dense(parsed['audio'], default_value=0)
     labels = tf.sparse_tensor_to_dense(parsed['label'], default_value=0)
-    return tf.reshape(audios, (128, 157, 2)), labels
+    return audios, labels
 
 
 def loss(logits, labels):
@@ -69,21 +69,21 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
 
 
 def train_inputs(train_path, batch_size):
-    dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).batch(batch_size)
-    return dataset
+    dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(
+        batch_size).make_one_shot_iterator()
+    return dataset.get_next()
 
 
-def to_generator(dataset):
-    count=0
-    for audios, labels in tfe.Iterator(dataset):
-        count+=1
-        print(count)
-        yield audios.numpy(), labels.numpy()
+def to_generator(inputs):
+    with tf.Session() as sess:
+        while True:
+            audios, labels = sess.run(inputs)
+            yield audios, labels
 
 
 def test_inputs(test_path, batch_size):
-    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).batch(batch_size)
-    return dataset
+    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).repeat().batch(batch_size).make_one_shot_iterator()
+    return dataset.get_next()
 
 
 def run_task_eager(args):
@@ -118,9 +118,10 @@ def run_task_eager(args):
     model.compile(optimizer=tf.train.AdamOptimizer(0.001), loss='categorical_crossentropy',
                   metrics=['accuracy', compute_accuracy])
 
+    train_generator = to_generator(train_inputs(train_path, args.batch_size))
     test_generator = to_generator(test_inputs(test_path, args.batch_size))
 
-    model.fit_generator(generator=to_generator(train_inputs(train_path, args.batch_size)),
+    model.fit_generator(generator=train_generator,
                         steps_per_epoch=total_batch,
                         callbacks=[MonitorCallBack(model, test_generator=test_generator, args=args)],
                         epochs=args.epochs, )
