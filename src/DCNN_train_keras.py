@@ -76,6 +76,7 @@ def train_inputs(train_path, batch_size):
 
 def to_generator(dataset):
     for audios, labels in tfe.Iterator(dataset):
+        print(audios.shape)
         yield audios.numpy(), labels.numpy()
 
 
