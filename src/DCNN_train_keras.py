@@ -75,7 +75,8 @@ def train_inputs(train_path, batch_size):
 
 
 def to_generator(inputs):
-    with tf.Session() as sess:
+    g=tf.get_default_graph()
+    with tf.Session(graph=g) as sess:
         while True:
             audios, labels = sess.run(inputs)
             yield audios, labels
