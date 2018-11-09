@@ -70,7 +70,7 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
 
 def train_inputs(train_path, batch_size):
     dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(
-        batch_size).make_one_shot_iterator()
+        batch_size)
     return dataset
 
 
@@ -80,9 +80,9 @@ def to_generator(dataset):
 
 
 def test_inputs(test_path, batch_size):
-    iterator = tf.data.TFRecordDataset(test_path).map(parse_example).batch(
-        batch_size).repeat().make_one_shot_iterator()
-    return iterator.get_next()
+    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).batch(
+        batch_size).repeat()
+    return dataset
 
 
 def run_task_eager(args):
