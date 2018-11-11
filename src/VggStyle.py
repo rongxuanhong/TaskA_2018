@@ -172,7 +172,7 @@ class VGGStyle(tf.keras.Model):
         self.batchnorm2 = BatchNormalization(axis=-1)
         self.batchnorm3 = BatchNormalization(axis=-1)
         # self.noise = GaussianNoise(0.3)
-        self.dropout3 = Dropout(0.5)
+        self.dropout3 = Dropout(0.3)
         self.avgpool = GlobalAveragePooling2D()
 
     def call(self, inputs, training=None, mask=None):
