@@ -163,7 +163,7 @@ def run():
     print(b)
 
 
-def main(args):
+def main():
     # try:
     #     run_task_eager(args)
     #     finish_instance()

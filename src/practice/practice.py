@@ -113,11 +113,25 @@ def main():
     # plt.show()
 
 
+def parse_example(example):
+    """
+    解析样本
+    :param example:
+    :return:
+    """
+    keys_to_features = {
+        'audio': tf.VarLenFeature(tf.float32),
+        'label': tf.VarLenFeature(tf.float32),
+    }
+    parsed = tf.parse_single_example(example, keys_to_features)
+    audios = tf.sparse_tensor_to_dense(parsed['audio'], default_value=0)
+    labels = tf.sparse_tensor_to_dense(parsed['label'], default_value=0)
+    return audios, labels
+
+
 if __name__ == '__main__':
+    from keras import backend as K
     # main()
-    np.random.seed(0)
-    lam = np.random.beta(0.2, 0.2,10)
-    print(lam)
     # generate_spectrum()
     # import os
     #
@@ -139,3 +153,11 @@ if __name__ == '__main__':
     #
     # a=np.random.uniform() - 0.5
     # print(a)
+    import os
+
+    train_path = os.path.join('/data/TFRecord', 'train11.tfrecords')
+    iterator = tf.data.TFRecordDataset(train_path).take(5).map(parse_example).make_one_shot_iterator()
+    data = iterator.get_next()
+    sess = K.get_session()
+    a, b = sess.run(data)
+    print(b)
