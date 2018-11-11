@@ -68,16 +68,16 @@ def compute_mix_accuracy(logits, label_a, label_b, lam):
     return correct / int(logits.shape[0]) * 100
 
 
-def train_inputs(train_path, batch_size, sess):
+def train_inputs(train_path, batch_size):
     dataset = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).repeat().batch(
         batch_size).make_one_shot_iterator()
-    return dataset.get_next(), sess
+    return dataset.get_next()
 
 
 def to_generator(input):
-    element, sess = input
+    sess = K.get_session()
     while True:
-        audios, labels = sess.run(element)
+        audios, labels = sess.run(input)
         yield audios, labels
     # count = 0
     # for audios, labels in tfe.Iterator(dataset):
@@ -88,8 +88,8 @@ def to_generator(input):
 
 
 def test_inputs(test_path, batch_size):
-    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).repeat().batch(batch_size)
-    return dataset
+    dataset = tf.data.TFRecordDataset(test_path).map(parse_example).repeat().batch(batch_size).make_one_shot_iterator()
+    return dataset.get_next()
 
 
 def run_task_eager(args):
@@ -104,8 +104,6 @@ def run_task_eager(args):
     np.random.seed(0)
 
     start_time = datetime.now()
-
-    sess = K.get_session()
 
     # 3.加载数据
     batch_size = args.batch_size
@@ -128,7 +126,7 @@ def run_task_eager(args):
 
     test_generator = to_generator(test_inputs(test_path, args.batch_size))
 
-    model.fit_generator(generator=to_generator(train_inputs(train_path, args.batch_size, sess)),
+    model.fit_generator(generator=to_generator(train_inputs(train_path, args.batch_size)),
                         steps_per_epoch=total_batch,
                         callbacks=[MonitorCallBack(model, test_generator=test_generator, args=args)],
                         epochs=args.epochs, )
@@ -154,24 +152,14 @@ def define_task_eager_flags():
     return args
 
 
-def run():
-    train_path = os.path.join('/data/TFRecord', 'train11.tfrecords')
-    iterator = tf.data.TFRecordDataset(train_path).take(5).map(parse_example).make_one_shot_iterator()
-    data = iterator.get_next()
-    sess = K.get_session()
-    a, b = sess.run(data)
-    print(b)
-
-
-def main():
+def main(args):
     # try:
     #     run_task_eager(args)
     #     finish_instance()
     # except:
     #     finish_instance()
-    # run_task_eager(args)
+    run_task_eager(args)
     # finish_instance()
-    run()
 
 
 def finish_instance():
@@ -179,5 +167,5 @@ def finish_instance():
 
 
 if __name__ == '__main__':
-    # args = define_task_eager_flags()
-    main()
+    args = define_task_eager_flags()
+    main(args)
