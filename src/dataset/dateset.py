@@ -210,10 +210,10 @@ class DataSet:
         """
 
         writer = tf.python_io.TFRecordWriter(tfrecord_path)
-        for row in tqdm(dataset.itertuples(), total=len(dataset)):
-            # path = os.path.join('/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/',
-            #                     row.file)
-            path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
+        for row in tqdm(dataset.head(5).itertuples(), total=len(dataset)):
+            path = os.path.join('/home/ccyoung/Downloads/2018_task1_A/TUT-urban-acoustic-scenes-2018-development-data/',
+                                row.file)
+            # path = os.path.join('/data/TUT-urban-acoustic-scenes-2018-development-data/', row.file)
             # 必须先转成float16，否则librosa无法处理
 
             label = self.label_encoder.transform([row.scene])[0]
@@ -417,8 +417,8 @@ def add_gaussian_noise(y):
 
 
 def main():
-    # path_prefix = '/home/ccyoung/DCase/Task1_2018/evaluation'
-    path_prefix = '/data/TFRecord'
+    path_prefix = '/home/ccyoung/DCase/Task1_2018/evaluation'
+    # path_prefix = '/data/TFRecord'
     # tf.enable_eager_execution()
 
     start_time = datetime.now()
@@ -431,7 +431,7 @@ def main():
     # mel = task.extract_feature8('../airport-barcelona-0-0-a.wav')
     # print(mel.shape)
     task.generate_TFRecord(task.train, os.path.join(path_prefix, 'train11.tfrecords'))
-    task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test11.tfrecords'), augment=False)
+    # task.generate_TFRecord(task.test, os.path.join(path_prefix, 'test11.tfrecords'), augment=False)
     compute_time_consumed(start_time)
     os.system('sh /data/stop.sh')
 

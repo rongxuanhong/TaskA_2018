@@ -77,7 +77,7 @@ def train_inputs(train_path, batch_size, sess):
 def to_generator(input):
     element, sess = input
     while True:
-        audios, labels = sess.run([element])
+        audios, labels = sess.run(element)
         yield audios, labels
     # count = 0
     # for audios, labels in tfe.Iterator(dataset):
@@ -154,14 +154,24 @@ def define_task_eager_flags():
     return args
 
 
+def run():
+    train_path = os.path.join('/data/TFRecord', 'train11.tfrecords')
+    iterator = tf.data.TFRecordDataset(train_path).take(5).map(parse_example).make_one_shot_iterator()
+    data = iterator.get_next()
+    sess = K.get_session()
+    a, b = sess.run(data)
+    print(b)
+
+
 def main(args):
     # try:
     #     run_task_eager(args)
     #     finish_instance()
     # except:
     #     finish_instance()
-    run_task_eager(args)
+    # run_task_eager(args)
     # finish_instance()
+    run()
 
 
 def finish_instance():
@@ -169,5 +179,5 @@ def finish_instance():
 
 
 if __name__ == '__main__':
-    args = define_task_eager_flags()
-    main(args)
+    # args = define_task_eager_flags()
+    main()
