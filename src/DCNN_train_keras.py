@@ -75,9 +75,10 @@ def train_inputs(train_path, batch_size):
 
 
 def to_generator(input):
-    sess = K.get_session()
     while True:
+        sess = K.get_session()
         audios, labels = sess.run(input)
+        sess.close()
         yield audios, labels
     # count = 0
     # for audios, labels in tfe.Iterator(dataset):
