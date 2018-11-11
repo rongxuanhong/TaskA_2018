@@ -162,7 +162,7 @@ def run_task_eager(args):
         tf.contrib.data.batch_and_drop_remainder(batch_size))
 
     # 4.创建模型和优化器
-    model = VGGStyle(num_classes=10, weight_decay=0, initializer='he_uniform')
+    model = VGGStyle(num_classes=10, weight_decay=1e-4, initializer='he_uniform')
 
     step_counter = tf.train.get_or_create_global_step()
 
@@ -226,7 +226,7 @@ def run_task_eager(args):
                 #     check_point.save(check_point_prefix)  # 保存检查点
                 max_acc = acc
                 print('max_acc:{0:.2f}'.format(max_acc))
-            check_point.save(check_point_prefix)  # 保存检查点
+                check_point.save(check_point_prefix)  # 保存检查点
     # 输出训练时间
     compute_time_consumed(start_time)
 
