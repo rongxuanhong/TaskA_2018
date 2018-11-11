@@ -16,8 +16,8 @@
       <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="188" column="48" selection-start-line="188" selection-start-column="48" selection-end-line="188" selection-end-column="48" />
+            <state relative-caret-position="290">
+              <caret line="185" column="49" lean-forward="true" selection-start-line="185" selection-start-column="49" selection-end-line="185" selection-end-column="49" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -201,40 +201,6 @@
               <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
               <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="check_point" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="check_point" type="462c0819:PsiDirectoryNode" />
-              <item name="model3" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="check_point" type="462c0819:PsiDirectoryNode" />
-              <item name="model3" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Task1_2018" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Task1_2018" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="check_point" type="462c0819:PsiDirectoryNode" />
-              <item name="model3" type="462c0819:PsiDirectoryNode" />
-              <item name="train" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -403,7 +369,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32829374" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.30777538" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.05399568" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32829374" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -808,8 +774,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="188" column="48" selection-start-line="188" selection-start-column="48" selection-end-line="188" selection-end-column="48" />
+        <state relative-caret-position="290">
+          <caret line="185" column="49" lean-forward="true" selection-start-line="185" selection-start-column="49" selection-end-line="185" selection-end-column="49" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
