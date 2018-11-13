@@ -183,7 +183,7 @@ def run_task_eager(args):
     #                                            decay_rate=0.9,
     #                                            staircase=False)
     learning_rate = tf.train.exponential_decay(
-        learning_rate=0.001, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
+        learning_rate=0.007, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
     optimizer = tf.train.AdamOptimizer(learning_rate)
     # #
     # optimizer = tf.train.MomentumOptimizer(0.001*0.2, momentum=0.9, use_nesterov=True)
