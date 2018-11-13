@@ -179,10 +179,10 @@ def run_task_eager(args):
     # learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
     # learning_rate = tf.train.polynomial_decay(0.001, step_counter, 50, end_learning_rate=0, power=1.0)
     # print(learning_rate)
-    optimizer = tf.train.AdamOptimizer()
-    # learning_rate = tf.train.exponential_decay(learning_rate=args.lr, global_step=step_counter, decay_steps=2,
-    #                                            decay_rate=0.5,
-    # #                                            staircase=False)
+    learning_rate = tf.train.exponential_decay(learning_rate=0.0009, global_step=step_counter, decay_steps=2,
+                                               decay_rate=0.9,
+                                               staircase=False)
+    optimizer = tf.train.AdamOptimizer(learning_rate)
     # learning_rate = tf.train.exponential_decay(
     #     learning_rate=0.001, global_step=step_counter, decay_steps=2, decay_rate=0.9, staircase=True)
     # #
@@ -206,12 +206,12 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore(os.path.join(args.output_dir, 'model3', 'cpkt-10'))  # 存在就恢复模型(可不使用)
-    # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
+    # check_point.restore(os.path.join(args.output_dir, 'model3', 'cpkt-10'))  # 存在就恢复模型(可不使用)
+    check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
-    max_acc = 54.5
+    max_acc = 58.96
     for i in range(args.epochs):  # 迭代的轮次
         with summary_writer.as_default():
             # 训练

@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/DCNN_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DCNN_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/practice/practice.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/practice/practice.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,8 +17,8 @@
       <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="215" column="41" lean-forward="true" selection-start-line="215" selection-start-column="41" selection-end-line="215" selection-end-column="41" />
+            <state relative-caret-position="385">
+              <caret line="213" column="19" selection-start-line="213" selection-start-column="19" selection-end-line="213" selection-end-column="19" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -28,8 +29,8 @@
       <file leaf-file-name="practice.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/practice/practice.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="563">
-              <caret line="161" column="25" lean-forward="true" selection-start-line="161" selection-start-column="25" selection-end-line="161" selection-end-column="25" />
+            <state relative-caret-position="395">
+              <caret line="84" column="30" lean-forward="true" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -85,7 +86,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="VggStyle.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-190">
@@ -97,7 +98,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dcnn_run_server.sh" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dcnn_run_server.sh" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/dcnn_run_server.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="38">
@@ -180,11 +181,11 @@
         <option value="$PROJECT_DIR$/src/callbacks/MonitorCallback.py" />
         <option value="$PROJECT_DIR$/src/callbacks/monitor_callback.py" />
         <option value="$PROJECT_DIR$/src/practice/mnist.py" />
-        <option value="$PROJECT_DIR$/src/practice/practice.py" />
         <option value="$PROJECT_DIR$/src/DCNN_train_keras.py" />
         <option value="$PROJECT_DIR$/src/VggStyle.py" />
         <option value="$PROJECT_DIR$/src/dcnn_run_server.sh" />
         <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
+        <option value="$PROJECT_DIR$/src/practice/practice.py" />
         <option value="$PROJECT_DIR$/src/DCNN_train.py" />
       </list>
     </option>
@@ -249,7 +250,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.VggStyle">
+  <component name="RunManager" selected="Python.practice">
     <configuration name="DCNN_train_keras" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Task1_2018" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -349,11 +350,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.practice" />
         <item itemvalue="Python.VggStyle" />
         <item itemvalue="Python.DCNN_train_keras" />
         <item itemvalue="Python.dateset" />
         <item itemvalue="Python.mnist" />
-        <item itemvalue="Python.practice" />
       </list>
     </recent_temporary>
   </component>
@@ -378,7 +379,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32829374" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.095032394" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2462203" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32829374" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -409,13 +410,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/layers/noise.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="53" column="6" selection-start-line="53" selection-start-column="6" selection-end-line="53" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/InceptionV3_train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="625">
@@ -722,24 +716,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/practice/practice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="161" column="25" lean-forward="true" selection-start-line="161" selection-start-column="25" selection-end-line="161" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/keras/applications/vgg16.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="344">
           <caret line="167" column="75" lean-forward="true" selection-start-line="167" selection-start-column="75" selection-end-line="167" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dcnn_run_server.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -774,16 +754,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="215" column="41" lean-forward="true" selection-start-line="215" selection-start-column="41" selection-end-line="215" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/VggStyle.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-190">
@@ -791,6 +761,37 @@
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/rmsprop.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="53" column="6" selection-start-line="53" selection-start-column="6" selection-end-line="53" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/practice/practice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="395">
+          <caret line="84" column="30" lean-forward="true" selection-start-line="84" selection-start-column="30" selection-end-line="84" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="213" column="19" selection-start-line="213" selection-start-column="19" selection-end-line="213" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dcnn_run_server.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
         </state>
       </provider>
     </entry>

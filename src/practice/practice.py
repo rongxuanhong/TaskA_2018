@@ -80,7 +80,7 @@ def main():
 
     y = []
     z = []
-    N = 50
+    N = 24
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -90,7 +90,7 @@ def main():
                 learning_rate=0.001, global_step=num_epoch, decay_steps=1, decay_rate=0.9, staircase=True)
             # 标准指数型衰减
             learing_rate2 = tf.train.exponential_decay(
-                learning_rate=0.001, global_step=num_epoch, decay_steps=2, decay_rate=0.9, staircase=True)
+                learning_rate=0.0009, global_step=num_epoch, decay_steps=2, decay_rate=0.9, staircase=True)
 
             learning_rate = tf.train.polynomial_decay(0.001, num_epoch, 50, end_learning_rate=0, power=1.0)
 
@@ -130,8 +130,7 @@ def parse_example(example):
 
 
 if __name__ == '__main__':
-    from keras import backend as K
-    # main()
+    main()
     # generate_spectrum()
     # import os
     #
@@ -153,11 +152,3 @@ if __name__ == '__main__':
     #
     # a=np.random.uniform() - 0.5
     # print(a)
-    import os
-
-    train_path = os.path.join('/data/TFRecord', 'train11.tfrecords')
-    iterator = tf.data.TFRecordDataset(train_path).take(5).map(parse_example).make_one_shot_iterator()
-    data = iterator.get_next()
-    sess = K.get_session()
-    a, b = sess.run(data)
-    print(b)
