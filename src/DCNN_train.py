@@ -183,9 +183,9 @@ def run_task_eager(args):
     #                                            decay_rate=0.9,
     #                                            staircase=False)
     learning_rate = tf.train.exponential_decay(
-        learning_rate=0.007, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
+        learning_rate=0.0007, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
     optimizer = tf.train.AdamOptimizer(learning_rate)
-    # #
+
     # optimizer = tf.train.MomentumOptimizer(0.001*0.2, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
