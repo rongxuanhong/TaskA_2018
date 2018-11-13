@@ -182,7 +182,7 @@ def run_task_eager(args):
     # learning_rate = tf.train.exponential_decay(learning_rate=0.0009, global_step=step_counter, decay_steps=2,
     #                                            decay_rate=0.9,
     #                                            staircase=False)
-    optimizer = tf.train.AdamOptimizer(0.002)
+    optimizer = tf.train.AdamOptimizer(0.001)
     # learning_rate = tf.train.exponential_decay(
     #     learning_rate=0.001, global_step=step_counter, decay_steps=2, decay_rate=0.9, staircase=True)
     # #
@@ -211,7 +211,7 @@ def run_task_eager(args):
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
-    max_acc = 58.96
+    max_acc = 0
     for i in range(args.epochs):  # 迭代的轮次
         with summary_writer.as_default():
             # 训练
