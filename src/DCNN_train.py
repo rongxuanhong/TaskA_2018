@@ -173,7 +173,7 @@ def run_task_eager(args):
     #         learning_rate *= decay_rate
     #         learning_rates.append(learning_rate)
 
-    learning_rate = tf.train.piecewise_constant(step_counter, boundaries=[40, 60], values=[0.005, 0.0005, 0.00005])
+    # learning_rate = tf.train.piecewise_constant(step_counter, boundaries=[40, 60], values=[0.005, 0.0005, 0.00005])
     # learning_rate = tf.train.polynomial_decay(0.001, step_counter, 50, end_learning_rate=0, power=1.0)
     # print(learning_rate)
     # learning_rate = tf.train.exponential_decay(learning_rate=0.0009, global_step=step_counter, decay_steps=2,
@@ -183,7 +183,7 @@ def run_task_eager(args):
     #     learning_rate=0.0007, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
     # optimizer = tf.train.AdamOptimizer()
 
-    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(0.01, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
