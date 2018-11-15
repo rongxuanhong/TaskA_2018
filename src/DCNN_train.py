@@ -184,7 +184,7 @@ def run_task_eager(args):
     #     learning_rate=0.0007, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
     # optimizer = tf.train.AdamOptimizer()
 
-    optimizer = tf.train.MomentumOptimizer(0.01, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(0.001, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
@@ -204,7 +204,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    # check_point.restore(os.path.join(args.output_dir, 'model4', 'cpkt-10'))  # 存在就恢复模型(可不使用)
+    check_point.restore(os.path.join(args.output_dir, 'model4', 'cpkt-43'))  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model4')))
     # 7. 训练、评估
     # with tf.device(device):
@@ -221,7 +221,7 @@ def run_task_eager(args):
             # 测试
             # 评估
             acc = test(model, test_ds, args)
-            if acc > max_acc:  ## 保证保存的最后一个cpkt是acc最大的
+            if acc >= max_acc:  ## 保证保存的最后一个cpkt是acc最大的
                 #     check_point.save(check_point_prefix)  # 保存检查点
                 max_acc = acc
                 print('max_acc:{0:.2f}'.format(max_acc))
