@@ -156,10 +156,8 @@ def run_task_eager(args):
     # else:
     # train_path = os.path.join('/home/ccyoung/DCase', 'train.tfrecords')
     # test_path = os.path.join('/home/ccyoung/DCase', 'test.tfrecords')
-    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).apply(
-        tf.contrib.data.batch_and_drop_remainder(batch_size))
-    test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).apply(
-        tf.contrib.data.batch_and_drop_remainder(batch_size))
+    train_ds = tf.data.TFRecordDataset(train_path).map(parse_example).shuffle(12500).batch(batch_size, True)
+    test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).batch(batch_size, True)
 
     # 4.创建模型和优化器
     model = VGGStyle(num_classes=10, weight_decay=0, initializer='he_uniform')
@@ -184,16 +182,16 @@ def run_task_eager(args):
     #                                            staircase=False)
     # learning_rate = tf.train.exponential_decay(
     #     learning_rate=0.0007, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
-    optimizer = tf.train.AdamOptimizer(0.001)
+    # optimizer = tf.train.AdamOptimizer()
 
-    # optimizer = tf.train.MomentumOptimizer(0.001*0.2, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(0.01, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
-        train_dir = os.path.join(args.output_dir, 'model3', 'train')
-        test_dir = os.path.join(args.output_dir, 'model3', 'test')
+        train_dir = os.path.join(args.output_dir, 'model4', 'train')
+        test_dir = os.path.join(args.output_dir, 'model4', 'test')
         tf.gfile.MakeDirs(args.output_dir)  # 创建所有文件
     else:
         train_dir = None
@@ -202,12 +200,12 @@ def run_task_eager(args):
     test_summary_writer = tfc.summary.create_file_writer(test_dir, flush_millis=10000, name='test')
 
     # 6. 创建或者恢复checkpoint
-    check_point_prefix = os.path.join(args.output_dir, 'model3', 'cpkt')
+    check_point_prefix = os.path.join(args.output_dir, 'model4', 'cpkt')
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore(os.path.join(args.output_dir, 'model3', 'cpkt-10'))  # 存在就恢复模型(可不使用)
-    # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model3')))
+    # check_point.restore(os.path.join(args.output_dir, 'model4', 'cpkt-10'))  # 存在就恢复模型(可不使用)
+    # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model4')))
     # 7. 训练、评估
     # with tf.device(device):
     start_time = datetime.now()
