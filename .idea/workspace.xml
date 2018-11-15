@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4ae1e69f-d8df-4636-b499-40c2a9c4a1d0" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/src/DCNN_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/DCNN_train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dcnn_run_server.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/dcnn_run_server.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,8 +17,8 @@
       <file leaf-file-name="DCNN_train.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="205" column="72" selection-start-line="205" selection-start-column="72" selection-end-line="205" selection-end-column="72" />
+            <state relative-caret-position="399">
+              <caret line="195" column="24" lean-forward="true" selection-start-line="195" selection-start-column="24" selection-end-line="195" selection-end-column="24" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -62,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/src/dcnn_run_server.sh">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="38">
-              <caret line="2" column="38" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="38" />
+              <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -144,8 +145,8 @@
         <option value="$PROJECT_DIR$/src/DCNN_train_keras.py" />
         <option value="$PROJECT_DIR$/src/dataset/dateset.py" />
         <option value="$PROJECT_DIR$/src/VggStyle.py" />
-        <option value="$PROJECT_DIR$/src/dcnn_run_server.sh" />
         <option value="$PROJECT_DIR$/src/practice/practice.py" />
+        <option value="$PROJECT_DIR$/src/dcnn_run_server.sh" />
         <option value="$PROJECT_DIR$/src/DCNN_train.py" />
       </list>
     </option>
@@ -726,17 +727,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dcnn_run_server.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="38" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/practice/practice.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="657">
           <caret line="112" column="35" lean-forward="true" selection-start-line="112" selection-start-column="35" selection-end-line="112" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/momentum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="58">
+          <caret line="45" column="34" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dcnn_run_server.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -750,17 +758,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/venv/tensorflow/lib/python3.5/site-packages/tensorflow/python/training/momentum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="45" column="34" selection-start-line="45" selection-start-column="21" selection-end-line="45" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DCNN_train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="205" column="72" selection-start-line="205" selection-start-column="72" selection-end-line="205" selection-end-column="72" />
+        <state relative-caret-position="399">
+          <caret line="195" column="24" lean-forward="true" selection-start-line="195" selection-start-column="24" selection-end-line="195" selection-end-column="24" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
