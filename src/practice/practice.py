@@ -130,7 +130,7 @@ def parse_example(example):
 
 
 if __name__ == '__main__':
-    main()
+    # main()
     # generate_spectrum()
     # import os
     #
@@ -152,3 +152,4 @@ if __name__ == '__main__':
     #
     # a=np.random.uniform() - 0.5
     # print(a)
+    print(5*1e-5)

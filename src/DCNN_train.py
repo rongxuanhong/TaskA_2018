@@ -160,8 +160,7 @@ def run_task_eager(args):
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).batch(batch_size, True)
 
     # 4.创建模型和优化器
-    model = VGGStyle(num_classes=10, weight_decay=0, initializer='he_uniform')
-
+    model = VGGStyle(num_classes=10, weight_decay=5e-5, initializer='he_uniform')
     step_counter = tf.train.get_or_create_global_step()
 
     # boundaries = []
@@ -174,7 +173,7 @@ def run_task_eager(args):
     #         learning_rate *= decay_rate
     #         learning_rates.append(learning_rate)
 
-    # learning_rate = tf.train.piecewise_constant(step_counter, boundaries=boundaries, values=learning_rates)
+    learning_rate = tf.train.piecewise_constant(step_counter, boundaries=[40, 60], values=[0.01, 0.001, 0.0001])
     # learning_rate = tf.train.polynomial_decay(0.001, step_counter, 50, end_learning_rate=0, power=1.0)
     # print(learning_rate)
     # learning_rate = tf.train.exponential_decay(learning_rate=0.0009, global_step=step_counter, decay_steps=2,
@@ -184,7 +183,7 @@ def run_task_eager(args):
     #     learning_rate=0.0007, global_step=step_counter, decay_steps=1, decay_rate=0.9, )
     # optimizer = tf.train.AdamOptimizer()
 
-    optimizer = tf.train.MomentumOptimizer(0.001, momentum=0.9, use_nesterov=True)
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum=0.9, use_nesterov=True)
     # learning_rate = tf.train.piecewise_constant(step_counter, [int(0.4 * args.epochs), int(0.75 * args.epochs)],
     #                                             [args.lr, args.lr * 0.1, args.lr * 0.01])
 
@@ -204,7 +203,7 @@ def run_task_eager(args):
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore(os.path.join(args.output_dir, 'model4', 'cpkt-43'))  # 存在就恢复模型(可不使用)
+    # check_point.restore(os.path.join(args.output_dir, 'model4', 'cpkt-43'))  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model4')))
     # 7. 训练、评估
     # with tf.device(device):
