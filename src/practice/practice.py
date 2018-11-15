@@ -80,24 +80,25 @@ def main():
 
     y = []
     z = []
-    N = 24
+    N = 80
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         for num_epoch in range(N):
             # 阶梯型衰减
-            learing_rate1 = tf.train.exponential_decay(
-                learning_rate=0.001, global_step=num_epoch, decay_steps=1, decay_rate=0.9, staircase=True)
-            # 标准指数型衰减
-            learing_rate2 = tf.train.exponential_decay(
-                learning_rate=0.0009, global_step=num_epoch, decay_steps=2, decay_rate=0.9, staircase=True)
+            # learing_rate1 = tf.train.exponential_decay(
+            #     learning_rate=0.001, global_step=num_epoch, decay_steps=1, decay_rate=0.9, staircase=True)
+            # # 标准指数型衰减
+            # learing_rate2 = tf.train.exponential_decay(
+            #     learning_rate=0.0009, global_step=num_epoch, decay_steps=2, decay_rate=0.9, staircase=True)
+            #
+            # learning_rate = tf.train.polynomial_decay(0.001, num_epoch, 50, end_learning_rate=0, power=1.0)
+            learning_rate3= tf.train.piecewise_constant(num_epoch, boundaries=[40, 60], values=[0.01, 0.001, 0.0001])
 
-            learning_rate = tf.train.polynomial_decay(0.001, num_epoch, 50, end_learning_rate=0, power=1.0)
-
-            lr1 = sess.run([learing_rate1])
-            lr2 = sess.run([learing_rate2])
+            # lr1 = sess.run([learing_rate1])
+            lr2 = sess.run([learning_rate3])
             print(lr2)
-            y.append(lr1)
+            # y.append(lr1)
             z.append(lr2)
 
     # x = range(N)
@@ -130,7 +131,7 @@ def parse_example(example):
 
 
 if __name__ == '__main__':
-    # main()
+    main()
     # generate_spectrum()
     # import os
     #
@@ -152,4 +153,4 @@ if __name__ == '__main__':
     #
     # a=np.random.uniform() - 0.5
     # print(a)
-    print(5*1e-5)
+    # print(5*1e-5)
