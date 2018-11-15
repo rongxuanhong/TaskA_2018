@@ -189,8 +189,8 @@ def run_task_eager(args):
 
     # 5. 创建用于写入tensorboard总结的文件写入器
     if args.output_dir:
-        train_dir = os.path.join(args.output_dir, 'model3', 'train')
-        test_dir = os.path.join(args.output_dir, 'model3', 'test')
+        train_dir = os.path.join(args.output_dir, 'model4', 'train')
+        test_dir = os.path.join(args.output_dir, 'model4', 'test')
         tf.gfile.MakeDirs(args.output_dir)  # 创建所有文件
     else:
         train_dir = None
@@ -199,11 +199,11 @@ def run_task_eager(args):
     test_summary_writer = tfc.summary.create_file_writer(test_dir, flush_millis=10000, name='test')
 
     # 6. 创建或者恢复checkpoint
-    check_point_prefix = os.path.join(args.output_dir, 'model3', 'cpkt')
+    check_point_prefix = os.path.join(args.output_dir, 'model4', 'cpkt')
     create_folder(check_point_prefix)
 
     check_point = tf.train.Checkpoint(model=model, optimizer=optimizer, step_counter=step_counter)
-    check_point.restore(os.path.join(args.output_dir, 'model3', 'cpkt-13'))  # 存在就恢复模型(可不使用)
+    check_point.restore(os.path.join(args.output_dir, 'model4', 'cpkt-41'))  # 存在就恢复模型(可不使用)
     # check_point.restore(tf.train.latest_checkpoint(os.path.join(args.output_dir, 'model4')))
     # 7. 训练、评估
     # with tf.device(device):
