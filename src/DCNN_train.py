@@ -160,7 +160,7 @@ def run_task_eager(args):
     test_ds = tf.data.TFRecordDataset(test_path).map(parse_example).batch(batch_size, True)
 
     # 4.创建模型和优化器
-    model = VGGStyle(num_classes=10, weight_decay=5e-5, initializer='he_uniform')
+    model = VGGStyle(num_classes=10, weight_decay=0, initializer='he_uniform')
     step_counter = tf.train.get_or_create_global_step()
 
     # boundaries = []
