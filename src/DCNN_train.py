@@ -224,7 +224,7 @@ def run_task_eager(args):
                 #     check_point.save(check_point_prefix)  # 保存检查点
                 max_acc = acc
                 print('max_acc:{0:.2f}'.format(max_acc))
-                check_point.save(check_point_prefix)  # 保存检查点
+            check_point.save(check_point_prefix)  # 保存检查点
     # 输出训练时间
     compute_time_consumed(start_time)
 
